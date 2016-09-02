@@ -1,9 +1,9 @@
 package com.example.laudien.tictactoe;
 
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -11,35 +11,39 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     // Der aktive Spieler; 0 = rot, 1 = gelb
     int activePlayer = 0;
-
     // Gewinnerpositionen
     int [][] winningPositions = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
-
     // Status der jeweiligen Position; 0 = rot, 1 = gelb, 2 = unbelegt
     int[] positionState = {2,2,2,2,2,2,2,2,2};
-
     // Gibt an, ob das Spiel noch läuft
     boolean gameIsRunning = true;
-
     // Zeigt an, wer gewonnen hat
     int winner = 2;
-
     // der Player, der den Applaus abspielt
     MediaPlayer applause;
+    // das Schiff
+    ImageView ship;
+    // Timer
+    CountDownTimer timer;
+    // der zuletzt gesetzte Chip
+    ImageView chip;
 
     public void placeChip(View view){
-        ImageView chip = (ImageView) view;
+        chip = (ImageView) view;
         TextView winnerText = (TextView) findViewById(R.id.winnerText);
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
         String winnerMessage = "";
 
+        timer.start();
+
         if(positionState[Integer.parseInt(chip.getTag().toString())] == 2
                 && gameIsRunning) {
-
             chip.setTranslationY(-1000f);
             chip.setImageResource(R.drawable.red);
             if (activePlayer == 1) {
@@ -51,17 +55,19 @@ public class MainActivity extends AppCompatActivity {
             positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer;
 
             // Prüfe, ob jemand gewonnen hat - und wenn ja: wer?
-            for(int[] winningPosition: winningPositions){
-                if(positionState[winningPosition[0]] == activePlayer
+            for (int[] winningPosition : winningPositions) {
+                if (positionState[winningPosition[0]] == activePlayer
                         && positionState[winningPosition[1]] == activePlayer
-                        && positionState[winningPosition[2]] == activePlayer){
+                        && positionState[winningPosition[2]] == activePlayer) {
 
                     // Applaus einspielen
                     applause.start();
 
                     // Gewinnernachricht in einen String packen
                     winnerMessage = getString(R.string.red_wins);
-                    if(activePlayer == 1){winnerMessage = getString(R.string.yellow_wins);}
+                    if (activePlayer == 1) {
+                        winnerMessage = getString(R.string.yellow_wins);
+                    }
 
                     // Anzeigen, wer gewonnen hat
                     winner = activePlayer;
@@ -72,21 +78,21 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Prüfe, ob unentschieden
-            if(gameIsRunning && winner == 2){
+            if (gameIsRunning && winner == 2) {
                 boolean isUndecided = true;
-                for(int currentPosition: positionState){
-                    if (currentPosition == 2){
+                for (int currentPosition : positionState) {
+                    if (currentPosition == 2) {
                         isUndecided = false;
                     }
                 }
                 // Zeige 'Unentschieden' an:
-                if(isUndecided){
+                if (isUndecided) {
                     winnerMessage = getString(R.string.draw);
                     gameIsRunning = false;
                 }
             }
 
-            if (!gameIsRunning){
+            if (!gameIsRunning) {
                 // Im Textfeld die Gewinnernachricht anzeigen
                 winnerText.setText(winnerMessage);
 
@@ -126,6 +132,11 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
         winnerLayout.setVisibility(winnerLayout.INVISIBLE);
 
+        // den Applaus stoppen
+        applause.stop();
+        applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
+
+
         // Gibt das Spielfeld für Benutzereingaben frei
         gameIsRunning = true;
     }
@@ -141,5 +152,38 @@ public class MainActivity extends AppCompatActivity {
 
         // dem Mediaplayer für den Applaus den Sound hinzufügen
         applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
+
+        ship = (ImageView)findViewById(R.id.shipView);
+        ship.setTranslationX(+1000f);
+
+        timer = new CountDownTimer(10000,1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if(gameIsRunning){showShip();}
+            }
+        };
+    }
+
+    void showShip(){
+        GridLayout board = (GridLayout)findViewById(R.id.board);
+        int rand = new Random().nextInt(8);
+
+        // bestimme das nächste leere Feld
+        while (positionState[rand] != 2) {
+            rand = new Random().nextInt(8);
+        }
+        chip = (ImageView) board.getChildAt(rand);
+
+        MediaPlayer shipSound = MediaPlayer.create(this,R.raw.foghorn);
+
+        shipSound.start();
+        ship.setTranslationX(0f);
+        placeChip(chip);
+        ship.animate().translationX(-1000f).setDuration(5000);
     }
 }
