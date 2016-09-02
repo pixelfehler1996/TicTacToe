@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     // Der aktive Spieler; 0 = rot, 1 = gelb
     int activePlayer = 0;
@@ -27,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
     int winner = 2;
     // der Player, der den Applaus abspielt
     MediaPlayer applause;
+    // Gong
+    MediaPlayer gong;
     // das Schiff
     ImageView ship;
     // Timer
     CountDownTimer timer;
+    TextView counterTextView;
     // der zuletzt gesetzte Chip
     ImageView chip;
 
@@ -93,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (!gameIsRunning) {
+                // Countdown ausblenden und Timer zurücksetzen
+                timer.cancel();
+                counterTextView.setVisibility(View.INVISIBLE);
+
                 // Im Textfeld die Gewinnernachricht anzeigen
                 winnerText.setText(winnerMessage);
 
@@ -136,6 +143,15 @@ public class MainActivity extends AppCompatActivity {
         applause.stop();
         applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
 
+        // Timer stoppen, den Countdown sichtbar machen und auf 20 setzen
+        timer.cancel();
+        counterTextView.setText("20");
+        counterTextView.setVisibility(View.VISIBLE);
+
+        // Gong resetten und starten
+        gong.stop();
+        gong = MediaPlayer.create(this,R.raw.gong);
+        gong.start();
 
         // Gibt das Spielfeld für Benutzereingaben frei
         gameIsRunning = true;
@@ -144,7 +160,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
+
+        counterTextView = (TextView)findViewById(R.id.counterTextView);
 
         // Button 'New Game' beschriften
         Button newGame = (Button)findViewById(R.id.newGame);
@@ -156,10 +174,10 @@ public class MainActivity extends AppCompatActivity {
         ship = (ImageView)findViewById(R.id.shipView);
         ship.setTranslationX(+1000f);
 
-        timer = new CountDownTimer(10000,1000) {
+        timer = new CountDownTimer(20100,1000) {
             @Override
             public void onTick(long l) {
-
+                counterTextView.setText(Long.toString(l/1000));
             }
 
             @Override
@@ -167,9 +185,13 @@ public class MainActivity extends AppCompatActivity {
                 if(gameIsRunning){showShip();}
             }
         };
+
+        gong = MediaPlayer.create(this,R.raw.gong);
+        gong.start();
     }
 
     void showShip(){
+        timer.cancel();
         GridLayout board = (GridLayout)findViewById(R.id.board);
         int rand = new Random().nextInt(8);
 
