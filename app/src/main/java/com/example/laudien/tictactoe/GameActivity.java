@@ -124,7 +124,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         // let the KI set its stone
-        if (activePlayer == 1 && kiIsUsed) {
+        if (activePlayer == 1 && kiIsUsed && gameIsRunning) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -182,7 +182,7 @@ public class GameActivity extends AppCompatActivity {
         int rand = 0;
         if(position != -1){
             placeChip((ImageView) board.getChildAt(position));
-        } else{ // if no position was found set random
+        } else{ // if no position was found, set random
             rand = new Random().nextInt(9);
             // bestimme das nächste leere Feld
             while (positionState[rand] != 2) {
