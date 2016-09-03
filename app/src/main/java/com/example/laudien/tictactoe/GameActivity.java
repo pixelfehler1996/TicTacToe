@@ -1,5 +1,7 @@
 package com.example.laudien.tictactoe;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +33,14 @@ public class GameActivity extends AppCompatActivity {
     MediaPlayer gong;
     // das Schiff
     ImageView ship;
+    MediaPlayer shipSound;
     // Timer
     CountDownTimer timer;
     TextView counterTextView;
     // der zuletzt gesetzte Chip
     ImageView chip;
+    // die Zeit, die der Spieler für seinen Zug hat
+    Long playerTime;
 
     public void placeChip(View view){
         chip = (ImageView) view;
@@ -143,10 +148,11 @@ public class GameActivity extends AppCompatActivity {
         applause.stop();
         applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
 
-        // Timer stoppen, den Countdown sichtbar machen und auf 20 setzen
+        // Timer neustarten, den Countdown sichtbar machen und auf playerTime setzen
         timer.cancel();
-        counterTextView.setText("20");
+        counterTextView.setText(Long.toString(playerTime/1000));
         counterTextView.setVisibility(View.VISIBLE);
+        timer.start();
 
         // Gong resetten und starten
         gong.stop();
@@ -162,7 +168,15 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        shipSound = MediaPlayer.create(this,R.raw.foghorn);
+
+        // get the players time from the shared preferences
+        SharedPreferences savedTime = getSharedPreferences("savedTime",0);
+        playerTime = (long)1000 * savedTime.getInt("savedTime",0);
+
+        // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
+        counterTextView.setText(Long.toString(playerTime/1000));
 
         // Button 'New Game' beschriften
         Button newGame = (Button)findViewById(R.id.newGame);
@@ -174,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
         ship = (ImageView)findViewById(R.id.shipView);
         ship.setTranslationX(+1000f);
 
-        timer = new CountDownTimer(20100,1000) {
+        timer = new CountDownTimer(100 + playerTime,1000) {
             @Override
             public void onTick(long l) {
                 counterTextView.setText(Long.toString(l/1000));
@@ -186,22 +200,24 @@ public class GameActivity extends AppCompatActivity {
             }
         };
 
+        // Play the gong sound
         gong = MediaPlayer.create(this,R.raw.gong);
         gong.start();
+
+        // start the timer
+        timer.start();
     }
 
     void showShip(){
         timer.cancel();
         GridLayout board = (GridLayout)findViewById(R.id.board);
-        int rand = new Random().nextInt(8);
+        int rand = new Random().nextInt(9);
 
         // bestimme das nächste leere Feld
         while (positionState[rand] != 2) {
-            rand = new Random().nextInt(8);
+            rand = new Random().nextInt(9);
         }
         chip = (ImageView) board.getChildAt(rand);
-
-        MediaPlayer shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
         shipSound.start();
         ship.setTranslationX(0f);
