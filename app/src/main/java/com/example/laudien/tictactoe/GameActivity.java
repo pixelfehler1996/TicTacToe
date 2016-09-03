@@ -177,16 +177,15 @@ public class GameActivity extends AppCompatActivity {
     }
     void artificialIntelligence(){
         // every time its the yellow player!
-        // 1. defense an attack of the player:
-        int position = searchPositions(0);
+        int position = searchPositions(1);
         int rand = 0;
-        if(position != -1){
-            placeChip((ImageView) board.getChildAt(position));
-        } else{ // 2. if no enemy winning position was found, attack the player:
-            position = searchPositions(1);
+        if(position != -1){ // 1. Attack (= win the game if possible):
+            placeChip(board.getChildAt(position));
+        } else{ // 2. if no immediate win is possible, defense a possible win of the player:
+            position = searchPositions(0);
             if(position != -1){
-                placeChip((ImageView) board.getChildAt(position));
-            }else { // 3. if no possible win was found, place random:
+                placeChip(board.getChildAt(position));
+            } else{ // 3. if no possible win was found, place random:
                 rand = new Random().nextInt(9);
                 while (positionState[rand] != 2) {
                     rand = new Random().nextInt(9);
