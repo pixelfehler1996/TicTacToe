@@ -182,13 +182,17 @@ public class GameActivity extends AppCompatActivity {
         int rand = 0;
         if(position != -1){
             placeChip((ImageView) board.getChildAt(position));
-        } else{ // if no position was found, set random
-            rand = new Random().nextInt(9);
-            // bestimme das nächste leere Feld
-            while (positionState[rand] != 2) {
+        } else{ // 2. if no enemy winning position was found, attack the player:
+            position = searchPositions(1);
+            if(position != -1){
+                placeChip((ImageView) board.getChildAt(position));
+            }else { // 3. if no possible win was found, place random:
                 rand = new Random().nextInt(9);
+                while (positionState[rand] != 2) {
+                    rand = new Random().nextInt(9);
+                }
+                placeChip(board.getChildAt(rand));
             }
-            placeChip(board.getChildAt(rand));
         }
     }
 
