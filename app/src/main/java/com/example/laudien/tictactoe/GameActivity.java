@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,9 @@ public class GameActivity extends AppCompatActivity {
     ImageView chip;
     // die Zeit, die der Spieler für seinen Zug hat
     Long playerTime;
+    // the grid layout
+    GridLayout board;
+    Boolean kiIsUsed;
 
     public void placeChip(View view){
         chip = (ImageView) view;
@@ -119,6 +123,15 @@ public class GameActivity extends AppCompatActivity {
                 activePlayer = 1;
             }
         }
+        // let the KI set its stone
+        if (activePlayer == 1 && kiIsUsed) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    artificialIntelligence();
+                }
+            },2000);
+        }
     }
 
     // Wenn auf "New Game" geklickt wurde
@@ -162,17 +175,69 @@ public class GameActivity extends AppCompatActivity {
         // Gibt das Spielfeld für Benutzereingaben frei
         gameIsRunning = true;
     }
+    void artificialIntelligence(){
+        // every time its the yellow player!
+        // 1. defense an attack of the player:
+        int position = searchPositions(0);
+        int rand = 0;
+        if(position != -1){
+            placeChip((ImageView) board.getChildAt(position));
+        } else{ // if no position was found set random
+            rand = new Random().nextInt(9);
+            // bestimme das nächste leere Feld
+            while (positionState[rand] != 2) {
+                rand = new Random().nextInt(9);
+            }
+            placeChip(board.getChildAt(rand));
+        }
+    }
+
+    int searchPositions(int playerID){
+        // searches for a position where are 2/3 used from the player with playerID
+        int counter;
+        for(int[] possiblePosition : winningPositions){
+            counter = 0;
+            if(positionState[possiblePosition[0]] == playerID){
+                counter++;
+            }
+            if(positionState[possiblePosition[1]] == playerID){
+                counter++;
+            }
+            if(positionState[possiblePosition[2]] == playerID){
+                counter++;
+            }
+            if(counter >= 2){
+                // give back the position of the empty field that is needed for player with playerID to win
+                if(positionState[possiblePosition[0]] == 2){
+                    return possiblePosition[0];
+                }
+                if(positionState[possiblePosition[1]] == 2){
+                    return possiblePosition[1];
+                }
+                if(positionState[possiblePosition[2]] == 2){
+                    return possiblePosition[2];
+                }
+            }
+        }
+        // if nothing was found, return -1
+        return -1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        board = (GridLayout)findViewById(R.id.board);
 
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
         // get the players time from the shared preferences
         SharedPreferences savedTime = getSharedPreferences("savedTime",0);
         playerTime = (long)1000 * savedTime.getInt("savedTime",0);
+
+        // get the information if the player plays against the KI
+        SharedPreferences usesKI = getSharedPreferences("kiIsUsed",0);
+        kiIsUsed = usesKI.getBoolean("kiIsUsed",false);
 
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
@@ -208,9 +273,20 @@ public class GameActivity extends AppCompatActivity {
         timer.start();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timer.start();
+    }
+
     void showShip(){
         timer.cancel();
-        GridLayout board = (GridLayout)findViewById(R.id.board);
         int rand = new Random().nextInt(9);
 
         // bestimme das nächste leere Feld

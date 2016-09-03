@@ -18,11 +18,25 @@ public class StartActivity extends AppCompatActivity {
         this.onStop();
         startActivity(new Intent(StartActivity.this,GameActivity.class));
     }
+    public void playerVsKI(View view){
+        SharedPreferences kiIsUsed = getSharedPreferences("kiIsUsed",0);
+        SharedPreferences.Editor editor = kiIsUsed.edit();
+        editor.putBoolean("kiIsUsed",true);
+        editor.commit();
+
+        startGame(view);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        // reset kiIsUsed to false ==>
+        SharedPreferences kiIsUsed = getSharedPreferences("kiIsUsed",0);
+        SharedPreferences.Editor editor = kiIsUsed.edit();
+        editor.putBoolean("kiIsUsed",false);
+        editor.commit(); // <==
 
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         timeTextView = (TextView)findViewById(R.id.timeTextView);
