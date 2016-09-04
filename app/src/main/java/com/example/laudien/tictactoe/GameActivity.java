@@ -112,7 +112,7 @@ public class GameActivity extends AppCompatActivity {
                 winnerText.setText(winnerMessage);
 
                 // Winner-Layout sichtbar machen
-                winnerLayout.setVisibility(winnerLayout.VISIBLE);
+                winnerLayout.setVisibility(View.VISIBLE);
             }
 
             // aktiven Spieler ändern
@@ -156,7 +156,7 @@ public class GameActivity extends AppCompatActivity {
 
         // winnerLayout wieder unsichtbar machen
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
-        winnerLayout.setVisibility(winnerLayout.INVISIBLE);
+        winnerLayout.setVisibility(View.INVISIBLE);
 
         // den Applaus stoppen
         applause.stop();
@@ -250,10 +250,6 @@ public class GameActivity extends AppCompatActivity {
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
         counterTextView.setText(Long.toString(playerTime/1000));
-
-        // Button 'New Game' beschriften
-        Button newGame = (Button)findViewById(R.id.newGame);
-        newGame.setText(getString(R.string.new_game));
 
         // dem Mediaplayer für den Applaus den Sound hinzufügen
         applause = MediaPlayer.create(this,R.raw.small_crowd_applause);

@@ -4,4 +4,7 @@
     <string name="yellow_wins">Gelb gewinnt!</string>
     <string name="new_game">Neues Spiel</string>
     <string name="draw">Unentschieden!</string>
+    <string name="player_vs_player">Spieler gegen Spieler</string>
+    <string name="player_vs_ai">Spieler gegen Computer</string>
+    <string name="time_per_move">Zeit pro Zug (in Sek.):</string>
 </resources>

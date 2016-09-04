@@ -4,4 +4,7 @@
     <string name="yellow_wins">Yellow wins!</string>
     <string name="new_game">New Game</string>
     <string name="draw">Draw!</string>
+    <string name="player_vs_player">Player vs. Player</string>
+    <string name="player_vs_ai">Player vs. Bot</string>
+    <string name="time_per_move">Time per move (in sec.):</string>
 </resources>

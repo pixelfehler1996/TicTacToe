@@ -12,7 +12,7 @@
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Spieler gegen Spieler"
+        android:text="@string/player_vs_player"
         android:id="@+id/startButton"
         android:onClick="startGame"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Spieler gegen KI"
+        android:text="@string/player_vs_ai"
         android:id="@+id/kiButton"
         android:layout_below="@+id/startButton"
         android:layout_alignParentLeft="true"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Zeit pro Zug (in Sek):"
+        android:text="@string/time_per_move"
         android:id="@+id/textView"
         android:layout_above="@+id/seekBar"
         android:layout_centerHorizontal="true" />
