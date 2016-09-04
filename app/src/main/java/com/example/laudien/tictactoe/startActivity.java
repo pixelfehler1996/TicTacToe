@@ -15,6 +15,10 @@ public class StartActivity extends AppCompatActivity {
     SeekBar seekBar;
 
     public void startGame(View view){
+        SharedPreferences kiIsUsed = getSharedPreferences("kiIsUsed",0);
+        SharedPreferences.Editor editor = kiIsUsed.edit();
+        editor.putBoolean("kiIsUsed",false);
+        editor.commit();
         this.onStop();
         startActivity(new Intent(StartActivity.this,GameActivity.class));
     }
@@ -23,8 +27,8 @@ public class StartActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = kiIsUsed.edit();
         editor.putBoolean("kiIsUsed",true);
         editor.commit();
-
-        startGame(view);
+        this.onStop();
+        startActivity(new Intent(StartActivity.this,GameActivity.class));
     }
 
     @Override
@@ -49,6 +53,7 @@ public class StartActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(seekBar.getProgress() < 5){seekBar.setProgress(5);}
                 timeTextView.setText(Integer.toString(seekBar.getProgress()));
             }
 

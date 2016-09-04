@@ -52,10 +52,9 @@ public class GameActivity extends AppCompatActivity {
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
         String winnerMessage = "";
 
-        timer.start();
-
         if(positionState[Integer.parseInt(chip.getTag().toString())] == 2
                 && gameIsRunning) {
+            timer.start();
             chip.setTranslationY(-1000f);
             chip.setImageResource(R.drawable.red);
             if (activePlayer == 1) {
@@ -125,6 +124,8 @@ public class GameActivity extends AppCompatActivity {
         }
         // let the KI set its stone
         if (activePlayer == 1 && kiIsUsed && gameIsRunning) {
+            // first disable the playground for user input
+            gameIsRunning = false;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -179,6 +180,10 @@ public class GameActivity extends AppCompatActivity {
         // every time its the yellow player!
         int position = searchPositions(1);
         int rand = 0;
+
+        // enable the playground
+        gameIsRunning = true;
+
         if(position != -1){ // 1. Attack (= win the game if possible):
             placeChip(board.getChildAt(position));
         } else{ // 2. if no immediate win is possible, defense a possible win of the player:
