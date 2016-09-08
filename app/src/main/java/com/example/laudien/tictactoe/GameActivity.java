@@ -301,6 +301,12 @@ public class GameActivity extends AppCompatActivity {
 
             switch (difficulty) {
                 case 0:
+                    // just place random
+                    rand = new Random().nextInt(9);
+                    while (positionState[rand] != 2) {
+                        rand = new Random().nextInt(9);
+                    }
+                    placeChip(board.getChildAt(rand));
                     break;
                 case 1: // medium
                     position = searchPositions(1); // every time its the yellow player!
