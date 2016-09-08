@@ -46,6 +46,7 @@ public class GameActivity extends AppCompatActivity {
     Boolean kiIsUsed;
     // difficulty: 0 = easy, 1 = normal, 2 = unbeatable
     int difficulty;
+    ArtificialIntelligence artificialIntelligence;
 
     public void placeChip(View view){
         chip = (ImageView) view;
@@ -130,7 +131,7 @@ public class GameActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    artificialIntelligence();
+                    artificialIntelligence.attack(difficulty);
                 }
             },2000);
         }
@@ -177,29 +178,7 @@ public class GameActivity extends AppCompatActivity {
         // Gibt das Spielfeld für Benutzereingaben frei
         gameIsRunning = true;
     }
-    void artificialIntelligence(){
-        // every time its the yellow player!
-        int position = searchPositions(1);
-        int rand = 0;
 
-        // enable the playground
-        gameIsRunning = true;
-
-        if(position != -1){ // 1. Attack (= win the game if possible):
-            placeChip(board.getChildAt(position));
-        } else{ // 2. if no immediate win is possible, defense a possible win of the player:
-            position = searchPositions(0);
-            if(position != -1){
-                placeChip(board.getChildAt(position));
-            } else{ // 3. if no possible win was found, place random:
-                rand = new Random().nextInt(9);
-                while (positionState[rand] != 2) {
-                    rand = new Random().nextInt(9);
-                }
-                placeChip(board.getChildAt(rand));
-            }
-        }
-    }
 
     int searchPositions(int playerID){
         // searches for a position where are 2/3 used from the player with playerID
@@ -245,6 +224,9 @@ public class GameActivity extends AppCompatActivity {
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",0);
         kiIsUsed = sharedPreferences.getBoolean("kiIsUsed",false);
         difficulty = sharedPreferences.getInt("difficulty", 0);
+
+        // Create a new Object of the AI
+        artificialIntelligence = new ArtificialIntelligence();
 
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
@@ -308,5 +290,41 @@ public class GameActivity extends AppCompatActivity {
         ship.setTranslationX(0f);
         placeChip(chip);
         ship.animate().translationX(-1000f).setDuration(5000);
+    }
+    class ArtificialIntelligence{
+        public void attack(int difficulty) {
+            int position;
+            int rand = 0;
+
+            // enable the playground
+            gameIsRunning = true;
+
+            switch (difficulty) {
+                case 0:
+                    break;
+                case 1: // medium
+                    position = searchPositions(1); // every time its the yellow player!
+
+                    if (position != -1) { // 1. Attack (= win the game if possible):
+                        placeChip(board.getChildAt(position));
+                    } else { // 2. if no immediate win is possible, defense a possible win of the player:
+                        position = searchPositions(0);
+                        if (position != -1) {
+                            placeChip(board.getChildAt(position));
+                        } else { // 3. if no possible win was found, place random:
+                            rand = new Random().nextInt(9);
+                            while (positionState[rand] != 2) {
+                                rand = new Random().nextInt(9);
+                            }
+                            placeChip(board.getChildAt(rand));
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
+
     }
 }
