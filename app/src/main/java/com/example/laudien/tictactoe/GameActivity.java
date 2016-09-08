@@ -131,9 +131,9 @@ public class GameActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    artificialIntelligence.attack(difficulty);
+                    artificialIntelligence.attack();
                 }
-            },2000);
+            },1000);
         }
     }
 
@@ -226,7 +226,7 @@ public class GameActivity extends AppCompatActivity {
         difficulty = sharedPreferences.getInt("difficulty", 0);
 
         // Create a new Object of the AI
-        artificialIntelligence = new ArtificialIntelligence();
+        artificialIntelligence = new ArtificialIntelligence(difficulty);
 
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
@@ -292,23 +292,28 @@ public class GameActivity extends AppCompatActivity {
         ship.animate().translationX(-1000f).setDuration(5000);
     }
     class ArtificialIntelligence{
-        public void attack(int difficulty) {
+        int diff;
+        public ArtificialIntelligence(int difficulty){
+            setDifficulty(difficulty);
+        }
+        public void setDifficulty(int difficulty){
+            diff = difficulty;
+        }
+        public void attack() {
             int position;
             int rand = 0;
 
             // enable the playground
             gameIsRunning = true;
 
-            switch (difficulty) {
-                case 0:
-                    // just place random
+            if(difficulty == 0) { //easy
+                // just place random
+                rand = new Random().nextInt(9);
+                while (positionState[rand] != 2) {
                     rand = new Random().nextInt(9);
-                    while (positionState[rand] != 2) {
-                        rand = new Random().nextInt(9);
-                    }
-                    placeChip(board.getChildAt(rand));
-                    break;
-                case 1: // medium
+                }
+                placeChip(board.getChildAt(rand));
+            } else if(difficulty == 1) { // medium
                     position = searchPositions(1); // every time its the yellow player!
 
                     if (position != -1) { // 1. Attack (= win the game if possible):
@@ -325,9 +330,8 @@ public class GameActivity extends AppCompatActivity {
                             placeChip(board.getChildAt(rand));
                         }
                     }
-                    break;
-                case 2:
-                    break;
+            } else if(difficulty == 2) { // hard
+
             }
         }
 
