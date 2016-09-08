@@ -7,4 +7,6 @@
     <string name="player_vs_player">Spieler gegen Spieler</string>
     <string name="player_vs_ai">Spieler gegen Computer</string>
     <string name="time_per_move">Zeit pro Zug (in Sek.):</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="difficulty">Schwierigkeit:</string>
 </resources>

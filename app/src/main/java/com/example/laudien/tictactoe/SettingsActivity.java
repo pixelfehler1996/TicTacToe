@@ -3,12 +3,11 @@ package com.example.laudien.tictactoe;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
-    SeekBar seekBar;
+    SeekBar timeSeekBar;
     TextView timeTextView;
 
     @Override
@@ -16,15 +15,15 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        seekBar = (SeekBar)findViewById(R.id.seekBar);
+        timeSeekBar = (SeekBar)findViewById(R.id.timeSeekBar);
         timeTextView = (TextView)findViewById(R.id.timeTextView);
 
         SharedPreferences savedTime = getSharedPreferences("savedTime",0);
-        seekBar.setProgress(savedTime.getInt("savedTime",20));
+        timeSeekBar.setProgress(savedTime.getInt("savedTime",20));
 
-        timeTextView.setText(Integer.toString(seekBar.getProgress()));
+        timeTextView.setText(Integer.toString(timeSeekBar.getProgress()));
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        timeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if(seekBar.getProgress() < 5){seekBar.setProgress(5);}
@@ -48,6 +47,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onStop();
 
         SharedPreferences savedTime = getSharedPreferences("savedTime",0);
-        savedTime.edit().putInt("savedTime",seekBar.getProgress()).apply();
+        savedTime.edit().putInt("savedTime", timeSeekBar.getProgress()).apply();
     }
 }

@@ -44,6 +44,8 @@ public class GameActivity extends AppCompatActivity {
     // the grid layout
     GridLayout board;
     Boolean kiIsUsed;
+    // difficulty: 0 = easy, 1 = normal, 2 = unbeatable
+    int difficulty;
 
     public void placeChip(View view){
         chip = (ImageView) view;
@@ -239,11 +241,10 @@ public class GameActivity extends AppCompatActivity {
         board = (GridLayout)findViewById(R.id.board);
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
-        // get the players time from the shared preferences
+        // get all saved values from the shared preferences
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",0);
-
-        // get the information if the player plays against the KI
         kiIsUsed = sharedPreferences.getBoolean("kiIsUsed",false);
+        difficulty = sharedPreferences.getInt("difficulty", 0);
 
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
