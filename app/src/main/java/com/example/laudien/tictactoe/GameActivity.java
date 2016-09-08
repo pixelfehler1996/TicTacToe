@@ -239,8 +239,8 @@ public class GameActivity extends AppCompatActivity {
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
         // get the players time from the shared preferences
-        SharedPreferences savedTime = getSharedPreferences("savedTime",0);
-        playerTime = (long)1000 * savedTime.getInt("savedTime",0);
+        SharedPreferences sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe",0);
+        playerTime = (long)1000 * sharedPreferences.getInt("savedTime",0);
 
         // get the information if the player plays against the KI
         SharedPreferences usesKI = getSharedPreferences("kiIsUsed",0);
