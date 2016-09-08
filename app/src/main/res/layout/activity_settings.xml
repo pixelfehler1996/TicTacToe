@@ -55,7 +55,7 @@
     <SeekBar
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:id="@+id/seekBarDifficulty"
+        android:id="@+id/difficultySeekBar"
         android:max="2"
         android:progress="0"
         android:indeterminate="false"
@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textView3"
+        android:id="@+id/difficultyTextView"
         android:text="0"
         android:layout_below="@+id/timeSeekBar"
         android:layout_toRightOf="@+id/textView2"

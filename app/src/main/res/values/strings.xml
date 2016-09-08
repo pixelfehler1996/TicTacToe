@@ -9,4 +9,7 @@
     <string name="time_per_move">Time per move (in sec.):</string>
     <string name="action_settings">Settings</string>
     <string name="difficulty">Difficulty:</string>
+    <string name="easy">easy</string>
+    <string name="medium">medium</string>
+    <string name="hard">hard</string>
 </resources>

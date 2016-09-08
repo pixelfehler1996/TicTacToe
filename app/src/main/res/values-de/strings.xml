@@ -9,4 +9,7 @@
     <string name="time_per_move">Zeit pro Zug (in Sek.):</string>
     <string name="action_settings">Einstellungen</string>
     <string name="difficulty">Schwierigkeit:</string>
+    <string name="easy">einfach</string>
+    <string name="medium">normal</string>
+    <string name="hard">schwer</string>
 </resources>
