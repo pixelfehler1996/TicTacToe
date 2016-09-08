@@ -234,17 +234,16 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        board = (GridLayout)findViewById(R.id.board);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe",0);
+        board = (GridLayout)findViewById(R.id.board);
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
         // get the players time from the shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe",0);
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",0);
 
         // get the information if the player plays against the KI
-        SharedPreferences usesKI = getSharedPreferences("kiIsUsed",0);
-        kiIsUsed = usesKI.getBoolean("kiIsUsed",false);
+        kiIsUsed = sharedPreferences.getBoolean("kiIsUsed",false);
 
         // set the counter to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
