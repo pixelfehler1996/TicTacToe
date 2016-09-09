@@ -71,6 +71,10 @@ public class StartActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        }else if(id == R.id.action_menu){
+            // load StartActivity Fragment
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameLayout, new StartFragment()).commit();
         }
         return super.onOptionsItemSelected(item);
     }

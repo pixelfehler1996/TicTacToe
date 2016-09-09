@@ -12,4 +12,5 @@
     <string name="easy">einfach</string>
     <string name="medium">normal</string>
     <string name="hard">schwer</string>
+    <string name="back_to_menu">Hauptmenü</string>
 </resources>
