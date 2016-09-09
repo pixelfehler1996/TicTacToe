@@ -221,7 +221,7 @@ public class GameActivity extends AppCompatActivity {
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
 
         // get all saved values from the shared preferences
-        playerTime = (long)1000 * sharedPreferences.getInt("savedTime",0);
+        playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         kiIsUsed = sharedPreferences.getBoolean("kiIsUsed",false);
         difficulty = sharedPreferences.getInt("difficulty", 0);
 
