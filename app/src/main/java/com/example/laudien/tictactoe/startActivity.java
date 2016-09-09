@@ -25,10 +25,12 @@ public class StartActivity extends AppCompatActivity
     SharedPreferences sharedPreferences;
     FragmentTransaction transaction;
     int activePlayer = 0; // 0 = red, 1 = yellow player
+    int aiPlayer; // determine which player is the ai
     int [][] winningPositions = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
     int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
     boolean gameIsRunning = true;
-    Boolean kiIsUsed;
+    boolean kiIsUsed;
+    boolean isFirstRound;
     int winner = 2;
     MediaPlayer applause;
     MediaPlayer gong;
@@ -96,6 +98,7 @@ public class StartActivity extends AppCompatActivity
         ship = (ImageView)findViewById(R.id.shipView);
         applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
         gong = MediaPlayer.create(this,R.raw.gong);
+        isFirstRound = true;
 
         ship.setTranslationX(+1000f); // get the ship out of display
 
@@ -117,11 +120,28 @@ public class StartActivity extends AppCompatActivity
         };
         gong.start(); // Play the gong sound
         timer.start(); // start the timer
+
+        // let the KI set its stone
+        if (kiIsUsed) {
+            if(difficulty == 2) {
+                aiPlayer = 0;
+                gameIsRunning = false; // first disable the playground for user input
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        artificialIntelligence.attack();
+                    }
+                }, 1000);
+            }else{
+                aiPlayer = 1;
+            }
+        }
     }
     public void newGame(View view){
-        //reload difficulty from sharedPreferences
+        //reload difficulty from sharedPreferences and reset AI
         difficulty = sharedPreferences.getInt("difficulty", 1);
         artificialIntelligence.setDifficulty(difficulty);
+        artificialIntelligence.resetCounter();
 
         // Rot beginnt wieder
         activePlayer = 0;
@@ -139,6 +159,9 @@ public class StartActivity extends AppCompatActivity
         for(int i = 0; i <= 8; i++){
             ((ImageView)board.getChildAt(i)).setImageResource(0);
         }
+
+        // set to firstRound
+        isFirstRound = true;
 
         // winnerLayout wieder unsichtbar machen
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
@@ -161,6 +184,22 @@ public class StartActivity extends AppCompatActivity
 
         // Gibt das Spielfeld für Benutzereingaben frei
         gameIsRunning = true;
+
+        // let the KI set its stone
+        if (kiIsUsed) {
+            if(difficulty == 2) {
+                aiPlayer = 0;
+                gameIsRunning = false; // first disable the playground for user input
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        artificialIntelligence.attack();
+                    }
+                }, 1000);
+            }else{
+                aiPlayer = 1;
+            }
+        }
     }
     public void placeChip(View view){
         chip = (ImageView) view;
@@ -239,7 +278,7 @@ public class StartActivity extends AppCompatActivity
             }
         }
         // let the KI set its stone
-        if (activePlayer == 1 && kiIsUsed && gameIsRunning) {
+        if (activePlayer == aiPlayer && kiIsUsed && gameIsRunning) {
             // first disable the playground for user input
             gameIsRunning = false;
             new Handler().postDelayed(new Runnable() {
@@ -249,6 +288,9 @@ public class StartActivity extends AppCompatActivity
                 }
             },1000);
         }
+
+        // set firstRound to false
+        isFirstRound = false;
     }
     void showShip(){
         timer.cancel();
@@ -267,11 +309,17 @@ public class StartActivity extends AppCompatActivity
     }
     class ArtificialIntelligence{
         int diff;
+        int counter; // counts the moves
+
         public ArtificialIntelligence(int difficulty){
             setDifficulty(difficulty);
+            resetCounter();
         }
         public void setDifficulty(int difficulty){
             diff = difficulty;
+        }
+        public void resetCounter(){
+            counter = 1;
         }
         public void attack() {
             int position;
@@ -304,9 +352,54 @@ public class StartActivity extends AppCompatActivity
                         placeChip(board.getChildAt(rand));
                     }
                 }
-            } else if(difficulty == 2) { // hard
-
+            } else if(difficulty == 2) { // hard - every time its the red player!
+                if(counter == 1 || counter == 2) {
+                    placeChip(board.getChildAt(getFreeEdge()));
+                }else if(counter == 3){
+                    position = searchPositions(0);
+                    if(position != -1){ // 1. Attack (= win the game if possible):
+                        placeChip(board.getChildAt(position));
+                    }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                        position = searchPositions(1);
+                        if(position != -1){
+                            placeChip(board.getChildAt(position));
+                        }else{ // if no defense is necessary, place on free edge
+                            placeChip(board.getChildAt(getFreeEdge()));
+                        }
+                    }
+                }else if(counter == 4){
+                    if(positionState[4] == 2){ // if middle field is empty, place there and win
+                        placeChip(board.getChildAt(4));
+                    }else{
+                        position = searchPositions(0);
+                        if(position != -1){ // 1. Attack (= win the game if possible):
+                            placeChip(board.getChildAt(position));
+                        }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                            position = searchPositions(1);
+                            if(position != -1){
+                                placeChip(board.getChildAt(position));
+                            }else{ // if no defense is necessary, place on free edge
+                                placeChip(board.getChildAt(getFreeEdge()));
+                            }
+                        }
+                    }
+                }
+                else if(counter > 4){
+                    position = searchPositions(0);
+                    if(position != -1){ // 1. Attack (= win the game if possible):
+                        placeChip(board.getChildAt(position));
+                    }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                        position = searchPositions(1);
+                        if(position != -1){
+                            placeChip(board.getChildAt(position));
+                        }else{ // if no defense is necessary, place on free edge
+                            placeChip(board.getChildAt(getFreeEdge()));
+                        }
+                    }
+                }
             }
+
+            counter++;
         }
         int searchPositions(int playerID){
             // searches for a position where are 2/3 used from the player with playerID
@@ -337,6 +430,16 @@ public class StartActivity extends AppCompatActivity
             }
             // if nothing was found, return -1
             return -1;
+        }
+        int getFreeEdge(){
+            // searches for the next free edge
+            int[] edges = {0,2,6,8};
+            for(int edge:edges){
+                if(positionState[edge] == 2){
+                    return edge;
+                }
+            }
+            return -1; // if nothing was found, return -1
         }
     }
 }
