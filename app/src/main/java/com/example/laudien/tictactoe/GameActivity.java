@@ -223,7 +223,7 @@ public class GameActivity extends AppCompatActivity {
         // get all saved values from the shared preferences
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         kiIsUsed = sharedPreferences.getBoolean("kiIsUsed",false);
-        difficulty = sharedPreferences.getInt("difficulty", 0);
+        difficulty = sharedPreferences.getInt("difficulty", 1);
 
         // Create a new Object of the AI
         artificialIntelligence = new ArtificialIntelligence(difficulty);
