@@ -71,10 +71,6 @@ public class StartActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }else if(id == R.id.action_menu){
-            // load StartActivity Fragment
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frameLayout, new StartFragment()).commit();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -142,7 +138,7 @@ public class StartActivity extends AppCompatActivity
         }
     }
     public void newGame(View view){
-        //reload difficulty from sharedPreferences and reset AI
+        //reload sharedPreferences and reset AI
         difficulty = sharedPreferences.getInt("difficulty", 1);
         artificialIntelligence.setDifficulty(difficulty);
         artificialIntelligence.resetCounter();
