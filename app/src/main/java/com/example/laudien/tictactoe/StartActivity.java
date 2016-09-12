@@ -32,9 +32,7 @@ public class StartActivity extends AppCompatActivity
     boolean aiIsUsed;
     boolean isFirstRound;
     int winner = 2;
-    MediaPlayer finalPlayer;
-    MediaPlayer gong;
-    MediaPlayer shipSound;
+    MediaPlayer mediaPlayer;
     ImageView ship;
     ImageView chip;
     CountDownTimer timer;
@@ -93,20 +91,17 @@ public class StartActivity extends AppCompatActivity
     }
     void startGame(){
         board = (GridLayout)findViewById(R.id.board);
-        shipSound = MediaPlayer.create(this,R.raw.foghorn);
         ship = (ImageView)findViewById(R.id.shipView);
-        finalPlayer = MediaPlayer.create(this,R.raw.small_crowd_applause);
-        gong = MediaPlayer.create(this,R.raw.gong);
+        mediaPlayer = MediaPlayer.create(this,R.raw.gong);
         isFirstRound = true;
 
         ship.setTranslationX(+1000f); // get the ship out of display
 
+        resetTimer(); // initialize the counter
         // set the counterView to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
         counterTextView.setText(Long.toString(playerTime/1000));
-
-        resetTimer(); // initialize the counter
-        gong.start(); // Play the gong sound
+        mediaPlayer.start(); // Play the gong sound
         timer.start(); // start the timer
 
         // let the KI set its stone
@@ -153,7 +148,7 @@ public class StartActivity extends AppCompatActivity
         winnerLayout.setVisibility(View.INVISIBLE);
 
         // stop the MediaPlayer
-        finalPlayer.stop();
+        mediaPlayer.stop();
 
         // reset and restart the timer, make the countdown visible
         timer.cancel();
@@ -161,10 +156,9 @@ public class StartActivity extends AppCompatActivity
         counterTextView.setVisibility(View.VISIBLE);
         timer.start();
 
-        // reset gong and start it
-        gong.stop();
-        gong = MediaPlayer.create(this,R.raw.gong);
-        gong.start();
+        // play the gong sound
+        mediaPlayer = MediaPlayer.create(this,R.raw.gong);
+        mediaPlayer.start();
 
         gameIsRunning = true; // enable playground for user input
 
@@ -216,14 +210,14 @@ public class StartActivity extends AppCompatActivity
                     // set sound and winnerMessage
                     if(aiIsUsed){ // bot game
                         if(aiPlayer == winner){ // ai wins against player
-                            finalPlayer = MediaPlayer.create(this, R.raw.kid_laugh);
+                            mediaPlayer = MediaPlayer.create(this, R.raw.kid_laugh);
                             winnerMessage = getString(R.string.you_lose);
                         }else{ // player wins against ai
-                            finalPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
+                            mediaPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
                             winnerMessage = getString(R.string.you_win);
                         }
                     }else { // player vs. player
-                        finalPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
+                        mediaPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
                         if (winner == 1) { // yellow player wins
                             winnerMessage = getString(R.string.yellow_wins);
                         }else{ // red player wins
@@ -245,7 +239,7 @@ public class StartActivity extends AppCompatActivity
                 }
                 // set sound and winnerMessage
                 if (isUndecided) {
-                    finalPlayer = MediaPlayer.create(this, R.raw.monkeys);
+                    mediaPlayer = MediaPlayer.create(this, R.raw.monkeys);
                     winnerMessage = getString(R.string.draw);
                     gameIsRunning = false; // disable playground for user input
                 }
@@ -253,7 +247,7 @@ public class StartActivity extends AppCompatActivity
 
             if (!gameIsRunning) {
                 // start MediaPlayer, show winnerLayout with winnerMessage, cancel timer
-                finalPlayer.start();
+                mediaPlayer.start();
                 timer.cancel();
                 counterTextView.setVisibility(View.INVISIBLE);
                 winnerText.setText(winnerMessage);
@@ -285,6 +279,7 @@ public class StartActivity extends AppCompatActivity
     void showShip(){
         timer.cancel();
         int rand = new Random().nextInt(9);
+        mediaPlayer = MediaPlayer.create(this,R.raw.foghorn);
 
         // get an empty field
         while (positionState[rand] != 2) {
@@ -292,7 +287,7 @@ public class StartActivity extends AppCompatActivity
         }
         chip = (ImageView) board.getChildAt(rand);
 
-        shipSound.start();
+        mediaPlayer.start();
         ship.setTranslationX(0f);
         placeChip(chip);
         ship.animate().translationX(-1000f).setDuration(5000);
