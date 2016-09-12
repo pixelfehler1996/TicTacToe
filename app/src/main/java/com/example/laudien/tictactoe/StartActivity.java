@@ -58,6 +58,20 @@ public class StartActivity extends AppCompatActivity
         transaction.replace(R.id.frameLayout, new StartFragment()).commit();
     }
     @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+        timer.cancel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mediaPlayer != null){mediaPlayer.start();}
+        if(timer!= null){timer.start();}
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
