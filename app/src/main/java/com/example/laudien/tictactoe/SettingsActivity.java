@@ -102,6 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }
