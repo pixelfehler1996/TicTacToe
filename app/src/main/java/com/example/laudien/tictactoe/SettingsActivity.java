@@ -1,9 +1,12 @@
 package com.example.laudien.tictactoe;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -88,5 +91,17 @@ public class SettingsActivity extends AppCompatActivity {
                 .putInt("savedTime", timeSeekBar.getProgress())
                 .putInt("difficulty", difficultySeekBar.getProgress())
                 .apply();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

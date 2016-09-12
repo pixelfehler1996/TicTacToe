@@ -20,7 +20,9 @@ import android.widget.TextView;
 import java.util.Random;
 
 public class StartActivity extends AppCompatActivity
-        implements GameFragment.OnFragmentInteractionListener, StartFragment.OnFragmentInteractionListener{
+        implements GameFragment.OnFragmentInteractionListener,
+        StartFragment.OnFragmentInteractionListener
+{
 
     SharedPreferences sharedPreferences;
     FragmentTransaction transaction;
@@ -60,8 +62,8 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        mediaPlayer.pause();
-        timer.cancel();
+        if(mediaPlayer != null){mediaPlayer.pause();}
+        if(timer != null){timer.cancel();}
     }
 
     @Override
