@@ -29,10 +29,10 @@ public class StartActivity extends AppCompatActivity
     int [][] winningPositions = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
     int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
     boolean gameIsRunning = true;
-    boolean kiIsUsed;
+    boolean aiIsUsed;
     boolean isFirstRound;
     int winner = 2;
-    MediaPlayer applause;
+    MediaPlayer finalPlayer;
     MediaPlayer gong;
     MediaPlayer shipSound;
     ImageView ship;
@@ -79,14 +79,14 @@ public class StartActivity extends AppCompatActivity
 
     }
     public void playerVsPlayer(View view){
-        kiIsUsed = false;
+        aiIsUsed = false;
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, new GameFragment()).commit();
         getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
         startGame();
     }
     public void playerVsKI(View view){
-        kiIsUsed = true;
+        aiIsUsed = true;
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, new GameFragment()).commit();
         getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
@@ -96,7 +96,7 @@ public class StartActivity extends AppCompatActivity
         board = (GridLayout)findViewById(R.id.board);
         shipSound = MediaPlayer.create(this,R.raw.foghorn);
         ship = (ImageView)findViewById(R.id.shipView);
-        applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
+        finalPlayer = MediaPlayer.create(this,R.raw.small_crowd_applause);
         gong = MediaPlayer.create(this,R.raw.gong);
         isFirstRound = true;
 
@@ -122,7 +122,7 @@ public class StartActivity extends AppCompatActivity
         timer.start(); // start the timer
 
         // let the KI set its stone
-        if (kiIsUsed) {
+        if (aiIsUsed) {
             if(difficulty == 2) {
                 aiPlayer = 0;
                 gameIsRunning = false; // first disable the playground for user input
@@ -168,8 +168,7 @@ public class StartActivity extends AppCompatActivity
         winnerLayout.setVisibility(View.INVISIBLE);
 
         // den Applaus stoppen
-        applause.stop();
-        applause = MediaPlayer.create(this,R.raw.small_crowd_applause);
+        finalPlayer.stop();
 
         // Timer neustarten, den Countdown sichtbar machen und auf playerTime setzen
         timer.cancel();
@@ -186,7 +185,7 @@ public class StartActivity extends AppCompatActivity
         gameIsRunning = true;
 
         // let the KI set its stone
-        if (kiIsUsed) {
+        if (aiIsUsed) {
             if(difficulty == 2) {
                 aiPlayer = 0;
                 gameIsRunning = false; // first disable the playground for user input
@@ -210,40 +209,49 @@ public class StartActivity extends AppCompatActivity
         if(positionState[Integer.parseInt(chip.getTag().toString())] == 2
                 && gameIsRunning) {
             timer.start();
+            // set chip color and animation and show animation
             chip.setTranslationY(-1000f);
-            chip.setImageResource(R.drawable.red);
             if (activePlayer == 1) {
                 chip.setImageResource(R.drawable.yellow);
+            }else{
+                chip.setImageResource(R.drawable.red);
             }
             chip.animate().translationY(0f).rotation(3600).setDuration(300);
 
-            // positionState verändern
+            // save the positionState of the position that was clicked to the used color
             positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer;
 
-            // Prüfe, ob jemand gewonnen hat - und wenn ja: wer?
+            // check if someone has won
             for (int[] winningPosition : winningPositions) {
                 if (positionState[winningPosition[0]] == activePlayer
                         && positionState[winningPosition[1]] == activePlayer
                         && positionState[winningPosition[2]] == activePlayer) {
 
-                    // Applaus einspielen
-                    applause.start();
-
-                    // Gewinnernachricht in einen String packen
-                    winnerMessage = getString(R.string.red_wins);
-                    if (activePlayer == 1) {
-                        winnerMessage = getString(R.string.yellow_wins);
-                    }
-
-                    // Anzeigen, wer gewonnen hat
                     winner = activePlayer;
 
-                    // Spielfeld sperren
-                    gameIsRunning = false;
+                    // set sound and winnerMessage
+                    if(aiIsUsed){ // bot game
+                        if(aiPlayer == winner){ // ai wins against player
+                            finalPlayer = MediaPlayer.create(this, R.raw.kid_laugh);
+                            winnerMessage = getString(R.string.you_lose);
+                        }else{ // player wins against ai
+                            finalPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
+                            winnerMessage = getString(R.string.you_win);
+                        }
+                    }else { // player vs. player
+                        finalPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
+                        if (winner == 1) { // yellow player wins
+                            winnerMessage = getString(R.string.yellow_wins);
+                        }else{ // red player wins
+                            winnerMessage = getString(R.string.red_wins);
+                        }
+                    }
+
+                    gameIsRunning = false; // disable playground for user input
                 }
             }
 
-            // Prüfe, ob unentschieden
+            // check for draw
             if (gameIsRunning && winner == 2) {
                 boolean isUndecided = true;
                 for (int currentPosition : positionState) {
@@ -251,34 +259,32 @@ public class StartActivity extends AppCompatActivity
                         isUndecided = false;
                     }
                 }
-                // Zeige 'Unentschieden' an:
+                // set sound and winnerMessage
                 if (isUndecided) {
+                    finalPlayer = MediaPlayer.create(this, R.raw.monkeys);
                     winnerMessage = getString(R.string.draw);
-                    gameIsRunning = false;
+                    gameIsRunning = false; // disable playground for user input
                 }
             }
 
             if (!gameIsRunning) {
-                // Countdown ausblenden und Timer zurücksetzen
+                // start MediaPlayer, show winnerLayout with winnerMessage, cancel timer
+                finalPlayer.start();
                 timer.cancel();
                 counterTextView.setVisibility(View.INVISIBLE);
-
-                // Im Textfeld die Gewinnernachricht anzeigen
                 winnerText.setText(winnerMessage);
-
-                // Winner-Layout sichtbar machen
                 winnerLayout.setVisibility(View.VISIBLE);
             }
 
-            // aktiven Spieler ändern
+            // change active player
             if (activePlayer == 1) {
                 activePlayer = 0;
             } else {
                 activePlayer = 1;
             }
         }
-        // let the KI set its stone
-        if (activePlayer == aiPlayer && kiIsUsed && gameIsRunning) {
+        // let the AI set its chip
+        if (activePlayer == aiPlayer && aiIsUsed && gameIsRunning) {
             // first disable the playground for user input
             gameIsRunning = false;
             new Handler().postDelayed(new Runnable() {

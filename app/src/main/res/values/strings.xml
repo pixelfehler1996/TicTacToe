@@ -12,4 +12,6 @@
     <string name="easy">easy</string>
     <string name="medium">medium</string>
     <string name="hard">hard</string>
+    <string name="you_win">You win!</string>
+    <string name="you_lose">You lose!</string>
 </resources>
