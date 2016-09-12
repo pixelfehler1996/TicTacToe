@@ -51,7 +51,6 @@ public class StartActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
 
         // get all saved values from the shared preferences
-        playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         difficulty = sharedPreferences.getInt("difficulty", 1);
 
         artificialIntelligence = new ArtificialIntelligence(difficulty); // new AI object
@@ -106,18 +105,7 @@ public class StartActivity extends AppCompatActivity
         counterTextView = (TextView)findViewById(R.id.counterTextView);
         counterTextView.setText(Long.toString(playerTime/1000));
 
-        // initialize the counter
-        timer = new CountDownTimer(100 + playerTime,1000) {
-            @Override
-            public void onTick(long l) {
-                counterTextView.setText(Long.toString(l/1000));
-            }
-
-            @Override
-            public void onFinish() {
-                if(gameIsRunning){showShip();}
-            }
-        };
+        resetTimer(); // initialize the counter
         gong.start(); // Play the gong sound
         timer.start(); // start the timer
 
@@ -143,18 +131,15 @@ public class StartActivity extends AppCompatActivity
         artificialIntelligence.setDifficulty(difficulty);
         artificialIntelligence.resetCounter();
 
-        // Rot beginnt wieder
-        activePlayer = 0;
+        activePlayer = 0;// red is beginning every time
 
-        // Setzt den Gewinner zurück
+        // reset winner and positionStates
         winner = 2;
-
-        // Spielfeld zurücksetzen
         for(int i = 0; i <= 8; i++){
             positionState[i] = 2;
         }
 
-        // Chips entfernen
+        // remove chips
         GridLayout board = (GridLayout)findViewById(R.id.board);
         for(int i = 0; i <= 8; i++){
             ((ImageView)board.getChildAt(i)).setImageResource(0);
@@ -163,28 +148,27 @@ public class StartActivity extends AppCompatActivity
         // set to firstRound
         isFirstRound = true;
 
-        // winnerLayout wieder unsichtbar machen
+        // make winnerLayout invisible
         LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
         winnerLayout.setVisibility(View.INVISIBLE);
 
-        // den Applaus stoppen
+        // stop the MediaPlayer
         finalPlayer.stop();
 
-        // Timer neustarten, den Countdown sichtbar machen und auf playerTime setzen
+        // reset and restart the timer, make the countdown visible
         timer.cancel();
-        counterTextView.setText(Long.toString(playerTime/1000));
+        resetTimer();
         counterTextView.setVisibility(View.VISIBLE);
         timer.start();
 
-        // Gong resetten und starten
+        // reset gong and start it
         gong.stop();
         gong = MediaPlayer.create(this,R.raw.gong);
         gong.start();
 
-        // Gibt das Spielfeld für Benutzereingaben frei
-        gameIsRunning = true;
+        gameIsRunning = true; // enable playground for user input
 
-        // let the KI set its stone
+        // let the KI set its chip
         if (aiIsUsed) {
             if(difficulty == 2) {
                 aiPlayer = 0;
@@ -312,6 +296,20 @@ public class StartActivity extends AppCompatActivity
         ship.setTranslationX(0f);
         placeChip(chip);
         ship.animate().translationX(-1000f).setDuration(5000);
+    }
+    public void resetTimer(){
+        playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
+        timer = new CountDownTimer(100 + playerTime,1000) {
+            @Override
+            public void onTick(long l) {
+                counterTextView.setText(Long.toString(l/1000));
+            }
+
+            @Override
+            public void onFinish() {
+                if(gameIsRunning){showShip();}
+            }
+        };
     }
     class ArtificialIntelligence{
         int diff;
