@@ -63,15 +63,15 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if(mediaPlayer != null){mediaPlayer.pause();}
-        if(timer != null){timer.cancel();}
+        if(mediaPlayer != null) mediaPlayer.pause();
+        if(timer != null) timer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mediaPlayer != null){mediaPlayer.start();}
-        if(timer!= null){timer.start();}
+        if(mediaPlayer != null) mediaPlayer.start();
+        if(timer!= null) timer.start();
     }
 
     @Override
@@ -127,14 +127,12 @@ public class StartActivity extends AppCompatActivity
 
         // reset winner and positionStates
         winner = 2;
-        for(int i = 0; i <= 8; i++){
+        for(int i = 0; i <= 8; i++)
             positionState[i] = 2;
-        }
 
         // remove chips
-        for(int i = 0; i <= 8; i++){
+        for(int i = 0; i <= 8; i++)
             ((ImageView)board.getChildAt(i)).setImageResource(0);
-        }
 
         // make winnerLayout invisible and the countdown visible
         winnerLayout.setVisibility(View.INVISIBLE);
@@ -161,9 +159,8 @@ public class StartActivity extends AppCompatActivity
                         artificialIntelligence.attack();
                     }
                 }, 1000);
-            }else{
+            }else
                 aiPlayer = 1;
-            }
         }
 
         gameIsRunning = true; // enable playground for user input
@@ -179,11 +176,10 @@ public class StartActivity extends AppCompatActivity
             timer.start();
             // set chip color and animation and show animation
             chip.setTranslationY(-1000f);
-            if (activePlayer == 1) {
+            if (activePlayer == 1)
                 chip.setImageResource(R.drawable.yellow);
-            }else{
+            else
                 chip.setImageResource(R.drawable.red);
-            }
             chip.animate().translationY(0f).rotation(3600).setDuration(300);
 
             // save the positionState of the position that was clicked to the used color
@@ -208,11 +204,10 @@ public class StartActivity extends AppCompatActivity
                         }
                     }else { // player vs. player
                         mediaPlayer = MediaPlayer.create(this, R.raw.small_crowd_applause);
-                        if (winner == 1) { // yellow player wins
+                        if (winner == 1) // yellow player wins
                             winnerMessage = getString(R.string.yellow_wins);
-                        }else{ // red player wins
+                        else // red player wins
                             winnerMessage = getString(R.string.red_wins);
-                        }
                     }
 
                     gameIsRunning = false; // disable playground for user input
@@ -223,9 +218,8 @@ public class StartActivity extends AppCompatActivity
             if (gameIsRunning && winner == 2) {
                 boolean isUndecided = true;
                 for (int currentPosition : positionState) {
-                    if (currentPosition == 2) {
+                    if (currentPosition == 2)
                         isUndecided = false;
-                    }
                 }
                 // set sound and winnerMessage
                 if (isUndecided) {
@@ -245,11 +239,10 @@ public class StartActivity extends AppCompatActivity
             }
 
             // change active player
-            if (activePlayer == 1) {
+            if (activePlayer == 1)
                 activePlayer = 0;
-            } else {
+            else
                 activePlayer = 1;
-            }
         }
         // let the AI set its chip
         if (activePlayer == aiPlayer && aiIsUsed && gameIsRunning) {
@@ -272,9 +265,8 @@ public class StartActivity extends AppCompatActivity
         mediaPlayer = MediaPlayer.create(this,R.raw.foghorn);
 
         // get an empty field
-        while (positionState[rand] != 2) {
+        while (positionState[rand] != 2)
             rand = new Random().nextInt(9);
-        }
         chip = (ImageView) board.getChildAt(rand);
 
         mediaPlayer.start();
@@ -292,7 +284,7 @@ public class StartActivity extends AppCompatActivity
 
             @Override
             public void onFinish() {
-                if(gameIsRunning){showShip();}
+                if(gameIsRunning) showShip();
             }
         };
     }
@@ -320,74 +312,68 @@ public class StartActivity extends AppCompatActivity
             if(difficulty == 0) { //easy
                 // just place random
                 rand = new Random().nextInt(9);
-                while (positionState[rand] != 2) {
+                while (positionState[rand] != 2)
                     rand = new Random().nextInt(9);
-                }
                 placeChip(board.getChildAt(rand));
             } else if(difficulty == 1) { // medium
                 position = searchPositions(1); // every time its the yellow player!
 
-                if (position != -1) { // 1. Attack (= win the game if possible):
+                if (position != -1) // 1. Attack (= win the game if possible):
                     placeChip(board.getChildAt(position));
-                } else { // 2. if no immediate win is possible, defense a possible win of the player:
+                else { // 2. if no immediate win is possible, defense a possible win of the player:
                     position = searchPositions(0);
-                    if (position != -1) {
+                    if (position != -1)
                         placeChip(board.getChildAt(position));
-                    } else { // 3. if no possible win was found, place random:
+                    else { // 3. if no possible win was found, place random:
                         rand = new Random().nextInt(9);
-                        while (positionState[rand] != 2) {
+                        while (positionState[rand] != 2)
                             rand = new Random().nextInt(9);
-                        }
                         placeChip(board.getChildAt(rand));
                     }
                 }
             } else if(difficulty == 2) { // hard - every time its the red player!
-                if(counter == 1 || counter == 2) {
+                if(counter == 1 || counter == 2)
                     placeChip(board.getChildAt(getFreeEdge()));
-                }else if(counter == 3){
+                else if(counter == 3){
                     position = searchPositions(0);
-                    if(position != -1){ // 1. Attack (= win the game if possible):
+                    if(position != -1) // 1. Attack (= win the game if possible):
                         placeChip(board.getChildAt(position));
-                    }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                    else { // 2. if not immediate win is possible, defense a possible win of the player:
                         position = searchPositions(1);
-                        if(position != -1){
+                        if(position != -1)
                             placeChip(board.getChildAt(position));
-                        }else{ // if no defense is necessary, place on free edge
+                        else // if no defense is necessary, place on free edge
                             placeChip(board.getChildAt(getFreeEdge()));
-                        }
                     }
                 }else if(counter == 4){
-                    if(positionState[4] == 2){ // if middle field is empty, place there and win
+                    if(positionState[4] == 2) // if middle field is empty, place there and win
                         placeChip(board.getChildAt(4));
-                    }else{
+                    else{
                         position = searchPositions(0);
-                        if(position != -1){ // 1. Attack (= win the game if possible):
+                        if(position != -1) // 1. Attack (= win the game if possible):
                             placeChip(board.getChildAt(position));
-                        }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                        else { // 2. if not immediate win is possible, defense a possible win of the player:
                             position = searchPositions(1);
-                            if(position != -1){
+                            if(position != -1)
                                 placeChip(board.getChildAt(position));
-                            }else{ // if no defense is necessary, place on free edge
+                            else // if no defense is necessary, place on free edge
                                 placeChip(board.getChildAt(getFreeEdge()));
-                            }
                         }
                     }
                 }
                 else if(counter > 4){
                     position = searchPositions(0);
-                    if(position != -1){ // 1. Attack (= win the game if possible):
+                    if(position != -1) // 1. Attack (= win the game if possible):
                         placeChip(board.getChildAt(position));
-                    }else { // 2. if not immediate win is possible, defense a possible win of the player:
+                    else { // 2. if not immediate win is possible, defense a possible win of the player:
                         position = searchPositions(1);
-                        if(position != -1){
+                        if(position != -1)
                             placeChip(board.getChildAt(position));
-                        }else{ // if no defense is necessary, place on free edge
+                        else // if no defense is necessary, place on free edge
                             placeChip(board.getChildAt(getFreeEdge()));
-                        }
                     }
                 }
             }
-
             counter++;
         }
         int searchPositions(int playerID){
@@ -395,38 +381,30 @@ public class StartActivity extends AppCompatActivity
             int counter;
             for(int[] possiblePosition : winningPositions){
                 counter = 0;
-                if(positionState[possiblePosition[0]] == playerID){
+                if(positionState[possiblePosition[0]] == playerID)
                     counter++;
-                }
-                if(positionState[possiblePosition[1]] == playerID){
+                if(positionState[possiblePosition[1]] == playerID)
                     counter++;
-                }
-                if(positionState[possiblePosition[2]] == playerID){
+                if(positionState[possiblePosition[2]] == playerID)
                     counter++;
-                }
                 if(counter >= 2){
                     // give back the position of the empty field that is needed for player with playerID to win
-                    if(positionState[possiblePosition[0]] == 2){
+                    if(positionState[possiblePosition[0]] == 2)
                         return possiblePosition[0];
-                    }
-                    if(positionState[possiblePosition[1]] == 2){
+                    if(positionState[possiblePosition[1]] == 2)
                         return possiblePosition[1];
-                    }
-                    if(positionState[possiblePosition[2]] == 2){
+                    if(positionState[possiblePosition[2]] == 2)
                         return possiblePosition[2];
-                    }
                 }
             }
-            // if nothing was found, return -1
-            return -1;
+            return -1; // if nothing was found, return -1
         }
         int getFreeEdge(){
             // searches for the next free edge
             int[] edges = {0,2,6,8};
             for(int edge:edges){
-                if(positionState[edge] == 2){
+                if(positionState[edge] == 2)
                     return edge;
-                }
             }
             return -1; // if nothing was found, return -1
         }
