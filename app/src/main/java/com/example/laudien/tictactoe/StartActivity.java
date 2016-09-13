@@ -51,11 +51,6 @@ public class StartActivity extends AppCompatActivity
         setContentView(R.layout.activity_start);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
 
-        // get all saved values from the shared preferences
-        difficulty = sharedPreferences.getInt("difficulty", 1);
-
-        artificialIntelligence = new ArtificialIntelligence(difficulty); // new AI object
-
         // load StartActivity Fragment
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, new StartFragment()).commit();
