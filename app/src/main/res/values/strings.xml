@@ -14,7 +14,4 @@
     <string name="hard">hard</string>
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose!</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
