@@ -43,7 +43,7 @@ public class StartActivity extends AppCompatActivity
     GridLayout board;
     LinearLayout winnerLayout; // layout with winner-text and "play again" button
     int difficulty; // 0 = easy, 1 = normal, 2 = unbeatable
-    ArtificialIntelligence artificialIntelligence;
+    ArtificialIntelligence computer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +110,11 @@ public class StartActivity extends AppCompatActivity
 
         // reload sharedPreferences and reset AI
         difficulty = sharedPreferences.getInt("difficulty", 1);
-        if(artificialIntelligence != null) {
-            artificialIntelligence.setDifficulty(difficulty);
-            artificialIntelligence.resetCounter();
+        if(computer != null) {
+            computer.setDifficulty(difficulty);
+            computer.resetCounter();
         }else
-            artificialIntelligence = new ArtificialIntelligence(difficulty);
+            computer = new ArtificialIntelligence(difficulty);
 
         activePlayer = 0;// red is beginning every time
         isFirstRound = true; // set to firstRound
@@ -151,7 +151,7 @@ public class StartActivity extends AppCompatActivity
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        artificialIntelligence.attack();
+                        computer.attack();
                     }
                 }, 1000);
             }else
@@ -246,7 +246,7 @@ public class StartActivity extends AppCompatActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    artificialIntelligence.attack();
+                    computer.attack();
                 }
             },1000);
         }
