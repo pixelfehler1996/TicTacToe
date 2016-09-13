@@ -41,6 +41,7 @@ public class StartActivity extends AppCompatActivity
     TextView counterTextView;
     Long playerTime; // time for each move
     GridLayout board;
+    LinearLayout winnerLayout; // layout with winner-text and "play again" button
     int difficulty; // 0 = easy, 1 = normal, 2 = unbeatable
     ArtificialIntelligence artificialIntelligence;
 
@@ -96,53 +97,33 @@ public class StartActivity extends AppCompatActivity
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, new GameFragment()).commit();
         getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
-        startGame();
+        startGame(view);
     }
     public void playerVsKI(View view){
         aiIsUsed = true;
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, new GameFragment()).commit();
         getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
-        startGame();
+        startGame(view);
     }
-    void startGame(){
+    public void startGame(View view){
         board = (GridLayout)findViewById(R.id.board);
         ship = (ImageView)findViewById(R.id.shipView);
-        mediaPlayer = MediaPlayer.create(this,R.raw.gong);
-        isFirstRound = true;
-
-        ship.setTranslationX(+1000f); // get the ship out of display
-
-        resetTimer(); // initialize the counter
-        // set the counterView to the set time
         counterTextView = (TextView)findViewById(R.id.counterTextView);
-        counterTextView.setText(Long.toString(playerTime/1000));
-        mediaPlayer.start(); // Play the gong sound
-        timer.start(); // start the timer
+        winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
+        mediaPlayer = MediaPlayer.create(this,R.raw.gong); // set the MediaPlayer to gong
 
-        // let the KI set its stone
-        if (aiIsUsed) {
-            if(difficulty == 2) {
-                aiPlayer = 0;
-                gameIsRunning = false; // first disable the playground for user input
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        artificialIntelligence.attack();
-                    }
-                }, 1000);
-            }else{
-                aiPlayer = 1;
-            }
-        }
-    }
-    public void newGame(View view){
-        //reload sharedPreferences and reset AI
+        // reload sharedPreferences and reset AI
         difficulty = sharedPreferences.getInt("difficulty", 1);
-        artificialIntelligence.setDifficulty(difficulty);
-        artificialIntelligence.resetCounter();
+        if(artificialIntelligence != null) {
+            artificialIntelligence.setDifficulty(difficulty);
+            artificialIntelligence.resetCounter();
+        }else
+            artificialIntelligence = new ArtificialIntelligence(difficulty);
 
         activePlayer = 0;// red is beginning every time
+        isFirstRound = true; // set to firstRound
+        mediaPlayer.stop(); // stop the MediaPlayer
 
         // reset winner and positionStates
         winner = 2;
@@ -151,32 +132,23 @@ public class StartActivity extends AppCompatActivity
         }
 
         // remove chips
-        GridLayout board = (GridLayout)findViewById(R.id.board);
         for(int i = 0; i <= 8; i++){
             ((ImageView)board.getChildAt(i)).setImageResource(0);
         }
 
-        // set to firstRound
-        isFirstRound = true;
-
-        // make winnerLayout invisible
-        LinearLayout winnerLayout = (LinearLayout) findViewById(R.id.winnerLayout);
+        // make winnerLayout invisible and the countdown visible
         winnerLayout.setVisibility(View.INVISIBLE);
-
-        // stop the MediaPlayer
-        mediaPlayer.stop();
-
-        // reset and restart the timer, make the countdown visible
-        timer.cancel();
-        resetTimer();
         counterTextView.setVisibility(View.VISIBLE);
+
+        ship.setTranslationX(+1000f); // get the ship out of display
+
+        // reset and (re-)start the timer
+        if(timer != null) timer.cancel();
+        resetTimer();
+        counterTextView.setText(Long.toString(playerTime/1000)); // set the counterTextView to the set time
         timer.start();
 
-        // play the gong sound
-        mediaPlayer = MediaPlayer.create(this,R.raw.gong);
-        mediaPlayer.start();
-
-        gameIsRunning = true; // enable playground for user input
+        mediaPlayer.start(); // play the gong sound
 
         // let the KI set its chip
         if (aiIsUsed) {
@@ -193,6 +165,8 @@ public class StartActivity extends AppCompatActivity
                 aiPlayer = 1;
             }
         }
+
+        gameIsRunning = true; // enable playground for user input
     }
     public void placeChip(View view){
         chip = (ImageView) view;
