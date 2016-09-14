@@ -18,6 +18,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -239,6 +240,7 @@ public class GameFragment extends Fragment {
         ship.setTranslationX(0f);
         placeChip(chip, context);
         ship.animate().translationX(-1500f).setDuration(5000);
+        Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
