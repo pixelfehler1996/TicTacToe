@@ -54,13 +54,11 @@ public class StartActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
-
     @Override
     public void onBackPressed() {
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, startFragment).commit();
     }
-
     public void playerVsPlayer(View view){
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, false);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);

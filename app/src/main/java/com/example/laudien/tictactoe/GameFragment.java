@@ -102,7 +102,7 @@ public class GameFragment extends Fragment {
         winnerLayout.setVisibility(View.INVISIBLE);
         counterTextView.setVisibility(View.VISIBLE);
 
-        ship.setTranslationX(+1000f); // get the ship out of display
+        ship.setVisibility(View.INVISIBLE); // make the ship invisible
 
         // reset and (re-)start the timer
         if(timer != null) timer.cancel();
@@ -228,6 +228,8 @@ public class GameFragment extends Fragment {
         int rand = new Random().nextInt(9);
         mediaPlayer = MediaPlayer.create(context,R.raw.foghorn);
 
+        ship.setVisibility(View.VISIBLE); // make the ship visable
+
         // get an empty field
         while (positionState[rand] != 2)
             rand = new Random().nextInt(9);
@@ -236,7 +238,13 @@ public class GameFragment extends Fragment {
         mediaPlayer.start();
         ship.setTranslationX(0f);
         placeChip(chip, context);
-        ship.animate().translationX(-1000f).setDuration(5000);
+        ship.animate().translationX(-1500f).setDuration(5000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ship.setVisibility(View.INVISIBLE); // make the ship invisable again
+            }
+        },5000);
     }
     static void resetTimer(final Context context){
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
