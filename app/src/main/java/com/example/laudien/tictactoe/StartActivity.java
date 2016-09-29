@@ -15,8 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 public class StartActivity extends AppCompatActivity
-        implements GameFragment.OnFragmentInteractionListener,
-        StartFragment.OnFragmentInteractionListener
+        implements StartFragment.OnFragmentInteractionListener
 {
 
     GameFragment gameFragment;

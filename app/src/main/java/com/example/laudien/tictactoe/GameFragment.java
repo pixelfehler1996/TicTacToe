@@ -1,17 +1,13 @@
 package com.example.laudien.tictactoe;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -46,7 +42,7 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.fragment_game,null);
+        layout = inflater.inflate(R.layout.fragment_game, container);
         board = (GridLayout)layout.findViewById(R.id.board);
         ship = (ImageView)layout.findViewById(R.id.shipView);
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
@@ -70,9 +66,6 @@ public class GameFragment extends Fragment {
         super.onResume();
         if(mediaPlayer != null) mediaPlayer.start();
         if(timer!= null) timer.start();
-    }
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
     public void startGame(){
         mediaPlayer = MediaPlayer.create(getContext(), R.raw.gong); // set the MediaPlayer to gong
@@ -260,9 +253,6 @@ public class GameFragment extends Fragment {
                 if(gameIsRunning) showShip();
             }
         };
-    }
-    public boolean isGameIsRunning() {
-        return gameIsRunning;
     }
     public void setGameIsRunning(boolean gameIsRunning) {
         this.gameIsRunning = gameIsRunning;

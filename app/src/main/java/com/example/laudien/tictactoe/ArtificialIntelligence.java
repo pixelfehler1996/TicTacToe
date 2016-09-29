@@ -1,31 +1,25 @@
 package com.example.laudien.tictactoe;
 
-import android.content.Context;
-
 import java.util.Random;
 
-/**
- * Created by laudien on 29.09.2016.
- */
-
-public class ArtificialIntelligence {
+class ArtificialIntelligence {
     private int difficulty;
     private int counter; // counts the moves
-    GameFragment gameFragment;
+    private GameFragment gameFragment;
 
-    public ArtificialIntelligence(GameFragment gameFragment){
+    ArtificialIntelligence(GameFragment gameFragment){
         resetCounter();
         this.gameFragment = gameFragment;
     }
-    public void setDifficulty(int difficulty){
+    void setDifficulty(int difficulty){
         this.difficulty = difficulty;
     }
-    public void resetCounter(){
+    void resetCounter(){
         counter = 1;
     }
-    public void attack() {
+    void attack() {
         int position;
-        int rand = 0;
+        int rand;
         int[] positionState = gameFragment.getPositionState();
 
         // enable the playground
