@@ -8,8 +8,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/player_vs_player"
-        android:id="@+id/startButton"
-        android:onClick="playerVsPlayer"
+        android:id="@+id/btn_player_vs_player"
         android:layout_above="@+id/relativeLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -20,8 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/player_vs_ai"
-        android:id="@+id/kiButton"
-        android:onClick="playerVsKI"
+        android:id="@+id/btn_player_vs_ki"
         android:layout_below="@+id/relativeLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -33,6 +31,6 @@
         android:layout_height="0dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/relativeLayout"></RelativeLayout>
+        android:id="@+id/relativeLayout"/>
 
 </RelativeLayout>

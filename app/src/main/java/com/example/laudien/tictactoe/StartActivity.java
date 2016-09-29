@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 public class StartActivity extends AppCompatActivity
-        implements StartFragment.OnFragmentInteractionListener
+        implements View.OnClickListener
 {
 
     GameFragment gameFragment;
@@ -50,34 +50,29 @@ public class StartActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-    @Override
     public void onBackPressed() {
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, startFragment).commit();
     }
-    public void playerVsPlayer(View view){
-        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, false);
-        gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, gameFragment).commit();
-        getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
-        newGame(view);
-    }
-    public void playerVsKI(View view){
-        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, true);
-        gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, gameFragment).commit();
-        getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
-        newGame(view);
-    }
-    public void newGame(View view){
-        gameFragment.startGame();
-    }
-    public void placeChip(View view){
-        gameFragment.placeChip(view);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_player_vs_player:
+                gameFragmentBundle.putBoolean(NAME_AI_IS_USED, false);
+                gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
+                transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout, gameFragment).commit();
+                getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
+                gameFragment.startGame();
+                break;
+            case R.id.btn_player_vs_ki:
+                gameFragmentBundle.putBoolean(NAME_AI_IS_USED, true);
+                gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
+                transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout, gameFragment).commit();
+                getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
+                gameFragment.startGame();
+                break;
+        }
     }
 }
