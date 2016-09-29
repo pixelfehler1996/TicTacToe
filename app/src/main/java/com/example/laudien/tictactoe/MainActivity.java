@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     GameFragment gameFragment;
     StartFragment startFragment;
-    FragmentTransaction transaction;
+    FragmentManager fragmentManager;
     Bundle gameFragmentBundle; // is sent to gameFragment
     public static final String NAME_AI_IS_USED = "aiIsUsed";
 
@@ -28,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
         gameFragmentBundle = new Bundle();
+        fragmentManager = getSupportFragmentManager();
 
-        // load MainActivity Fragment
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, startFragment).commit();
+        // load StartFragment
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, startFragment).commit();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, startFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, startFragment).commit();
     }
     public void playerVsPlayer(View view){
         openGameFragment(false);
@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void openGameFragment(boolean aiIsUsed){
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, gameFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, gameFragment).commit();
     }
     public void placeChip(View view){
         gameFragment.placeChip(view);
