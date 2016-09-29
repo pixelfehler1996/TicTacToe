@@ -14,9 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-public class StartActivity extends AppCompatActivity
-        implements StartFragment.OnFragmentInteractionListener
-{
+public class StartActivity extends AppCompatActivity {
 
     GameFragment gameFragment;
     StartFragment startFragment;
@@ -48,10 +46,6 @@ public class StartActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
     @Override
     public void onBackPressed() {
