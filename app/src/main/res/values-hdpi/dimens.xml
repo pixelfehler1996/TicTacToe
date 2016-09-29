@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="board_size">270dp</dimen>
+    <dimen name="chip_size">70dp</dimen>
+</resources>
