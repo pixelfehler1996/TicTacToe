@@ -86,10 +86,13 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         if(timer!= null) timer.start();
     }
     public void startGame(){
+        if(mediaPlayer != null) {
+            if (mediaPlayer.isPlaying())
+                mediaPlayer.stop(); // stop the MediaPlayer if playing
+        }
         mediaPlayer = MediaPlayer.create(getContext(), R.raw.gong); // set the MediaPlayer to gong
         if(aiIsUsed)computer.resetCounter(); // reset AI
         activePlayer = 0;// red is beginning every time
-        mediaPlayer.stop(); // stop the MediaPlayer
 
         // reset winner and positionStates
         winner = 2;
