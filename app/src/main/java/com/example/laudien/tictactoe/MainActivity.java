@@ -53,16 +53,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, startFragment).commit();
     }
     public void playerVsPlayer(View view) {
-        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, false);
-        gameFragment = (GameFragment) Fragment.instantiate(this, GameFragment.class.getName(), gameFragmentBundle);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, gameFragment).commit();
-        getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
-        gameFragment.startGame();
+        openGameFragment(false);
     }
     public void PlayerVsKi(View view){
-        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, true);
-        gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
+        openGameFragment(true);
+    }
+    private void openGameFragment(boolean aiIsUsed){
+        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
+        gameFragment = (GameFragment) Fragment.instantiate(this, GameFragment.class.getName(), gameFragmentBundle);
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, gameFragment).commit();
         getSupportFragmentManager().executePendingTransactions(); //ensure that transaction is completed
