@@ -47,6 +47,8 @@ public class GameFragment extends Fragment {
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
+
+        startGame();
         return layout;
     }
     @Override
@@ -54,6 +56,7 @@ public class GameFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         aiIsUsed = getArguments().getBoolean(MainActivity.NAME_AI_IS_USED);
     }
+
     @Override
     public void onPause() {
         super.onPause();
