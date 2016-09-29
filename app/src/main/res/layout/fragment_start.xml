@@ -13,7 +13,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/relativeLayout"
-        android:layout_alignEnd="@+id/relativeLayout" />
+        android:layout_alignEnd="@+id/relativeLayout"
+        android:onClick="playerVsPlayer"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -24,7 +25,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/relativeLayout"
-        android:layout_alignEnd="@+id/relativeLayout" />
+        android:layout_alignEnd="@+id/relativeLayout"
+        android:onClick="PlayerVsKi"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
