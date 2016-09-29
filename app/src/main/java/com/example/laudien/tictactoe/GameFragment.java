@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     private TextView counterTextView;
     private Long playerTime; // time for each move
     private ArtificialIntelligence computer;
+    int difficulty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +51,13 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
         Button btn_newGame = (Button)layout.findViewById(R.id.newGame);
+        aiIsUsed = getArguments().getBoolean(MainActivity.NAME_AI_IS_USED);
+
+        // create computer if ai is used
+        if(aiIsUsed){
+            difficulty = sharedPreferences.getInt("difficulty", 1);
+            computer = new ArtificialIntelligence(this, difficulty);
+        }
 
         // set the onClick Listeners
         btn_newGame.setOnClickListener(this);
@@ -58,11 +67,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         // start the game
         startGame();
         return layout;
-    }
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        aiIsUsed = getArguments().getBoolean(MainActivity.NAME_AI_IS_USED);
     }
 
     @Override
@@ -74,20 +78,17 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        difficulty = sharedPreferences.getInt("difficulty", 1);
+        if(computer == null)
+            computer = new ArtificialIntelligence(this, difficulty);
+        else
+            computer.setDifficulty(difficulty);
         if(mediaPlayer != null) mediaPlayer.start();
         if(timer!= null) timer.start();
     }
     public void startGame(){
         mediaPlayer = MediaPlayer.create(getContext(), R.raw.gong); // set the MediaPlayer to gong
-
-        // reload sharedPreferences and reset AI
-        int difficulty = sharedPreferences.getInt("difficulty", 1);
-        if(computer != null) {
-            computer.setDifficulty(difficulty);
-            computer.resetCounter();
-        }else
-            computer = new ArtificialIntelligence(this);
-
+        if(aiIsUsed)computer.resetCounter(); // reset AI
         activePlayer = 0;// red is beginning every time
         mediaPlayer.stop(); // stop the MediaPlayer
 
@@ -115,6 +116,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         mediaPlayer.start(); // play the gong sound
 
         // let the KI set its chip
+        Log.i("GameFragment", "aiIsUsed = " + aiIsUsed);
         if (aiIsUsed) {
             if(difficulty == 2) {
                 aiPlayer = 0;
