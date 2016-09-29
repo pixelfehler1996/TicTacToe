@@ -42,7 +42,7 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.fragment_game, container);
+        layout = inflater.inflate(R.layout.fragment_game, container, false);
         board = (GridLayout)layout.findViewById(R.id.board);
         ship = (ImageView)layout.findViewById(R.id.shipView);
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
