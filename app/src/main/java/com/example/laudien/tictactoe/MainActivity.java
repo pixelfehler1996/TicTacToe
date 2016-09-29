@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
 
     GameFragment gameFragment;
     StartFragment startFragment;
@@ -46,13 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.frameLayout, startFragment).commit();
     }
-    public void playerVsPlayer(View view){
-        openGameFragment(false);
-    }
-    public void playerVsKI(View view){
-        openGameFragment(true);
-    }
-    private void openGameFragment(boolean aiIsUsed){
+    @Override
+    public void onStartGame(boolean aiIsUsed) {
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
         fragmentManager.beginTransaction().replace(R.id.frameLayout, gameFragment).commit();
