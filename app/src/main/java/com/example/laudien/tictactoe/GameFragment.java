@@ -29,7 +29,6 @@ public class GameFragment extends Fragment {
     private GridLayout board;
     private boolean gameIsRunning = true;
     private boolean aiIsUsed;
-    private boolean isFirstRound;
     private int winner = 2;
     private MediaPlayer mediaPlayer;
     private ImageView ship;
@@ -79,7 +78,6 @@ public class GameFragment extends Fragment {
             computer = new ArtificialIntelligence(this);
 
         activePlayer = 0;// red is beginning every time
-        isFirstRound = true; // set to firstRound
         mediaPlayer.stop(); // stop the MediaPlayer
 
         // reset winner and positionStates
@@ -212,9 +210,6 @@ public class GameFragment extends Fragment {
                 }
             },1000);
         }
-
-        // set firstRound to false
-        isFirstRound = false;
     }
     private void showShip(){
         timer.cancel();
