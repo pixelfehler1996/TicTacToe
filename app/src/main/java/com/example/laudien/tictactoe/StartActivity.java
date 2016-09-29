@@ -76,9 +76,9 @@ public class StartActivity extends AppCompatActivity
         newGame(view);
     }
     public void newGame(View view){
-        gameFragment.startGame(this);
+        gameFragment.startGame();
     }
     public void placeChip(View view){
-        gameFragment.placeChip(view, this);
+        gameFragment.placeChip(view);
     }
 }

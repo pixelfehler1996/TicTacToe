@@ -23,26 +23,25 @@ import android.widget.Toast;
 import java.util.Random;
 
 public class GameFragment extends Fragment {
-    static SharedPreferences sharedPreferences;
-    static int activePlayer = 0; // 0 = red, 1 = yellow player
-    static int aiPlayer; // determine which player is the ai
-    static int [][] winningPositions = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
-    static int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
-    static View layout;
-    static LinearLayout winnerLayout;
-    static GridLayout board;
-    static boolean gameIsRunning = true;
-    static boolean aiIsUsed;
-    static boolean isFirstRound;
-    static int winner = 2;
-    static MediaPlayer mediaPlayer;
-    static ImageView ship;
-    static ImageView chip;
-    static CountDownTimer timer;
-    static TextView counterTextView;
-    static Long playerTime; // time for each move
-    static int difficulty; // 0 = easy, 1 = normal, 2 = unbeatable
-    static ArtificialIntelligence computer;
+    private SharedPreferences sharedPreferences;
+    private int activePlayer = 0; // 0 = red, 1 = yellow player
+    private int aiPlayer; // determine which player is the ai
+    public final static int [][] winningPositions = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
+    private int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
+    private View layout;
+    private LinearLayout winnerLayout;
+    private GridLayout board;
+    private boolean gameIsRunning = true;
+    private boolean aiIsUsed;
+    private boolean isFirstRound;
+    private int winner = 2;
+    private MediaPlayer mediaPlayer;
+    private ImageView ship;
+    private ImageView chip;
+    private CountDownTimer timer;
+    private TextView counterTextView;
+    private Long playerTime; // time for each move
+    private ArtificialIntelligence computer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,16 +74,16 @@ public class GameFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-    public static void startGame(Context context){
-        mediaPlayer = MediaPlayer.create(context, R.raw.gong); // set the MediaPlayer to gong
+    public void startGame(){
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.gong); // set the MediaPlayer to gong
 
         // reload sharedPreferences and reset AI
-        difficulty = sharedPreferences.getInt("difficulty", 1);
+        int difficulty = sharedPreferences.getInt("difficulty", 1);
         if(computer != null) {
             computer.setDifficulty(difficulty);
             computer.resetCounter();
         }else
-            computer = new ArtificialIntelligence(difficulty, context);
+            computer = new ArtificialIntelligence(this);
 
         activePlayer = 0;// red is beginning every time
         isFirstRound = true; // set to firstRound
@@ -107,7 +106,7 @@ public class GameFragment extends Fragment {
 
         // reset and (re-)start the timer
         if(timer != null) timer.cancel();
-        resetTimer(context);
+        resetTimer();
         counterTextView.setText(Long.toString(playerTime/1000)); // set the counterTextView to the set time
         timer.start();
 
@@ -130,7 +129,7 @@ public class GameFragment extends Fragment {
 
         gameIsRunning = true; // enable playground for user input
     }
-    public static void placeChip(View view, Context context){
+    public void placeChip(View view){
         chip = (ImageView) view;
         TextView winnerText = (TextView) layout.findViewById(R.id.winnerText);
         winnerLayout = (LinearLayout) layout.findViewById(R.id.winnerLayout);
@@ -161,18 +160,18 @@ public class GameFragment extends Fragment {
                     // set sound and winnerMessage
                     if(aiIsUsed){ // bot game
                         if(aiPlayer == winner){ // ai wins against player
-                            mediaPlayer = MediaPlayer.create(context, R.raw.kid_laugh);
-                            winnerMessage = context.getString(R.string.you_lose);
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.kid_laugh);
+                            winnerMessage = getContext().getString(R.string.you_lose);
                         }else{ // player wins against ai
-                            mediaPlayer = MediaPlayer.create(context, R.raw.small_crowd_applause);
-                            winnerMessage = context.getString(R.string.you_win);
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.small_crowd_applause);
+                            winnerMessage = getContext().getString(R.string.you_win);
                         }
                     }else { // player vs. player
-                        mediaPlayer = MediaPlayer.create(context, R.raw.small_crowd_applause);
+                        mediaPlayer = MediaPlayer.create(getContext(), R.raw.small_crowd_applause);
                         if (winner == 1) // yellow player wins
-                            winnerMessage = context.getString(R.string.yellow_wins);
+                            winnerMessage = getContext().getString(R.string.yellow_wins);
                         else // red player wins
-                            winnerMessage = context.getString(R.string.red_wins);
+                            winnerMessage = getContext().getString(R.string.red_wins);
                     }
 
                     gameIsRunning = false; // disable playground for user input
@@ -188,8 +187,8 @@ public class GameFragment extends Fragment {
                 }
                 // set sound and winnerMessage
                 if (isUndecided) {
-                    mediaPlayer = MediaPlayer.create(context, R.raw.monkeys);
-                    winnerMessage = context.getString(R.string.draw);
+                    mediaPlayer = MediaPlayer.create(getContext(), R.raw.monkeys);
+                    winnerMessage = getContext().getString(R.string.draw);
                     gameIsRunning = false; // disable playground for user input
                 }
             }
@@ -224,10 +223,10 @@ public class GameFragment extends Fragment {
         // set firstRound to false
         isFirstRound = false;
     }
-    static void showShip(Context context){
+    private void showShip(){
         timer.cancel();
         int rand = new Random().nextInt(9);
-        mediaPlayer = MediaPlayer.create(context,R.raw.foghorn);
+        mediaPlayer = MediaPlayer.create(getContext(),R.raw.foghorn);
 
         ship.setVisibility(View.VISIBLE); // make the ship visable
 
@@ -238,9 +237,9 @@ public class GameFragment extends Fragment {
 
         mediaPlayer.start();
         ship.setTranslationX(0f);
-        placeChip(chip, context);
+        placeChip(chip);
         ship.animate().translationX(-1500f).setDuration(5000);
-        Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -248,7 +247,7 @@ public class GameFragment extends Fragment {
             }
         },5000);
     }
-    static void resetTimer(final Context context){
+    private void resetTimer(){
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         timer = new CountDownTimer(100 + playerTime,1000) {
             @Override
@@ -258,131 +257,20 @@ public class GameFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                if(gameIsRunning) showShip(context);
+                if(gameIsRunning) showShip();
             }
         };
     }
-    static class ArtificialIntelligence{
-        int diff;
-        int counter; // counts the moves
-        Context context;
-
-        public ArtificialIntelligence(int difficulty, Context con){
-            setDifficulty(difficulty);
-            resetCounter();
-            context = con;
-        }
-        public void setDifficulty(int difficulty){
-            diff = difficulty;
-        }
-        public void resetCounter(){
-            counter = 1;
-        }
-        public void attack() {
-            int position;
-            int rand = 0;
-
-            // enable the playground
-            gameIsRunning = true;
-
-            if(difficulty == 0) { //easy
-                // just place random
-                rand = new Random().nextInt(9);
-                while (positionState[rand] != 2)
-                    rand = new Random().nextInt(9);
-                placeChip(board.getChildAt(rand), context);
-            } else if(difficulty == 1) { // medium
-                position = searchPositions(1); // every time its the yellow player!
-
-                if (position != -1) // 1. Attack (= win the game if possible):
-                    placeChip(board.getChildAt(position), context);
-                else { // 2. if no immediate win is possible, defense a possible win of the player:
-                    position = searchPositions(0);
-                    if (position != -1)
-                        placeChip(board.getChildAt(position), context);
-                    else { // 3. if no possible win was found, place random:
-                        rand = new Random().nextInt(9);
-                        while (positionState[rand] != 2)
-                            rand = new Random().nextInt(9);
-                        placeChip(board.getChildAt(rand), context);
-                    }
-                }
-            } else if(difficulty == 2) { // hard - every time its the red player!
-                if(counter == 1 || counter == 2)
-                    placeChip(board.getChildAt(getFreeEdge()), context);
-                else if(counter == 3){
-                    position = searchPositions(0);
-                    if(position != -1) // 1. Attack (= win the game if possible):
-                        placeChip(board.getChildAt(position), context);
-                    else { // 2. if not immediate win is possible, defense a possible win of the player:
-                        position = searchPositions(1);
-                        if(position != -1)
-                            placeChip(board.getChildAt(position), context);
-                        else // if no defense is necessary, place on free edge
-                            placeChip(board.getChildAt(getFreeEdge()), context);
-                    }
-                }else if(counter == 4){
-                    if(positionState[4] == 2) // if middle field is empty, place there and win
-                        placeChip(board.getChildAt(4), context);
-                    else{
-                        position = searchPositions(0);
-                        if(position != -1) // 1. Attack (= win the game if possible):
-                            placeChip(board.getChildAt(position), context);
-                        else { // 2. if not immediate win is possible, defense a possible win of the player:
-                            position = searchPositions(1);
-                            if(position != -1)
-                                placeChip(board.getChildAt(position), context);
-                            else // if no defense is necessary, place on free edge
-                                placeChip(board.getChildAt(getFreeEdge()), context);
-                        }
-                    }
-                }
-                else if(counter > 4){
-                    position = searchPositions(0);
-                    if(position != -1) // 1. Attack (= win the game if possible):
-                        placeChip(board.getChildAt(position), context);
-                    else { // 2. if not immediate win is possible, defense a possible win of the player:
-                        position = searchPositions(1);
-                        if(position != -1)
-                            placeChip(board.getChildAt(position), context);
-                        else // if no defense is necessary, place on free edge
-                            placeChip(board.getChildAt(getFreeEdge()), context);
-                    }
-                }
-            }
-            counter++;
-        }
-        int searchPositions(int playerID){
-            // searches for a position where are 2/3 used from the player with playerID
-            int counter;
-            for(int[] possiblePosition : winningPositions){
-                counter = 0;
-                if(positionState[possiblePosition[0]] == playerID)
-                    counter++;
-                if(positionState[possiblePosition[1]] == playerID)
-                    counter++;
-                if(positionState[possiblePosition[2]] == playerID)
-                    counter++;
-                if(counter >= 2){
-                    // give back the position of the empty field that is needed for player with playerID to win
-                    if(positionState[possiblePosition[0]] == 2)
-                        return possiblePosition[0];
-                    if(positionState[possiblePosition[1]] == 2)
-                        return possiblePosition[1];
-                    if(positionState[possiblePosition[2]] == 2)
-                        return possiblePosition[2];
-                }
-            }
-            return -1; // if nothing was found, return -1
-        }
-        int getFreeEdge(){
-            // searches for the next free edge
-            int[] edges = {0,2,6,8};
-            for(int edge:edges){
-                if(positionState[edge] == 2)
-                    return edge;
-            }
-            return -1; // if nothing was found, return -1
-        }
+    public boolean isGameIsRunning() {
+        return gameIsRunning;
+    }
+    public void setGameIsRunning(boolean gameIsRunning) {
+        this.gameIsRunning = gameIsRunning;
+    }
+    public GridLayout getBoard() {
+        return board;
+    }
+    public int[] getPositionState() {
+        return positionState;
     }
 }
