@@ -52,7 +52,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        aiIsUsed = getArguments().getBoolean(StartActivity.NAME_AI_IS_USED);
+        aiIsUsed = getArguments().getBoolean(MainActivity.NAME_AI_IS_USED);
     }
     @Override
     public void onPause() {
