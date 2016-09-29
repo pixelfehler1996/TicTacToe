@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 
 import java.util.Random;
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements View.OnClickListener{
     private SharedPreferences sharedPreferences;
     private int activePlayer = 0; // 0 = red, 1 = yellow player
     private int aiPlayer; // determine which player is the ai
@@ -47,7 +48,14 @@ public class GameFragment extends Fragment {
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
+        Button btn_newGame = (Button)layout.findViewById(R.id.newGame);
 
+        // set the onClick Listeners
+        btn_newGame.setOnClickListener(this);
+        for(int i = 0; i <= 8; i++)
+            board.getChildAt(i).setOnClickListener(this);
+
+        // start the game
         startGame();
         return layout;
     }
@@ -260,5 +268,13 @@ public class GameFragment extends Fragment {
     }
     public int[] getPositionState() {
         return positionState;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.newGame)
+            startGame();
+        else if(v.getParent() == board)
+            placeChip(v);
     }
 }
