@@ -52,7 +52,4 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
         fragmentManager.beginTransaction().replace(R.id.frameLayout, gameFragment).commit();
     }
-    public void placeChip(View view){
-        gameFragment.placeChip(view);
-    }
 }
