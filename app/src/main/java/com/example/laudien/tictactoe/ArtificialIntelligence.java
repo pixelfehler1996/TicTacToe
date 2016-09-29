@@ -26,70 +26,73 @@ class ArtificialIntelligence {
         // enable the playground
         gameFragment.setGameIsRunning(true);
 
-        if(difficulty == 0) { //easy
-            // just place random
-            rand = new Random().nextInt(9);
-            while (positionState[rand] != 2)
+        switch (difficulty) {
+            case 0: //easy
+                // just place random
                 rand = new Random().nextInt(9);
-            gameFragment.placeChip(gameFragment.getBoard().getChildAt(rand));
-        } else if(difficulty == 1) { // medium
-            position = searchPositions(1); // every time its the yellow player!
-
-            if (position != -1) // 1. Attack (= win the game if possible):
-                gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-            else { // 2. if no immediate win is possible, defense a possible win of the player:
-                position = searchPositions(0);
-                if (position != -1)
-                    gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-                else { // 3. if no possible win was found, place random:
+                while (positionState[rand] != 2)
                     rand = new Random().nextInt(9);
-                    while (positionState[rand] != 2)
-                        rand = new Random().nextInt(9);
-                    gameFragment.placeChip(gameFragment.getBoard().getChildAt(rand));
-                }
-            }
-        } else if(difficulty == 2) { // hard - every time its the red player!
-            if(counter == 1 || counter == 2)
-                gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
-            else if(counter == 3){
-                position = searchPositions(0);
-                if(position != -1) // 1. Attack (= win the game if possible):
+                gameFragment.placeChip(gameFragment.getBoard().getChildAt(rand));
+                break;
+            case 1: // medium
+                position = searchPositions(1); // every time its the yellow player!
+
+                if (position != -1) // 1. Attack (= win the game if possible):
                     gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-                else { // 2. if not immediate win is possible, defense a possible win of the player:
-                    position = searchPositions(1);
-                    if(position != -1)
-                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-                    else // if no defense is necessary, place on free edge
-                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
-                }
-            }else if(counter == 4){
-                if(positionState[4] == 2) // if middle field is empty, place there and win
-                    gameFragment.placeChip(gameFragment.getBoard().getChildAt(4));
-                else{
+                else { // 2. if no immediate win is possible, defense a possible win of the player:
                     position = searchPositions(0);
-                    if(position != -1) // 1. Attack (= win the game if possible):
+                    if (position != -1)
+                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
+                    else { // 3. if no possible win was found, place random:
+                        rand = new Random().nextInt(9);
+                        while (positionState[rand] != 2)
+                            rand = new Random().nextInt(9);
+                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(rand));
+                    }
+                }
+                break;
+            case 2: // hard - every time its the red player!
+                if (counter == 1 || counter == 2)
+                    gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
+                else if (counter == 3) {
+                    position = searchPositions(0);
+                    if (position != -1) // 1. Attack (= win the game if possible):
                         gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                     else { // 2. if not immediate win is possible, defense a possible win of the player:
                         position = searchPositions(1);
-                        if(position != -1)
+                        if (position != -1)
+                            gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
+                        else // if no defense is necessary, place on free edge
+                            gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
+                    }
+                } else if (counter == 4) {
+                    if (positionState[4] == 2) // if middle field is empty, place there and win
+                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(4));
+                    else {
+                        position = searchPositions(0);
+                        if (position != -1) // 1. Attack (= win the game if possible):
+                            gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
+                        else { // 2. if not immediate win is possible, defense a possible win of the player:
+                            position = searchPositions(1);
+                            if (position != -1)
+                                gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
+                            else // if no defense is necessary, place on free edge
+                                gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
+                        }
+                    }
+                } else if (counter > 4) {
+                    position = searchPositions(0);
+                    if (position != -1) // 1. Attack (= win the game if possible):
+                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
+                    else { // 2. if not immediate win is possible, defense a possible win of the player:
+                        position = searchPositions(1);
+                        if (position != -1)
                             gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                         else // if no defense is necessary, place on free edge
                             gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
                     }
                 }
-            }
-            else if(counter > 4){
-                position = searchPositions(0);
-                if(position != -1) // 1. Attack (= win the game if possible):
-                    gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-                else { // 2. if not immediate win is possible, defense a possible win of the player:
-                    position = searchPositions(1);
-                    if(position != -1)
-                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
-                    else // if no defense is necessary, place on free edge
-                        gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
-                }
-            }
+                break;
         }
         counter++;
     }
