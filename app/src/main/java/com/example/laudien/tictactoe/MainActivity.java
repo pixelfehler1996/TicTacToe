@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-public class StartActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     GameFragment gameFragment;
     StartFragment startFragment;
@@ -29,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
         gameFragmentBundle = new Bundle();
 
-        // load StartActivity Fragment
+        // load MainActivity Fragment
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, startFragment).commit();
     }
