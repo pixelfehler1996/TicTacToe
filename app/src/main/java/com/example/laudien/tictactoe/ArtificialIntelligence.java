@@ -1,7 +1,5 @@
 package com.example.laudien.tictactoe;
 
-import android.util.Log;
-
 import java.util.Random;
 
 class ArtificialIntelligence {
@@ -17,7 +15,6 @@ class ArtificialIntelligence {
     }
     void setDifficulty(int difficulty){
         this.difficulty = difficulty;
-        Log.i("ArtificialIntelligence", "Difficulty = " + difficulty);
     }
     void resetCounter(){
         counter = 1;

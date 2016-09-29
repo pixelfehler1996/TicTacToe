@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,7 +115,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         mediaPlayer.start(); // play the gong sound
 
         // let the KI set its chip
-        Log.i("GameFragment", "aiIsUsed = " + aiIsUsed);
         if (aiIsUsed) {
             if(difficulty == 2) {
                 aiPlayer = 0;
