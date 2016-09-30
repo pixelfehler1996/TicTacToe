@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
 
     public static final String NAME_AI_IS_USED = "aiIsUsed";
-    public static final long ANIMATION_DURATION = 500;
+    public static final long ANIMATION_DURATION = 200;
     GameFragment gameFragment;
     StartFragment startFragment;
     SettingsFragment settingsFragment;
