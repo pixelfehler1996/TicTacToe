@@ -76,4 +76,28 @@
         android:layout_toEndOf="@+id/textView2"
         android:layout_marginLeft="5dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/animation_duration"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/difficultySeekBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/seekBar_animation"
+        android:max="1000"
+        android:progress="200"
+        android:indeterminate="false"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

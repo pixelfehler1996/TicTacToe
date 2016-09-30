@@ -14,4 +14,5 @@
     <string name="hard">schwer</string>
     <string name="you_win">Gewonnen!</string>
     <string name="you_lose">Verloren!</string>
+    <string name="animation_duration">Animationszeit:</string>
 </resources>

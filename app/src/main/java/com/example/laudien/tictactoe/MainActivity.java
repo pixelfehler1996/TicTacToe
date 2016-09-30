@@ -14,7 +14,8 @@ import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
 
     public static final String NAME_AI_IS_USED = "aiIsUsed";
-    public static final long ANIMATION_DURATION = 200;
+    public static final String ANIMATION_DURATION = "animationDuration";
+    public static long animationDuration;
     GameFragment gameFragment;
     StartFragment startFragment;
     SettingsFragment settingsFragment;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
+        animationDuration = sharedPreferences.getLong(ANIMATION_DURATION, 200);
 
         // load Fragments
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                     gameFragment.onPause();
                 settings.setVisibility(View.VISIBLE);
                 settings.setTranslationX(+1100f);
-                settings.animate().translationX(0f).setDuration(ANIMATION_DURATION);
+                settings.animate().translationX(0f).setDuration(animationDuration);
             }
             return true;
         }
@@ -64,18 +66,24 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     @Override
     public void onBackPressed() {
         if(getTopMostLayout() == settings){
-            gameLayout.setAlpha(0f);
-            settings.animate().translationX(+1100f).setDuration(ANIMATION_DURATION);
-            gameLayout.animate().alpha(1f).setDuration(ANIMATION_DURATION);
             if(settingsFragment != null)
                 settingsFragment.onPause();
-            if(gameFragment != null)
-                gameFragment.onResume();
+            gameLayout.setAlpha(0f);
+            settings.animate().translationX(+1100f).setDuration(animationDuration);
+            gameLayout.animate().alpha(1f).setDuration(animationDuration);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(gameFragment != null)
+                        gameFragment.onResume();
+                }
+            }, animationDuration);
+
         }else {
             if (gameFragment != null) {
                 mainMenu.setVisibility(View.VISIBLE);
-                mainMenu.animate().translationX(0f).setDuration(ANIMATION_DURATION);
-                gameLayout.animate().alpha(0f).setDuration(ANIMATION_DURATION);
+                mainMenu.animate().translationX(0f).setDuration(animationDuration);
+                gameLayout.animate().alpha(0f).setDuration(animationDuration);
                 fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -83,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                         fragmentManager.beginTransaction().remove(gameFragment).commit();
                         gameFragment = null;
                     }
-                }, ANIMATION_DURATION);
+                }, animationDuration);
             } else { // exit app
                 finish();
                 System.exit(0);
@@ -94,15 +102,15 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onStartGame(boolean aiIsUsed) {
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        mainMenu.animate().translationX(-1100f).setDuration(ANIMATION_DURATION);
-        gameLayout.animate().alpha(1f).setDuration(ANIMATION_DURATION);
+        mainMenu.animate().translationX(-1100f).setDuration(animationDuration);
+        gameLayout.animate().alpha(1f).setDuration(animationDuration);
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mainMenu.setVisibility(View.INVISIBLE);
             }
-        }, ANIMATION_DURATION);
+        }, animationDuration);
     }
     private FrameLayout getTopMostLayout(){
         if(settings.getVisibility() == View.VISIBLE && settings.getTranslationX() == 0f)

@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import static com.example.laudien.tictactoe.MainActivity.ANIMATION_DURATION;
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 import static com.example.laudien.tictactoe.MainActivity.sharedPreferences;
 
 public class SettingsFragment extends Fragment {
 
-    SeekBar timeSeekBar;
-    SeekBar difficultySeekBar;
-    TextView timeTextView;
-    TextView difficultyTextView;
+    SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
+    TextView timeTextView, difficultyTextView;
 
     @Nullable
     @Override
@@ -24,6 +24,8 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         timeSeekBar = (SeekBar)view.findViewById(R.id.timeSeekBar);
         difficultySeekBar = (SeekBar)view.findViewById(R.id.difficultySeekBar);
+        seekBar_animation = (SeekBar)view.findViewById(R.id.seekBar_animation);
+        seekBar_animation.setProgress((int)animationDuration);
         timeTextView = (TextView)view.findViewById(R.id.timeTextView);
         difficultyTextView = (TextView)view.findViewById(R.id.difficultyTextView);
 
@@ -108,9 +110,11 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        animationDuration = seekBar_animation.getProgress();
         sharedPreferences.edit()
                 .putInt("savedTime", timeSeekBar.getProgress())
                 .putInt("difficulty", difficultySeekBar.getProgress())
+                .putLong(ANIMATION_DURATION, animationDuration)
                 .apply();
     }
 }
