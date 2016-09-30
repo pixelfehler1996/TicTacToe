@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
 
     public static final String NAME_AI_IS_USED = "aiIsUsed";
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     SettingsFragment settingsFragment;
     FragmentManager fragmentManager;
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
+    LayoutAnimation animation;
     public static SharedPreferences sharedPreferences;
 
     @Override
@@ -34,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
+        ArrayList<FrameLayout> layoutList = new ArrayList<>();
+        layoutList.add(mainMenu);
+        layoutList.add(gameLayout);
+        layoutList.add(settings);
+        animation = new LayoutAnimation(layoutList, animationDuration, 0);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
         animationDuration = sharedPreferences.getLong(ANIMATION_DURATION, 200);
 
