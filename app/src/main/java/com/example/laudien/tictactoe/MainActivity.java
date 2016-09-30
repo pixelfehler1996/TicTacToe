@@ -71,12 +71,12 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
         foreground.animate().translationX(-1100f).setDuration(500);
         background.animate().alpha(1f).setDuration(500);
+        fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 foreground.setVisibility(View.INVISIBLE);
             }
         }, 500);
-        fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
     }
 }
