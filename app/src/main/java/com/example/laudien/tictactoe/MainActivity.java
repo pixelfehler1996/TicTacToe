@@ -1,6 +1,7 @@
 package com.example.laudien.tictactoe;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,14 +9,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
 
+    public static final String NAME_AI_IS_USED = "aiIsUsed";
     GameFragment gameFragment;
     StartFragment startFragment;
     FragmentManager fragmentManager;
     Bundle gameFragmentBundle; // is sent to gameFragment
-    public static final String NAME_AI_IS_USED = "aiIsUsed";
+    FrameLayout foreground, background;
+    TranslateAnimation middleToLeft, leftToMiddle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +29,15 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
         gameFragmentBundle = new Bundle();
         fragmentManager = getSupportFragmentManager();
+        foreground = (FrameLayout)findViewById(R.id.foreground_layout);
+        background = (FrameLayout)findViewById(R.id.background_layout);
+        middleToLeft = new TranslateAnimation(0, -1100f, 0, 0);
+        middleToLeft.setDuration(500);
+        leftToMiddle = new TranslateAnimation(-1100f, 0, 0, 0);
+        leftToMiddle.setDuration(500);
 
         // load StartFragment
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, startFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,12 +55,33 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     }
     @Override
     public void onBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, startFragment).commit();
+        if(gameFragment != null) {
+            foreground.setVisibility(View.VISIBLE);
+            foreground.startAnimation(leftToMiddle);
+            background.animate().alpha(0f).setDuration(500);
+            fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fragmentManager.beginTransaction().remove(gameFragment).commit();
+                    gameFragment = null;
+                }
+            }, 500);
+        }else
+            finish();
     }
     @Override
     public void onStartGame(boolean aiIsUsed) {
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, gameFragment).commit();
+        foreground.startAnimation(middleToLeft);
+        background.animate().alpha(1f).setDuration(500);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                foreground.setVisibility(View.INVISIBLE);
+            }
+        }, 500);
+        fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
     }
 }
