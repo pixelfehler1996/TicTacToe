@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     StartFragment startFragment;
     SettingsFragment settingsFragment;
     FragmentManager fragmentManager;
-    Bundle gameFragmentBundle; // is sent to gameFragment
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
     public static SharedPreferences sharedPreferences;
 
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         setContentView(R.layout.activity_start);
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
         settingsFragment = new SettingsFragment();
-        gameFragmentBundle = new Bundle();
+        gameFragment = new GameFragment();
         fragmentManager = getSupportFragmentManager();
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         // load Fragments
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu
         fragmentManager.beginTransaction().replace(R.id.settings_layout, settingsFragment).commit(); // settings fragment
+        fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit(); // game fragment
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                 }
             }, animationDuration);
 
-        }else {
-            if (gameFragment != null) {
+        }else if(getTopMostLayout() == gameLayout){
                 mainMenu.setVisibility(View.VISIBLE);
                 mainMenu.animate().translationX(0f).setDuration(animationDuration);
                 gameLayout.animate().alpha(0f).setDuration(animationDuration);
@@ -92,16 +91,15 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                         gameFragment = null;
                     }
                 }, animationDuration);
-            } else { // exit app
-                finish();
-                System.exit(0);
-            }
+        } else { // exit app
+            finish();
+            System.exit(0);
         }
     }
     @Override
-    public void onStartGame(boolean aiIsUsed) {
-        gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
-        gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
+    public void onStartGame(final boolean aiIsUsed) {
+        if(gameFragment == null)
+            gameFragment = new GameFragment();
         mainMenu.animate().translationX(-1100f).setDuration(animationDuration);
         gameLayout.animate().alpha(1f).setDuration(animationDuration);
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
@@ -109,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
             @Override
             public void run() {
                 mainMenu.setVisibility(View.INVISIBLE);
+                gameFragment.startGame(aiIsUsed);
             }
         }, animationDuration);
     }

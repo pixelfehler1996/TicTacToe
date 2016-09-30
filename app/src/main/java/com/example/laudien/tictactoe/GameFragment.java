@@ -50,7 +50,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
         Button btn_newGame = (Button)layout.findViewById(R.id.newGame);
-        aiIsUsed = getArguments().getBoolean(MainActivity.NAME_AI_IS_USED);
 
         // create computer if ai is used
         if(aiIsUsed){
@@ -63,8 +62,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         for(int i = 0; i <= 8; i++)
             board.getChildAt(i).setOnClickListener(this);
 
-        // start the gameLayout
-        startGame();
         return layout;
     }
 
@@ -85,7 +82,8 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         if(mediaPlayer != null) mediaPlayer.start();
         if(timer!= null) timer.start();
     }
-    public void startGame(){
+    public void startGame(boolean aiIsUsed){
+        this.aiIsUsed = aiIsUsed;
         if(mediaPlayer != null) {
             if (mediaPlayer.isPlaying())
                 mediaPlayer.stop(); // stop the MediaPlayer if playing
@@ -276,7 +274,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.newGame)
-            startGame();
+            startGame(aiIsUsed);
         else if(v.getParent() == board)
             placeChip(v);
     }
