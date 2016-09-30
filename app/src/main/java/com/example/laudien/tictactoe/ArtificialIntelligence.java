@@ -38,7 +38,7 @@ class ArtificialIntelligence {
             case 1: // medium
                 position = searchPositions(1); // every time its the yellow player!
 
-                if (position != -1) // 1. Attack (= win the game if possible):
+                if (position != -1) // 1. Attack (= win the gameLayout if possible):
                     gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                 else { // 2. if no immediate win is possible, defense a possible win of the player:
                     position = searchPositions(0);
@@ -57,7 +57,7 @@ class ArtificialIntelligence {
                     gameFragment.placeChip(gameFragment.getBoard().getChildAt(getFreeEdge()));
                 else if (counter == 3) {
                     position = searchPositions(0);
-                    if (position != -1) // 1. Attack (= win the game if possible):
+                    if (position != -1) // 1. Attack (= win the gameLayout if possible):
                         gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                     else { // 2. if not immediate win is possible, defense a possible win of the player:
                         position = searchPositions(1);
@@ -71,7 +71,7 @@ class ArtificialIntelligence {
                         gameFragment.placeChip(gameFragment.getBoard().getChildAt(4));
                     else {
                         position = searchPositions(0);
-                        if (position != -1) // 1. Attack (= win the game if possible):
+                        if (position != -1) // 1. Attack (= win the gameLayout if possible):
                             gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                         else { // 2. if not immediate win is possible, defense a possible win of the player:
                             position = searchPositions(1);
@@ -83,7 +83,7 @@ class ArtificialIntelligence {
                     }
                 } else if (counter > 4) {
                     position = searchPositions(0);
-                    if (position != -1) // 1. Attack (= win the game if possible):
+                    if (position != -1) // 1. Attack (= win the gameLayout if possible):
                         gameFragment.placeChip(gameFragment.getBoard().getChildAt(position));
                     else { // 2. if not immediate win is possible, defense a possible win of the player:
                         position = searchPositions(1);

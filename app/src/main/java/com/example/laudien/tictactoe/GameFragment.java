@@ -63,7 +63,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         for(int i = 0; i <= 8; i++)
             board.getChildAt(i).setOnClickListener(this);
 
-        // start the game
+        // start the gameLayout
         startGame();
         return layout;
     }
@@ -163,7 +163,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                     winner = activePlayer;
 
                     // set sound and winnerMessage
-                    if(aiIsUsed){ // bot game
+                    if(aiIsUsed){ // bot gameLayout
                         if(aiPlayer == winner){ // ai wins against player
                             mediaPlayer = MediaPlayer.create(getContext(), R.raw.kid_laugh);
                             winnerMessage = getContext().getString(R.string.you_lose);
