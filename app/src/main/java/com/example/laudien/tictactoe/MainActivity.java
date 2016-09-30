@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     FragmentManager fragmentManager;
     Bundle gameFragmentBundle; // is sent to gameFragment
     FrameLayout foreground, background;
-    TranslateAnimation middleToLeft, leftToMiddle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +30,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         fragmentManager = getSupportFragmentManager();
         foreground = (FrameLayout)findViewById(R.id.foreground_layout);
         background = (FrameLayout)findViewById(R.id.background_layout);
-        middleToLeft = new TranslateAnimation(0, -1100f, 0, 0);
-        middleToLeft.setDuration(500);
-        leftToMiddle = new TranslateAnimation(-1100f, 0, 0, 0);
-        leftToMiddle.setDuration(500);
 
         // load StartFragment
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onBackPressed() {
         if(gameFragment != null) {
             foreground.setVisibility(View.VISIBLE);
-            foreground.startAnimation(leftToMiddle);
+            foreground.animate().translationX(0f).setDuration(500);
             background.animate().alpha(0f).setDuration(500);
             fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
             new Handler().postDelayed(new Runnable() {
@@ -74,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onStartGame(boolean aiIsUsed) {
         gameFragmentBundle.putBoolean(NAME_AI_IS_USED, aiIsUsed);
         gameFragment = (GameFragment)Fragment.instantiate(this,GameFragment.class.getName(), gameFragmentBundle);
-        foreground.startAnimation(middleToLeft);
+        foreground.animate().translationX(-1100f).setDuration(500);
         background.animate().alpha(1f).setDuration(500);
         new Handler().postDelayed(new Runnable() {
             @Override
