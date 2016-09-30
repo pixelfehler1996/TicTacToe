@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public static final String NAME_AI_IS_USED = "aiIsUsed";
     GameFragment gameFragment;
     StartFragment startFragment;
+    SettingsFragment settingsFragment;
     FragmentManager fragmentManager;
     Bundle gameFragmentBundle; // is sent to gameFragment
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
+        settingsFragment = new SettingsFragment();
         gameFragmentBundle = new Bundle();
         fragmentManager = getSupportFragmentManager();
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
 
         // load Fragments
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu
-        fragmentManager.beginTransaction().replace(R.id.settings_layout, new SettingsFragment()).commit(); // settings fragment
+        fragmentManager.beginTransaction().replace(R.id.settings_layout, settingsFragment).commit(); // settings fragment
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
             gameLayout.setAlpha(0f);
             settings.animate().translationX(+1100f).setDuration(500);
             gameLayout.animate().alpha(1f).setDuration(500);
+            if(settingsFragment != null)
+                settingsFragment.onPause();
             if(gameFragment != null)
                 gameFragment.onResume();
         }else {
@@ -80,8 +84,10 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                         gameFragment = null;
                     }
                 }, 500);
-            } else
+            } else { // exit app
                 finish();
+                System.exit(0);
+            }
         }
     }
     @Override
