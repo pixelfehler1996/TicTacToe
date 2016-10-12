@@ -83,7 +83,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         if(timer!= null) timer.start();
     }
     public void startGame(boolean aiIsUsed){
-
+        // change the size of the board (height = width)
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) board.getLayoutParams();
         params.height = board.getWidth();
         Log.i("GameFragment", "Board width: " + board.getWidth());
