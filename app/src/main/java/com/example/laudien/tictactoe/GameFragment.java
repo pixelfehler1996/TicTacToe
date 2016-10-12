@@ -5,13 +5,13 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +27,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     private int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
     private View layout;
     private LinearLayout winnerLayout;
-    private GridLayout board;
+    private ConstraintLayout board;
     private boolean gameIsRunning = true;
     private boolean aiIsUsed;
     private int winner = 2;
@@ -44,7 +44,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_game, container, false);
-        board = (GridLayout)layout.findViewById(R.id.board);
+        board = (ConstraintLayout) layout.findViewById(R.id.board);
         ship = (ImageView)layout.findViewById(R.id.shipView);
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
@@ -83,6 +83,12 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         if(timer!= null) timer.start();
     }
     public void startGame(boolean aiIsUsed){
+
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) board.getLayoutParams();
+        params.height = board.getWidth();
+        Log.i("GameFragment", "Board width: " + board.getWidth());
+        board.setLayoutParams(params);
+
         this.aiIsUsed = aiIsUsed;
         if(mediaPlayer != null) {
             if (mediaPlayer.isPlaying())
@@ -264,7 +270,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     public void setGameIsRunning(boolean gameIsRunning) {
         this.gameIsRunning = gameIsRunning;
     }
-    public GridLayout getBoard() {
+    public ConstraintLayout getBoard() {
         return board;
     }
     public int[] getPositionState() {
