@@ -47,7 +47,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         layout = inflater.inflate(R.layout.fragment_game, container, false);
         board = (ConstraintLayout) layout.findViewById(R.id.board);
         shipImage = (ImageView)layout.findViewById(R.id.shipView);
-        ship = new Ship(getContext(), positionState, board, shipImage, mediaPlayer, timer);
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
@@ -231,30 +230,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             },1000);
         }
     }
-    /*private void showShip(){
-        timer.cancel();
-        int rand = new Random().nextInt(9);
-        mediaPlayer = MediaPlayer.create(getContext(),R.raw.foghorn);
-
-        shipImage.setVisibility(View.VISIBLE); // make the shipImage visable
-
-        // get an empty field
-        while (positionState[rand] != 2)
-            rand = new Random().nextInt(9);
-        chip = (ImageView) board.getChildAt(rand);
-
-        mediaPlayer.start();
-        shipImage.setTranslationX(0f);
-        placeChip(chip);
-        shipImage.animate().translationX(-1500f).setDuration(5000);
-        Toast.makeText(getContext(), "Arrr!", Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shipImage.setVisibility(View.INVISIBLE); // make the shipImage invisable again
-            }
-        },5000);
-    }*/
     private void resetTimer(){
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         timer = new CountDownTimer(100 + playerTime,1000) {
@@ -265,7 +240,10 @@ public class GameFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFinish() {
-                if(gameIsRunning) ship.show();
+                if(gameIsRunning) {
+                    if(ship == null) ship = new Ship(getContext(), positionState, board, shipImage, mediaPlayer, timer);
+                    placeChip(ship.show());
+                }
             }
         };
     }
