@@ -32,20 +32,22 @@ public class GameFragment extends Fragment implements View.OnClickListener{
     private boolean aiIsUsed;
     private int winner = 2;
     private MediaPlayer mediaPlayer;
-    private ImageView ship;
+    private ImageView shipImage;
     private ImageView chip;
     private CountDownTimer timer;
     private TextView counterTextView;
     private Long playerTime; // time for each move
     private ArtificialIntelligence computer;
     int difficulty;
+    Ship ship;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_game, container, false);
         board = (ConstraintLayout) layout.findViewById(R.id.board);
-        ship = (ImageView)layout.findViewById(R.id.shipView);
+        shipImage = (ImageView)layout.findViewById(R.id.shipView);
+        ship = new Ship(getContext(), positionState, board, shipImage, mediaPlayer, timer);
         counterTextView = (TextView)layout.findViewById(R.id.counterTextView);
         winnerLayout = (LinearLayout)layout.findViewById(R.id.winnerLayout);
         sharedPreferences = this.getActivity().getSharedPreferences("com.example.laudien.tictactoe", 0);
@@ -111,7 +113,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         winnerLayout.setVisibility(View.INVISIBLE);
         counterTextView.setVisibility(View.VISIBLE);
 
-        ship.setVisibility(View.INVISIBLE); // make the ship invisible
+        shipImage.setVisibility(View.INVISIBLE); // make the shipImage invisible
 
         // reset and (re-)start the timer
         if(timer != null) timer.cancel();
@@ -229,12 +231,12 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             },1000);
         }
     }
-    private void showShip(){
+    /*private void showShip(){
         timer.cancel();
         int rand = new Random().nextInt(9);
         mediaPlayer = MediaPlayer.create(getContext(),R.raw.foghorn);
 
-        ship.setVisibility(View.VISIBLE); // make the ship visable
+        shipImage.setVisibility(View.VISIBLE); // make the shipImage visable
 
         // get an empty field
         while (positionState[rand] != 2)
@@ -242,17 +244,17 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         chip = (ImageView) board.getChildAt(rand);
 
         mediaPlayer.start();
-        ship.setTranslationX(0f);
+        shipImage.setTranslationX(0f);
         placeChip(chip);
-        ship.animate().translationX(-1500f).setDuration(5000);
+        shipImage.animate().translationX(-1500f).setDuration(5000);
         Toast.makeText(getContext(), "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ship.setVisibility(View.INVISIBLE); // make the ship invisable again
+                shipImage.setVisibility(View.INVISIBLE); // make the shipImage invisable again
             }
         },5000);
-    }
+    }*/
     private void resetTimer(){
         playerTime = (long)1000 * sharedPreferences.getInt("savedTime",20);
         timer = new CountDownTimer(100 + playerTime,1000) {
@@ -263,7 +265,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFinish() {
-                if(gameIsRunning) showShip();
+                if(gameIsRunning) ship.show();
             }
         };
     }
