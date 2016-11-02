@@ -96,6 +96,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         params.height = board.getWidth();
         Log.i("GameFragment", "Board width: " + board.getWidth());
         board.setLayoutParams(params);
+        YoYo.with(Techniques.Shake)
+                .duration(200)
+                .playOn(board);
 
         this.aiIsUsed = aiIsUsed;
         if(mediaPlayer != null) {
@@ -113,7 +116,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
 
         // remove chips
         for(int i = 0; i <= 8; i++)
-            ((ImageView)board.getChildAt(i)).setImageResource(0);
+            YoYo.with(Techniques.TakingOff)
+                    .duration(1000)
+                    .playOn(board.getChildAt(i));
 
         // make winnerLayout invisible and the countdown visible
         YoYo.with(Techniques.Hinge)

@@ -81,7 +81,8 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintRight_toLeftOf="@+id/guideline13"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            app:srcCompat="@drawable/red" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -97,7 +98,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline13"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            app:srcCompat="@drawable/yellow" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -113,7 +115,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            app:srcCompat="@drawable/red" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -130,7 +133,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintRight_toLeftOf="@+id/guideline13"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            app:srcCompat="@drawable/yellow" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -146,7 +150,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline13"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            app:srcCompat="@drawable/red" />
 
         <ImageView
             android:id="@+id/imageView6"
@@ -162,7 +167,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            app:srcCompat="@drawable/yellow" />
 
         <ImageView
             android:id="@+id/imageView7"
@@ -178,7 +184,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintRight_toLeftOf="@+id/guideline13"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            app:srcCompat="@drawable/red" />
 
         <ImageView
             android:id="@+id/imageView8"
@@ -194,7 +201,8 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline13"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            app:srcCompat="@drawable/yellow" />
 
         <ImageView
             android:id="@+id/imageView9"
@@ -210,7 +218,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            app:srcCompat="@drawable/red" />
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
