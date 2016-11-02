@@ -255,6 +255,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                 if(gameIsRunning) {
                     if(ship == null) ship = new Ship(getContext(), positionState, board, shipImage, mediaPlayer, timer);
                     placeChip(ship.show());
+                    YoYo.with(Techniques.Shake)
+                            .duration(700)
+                            .playOn(counterTextView);
                 }
             }
         };
