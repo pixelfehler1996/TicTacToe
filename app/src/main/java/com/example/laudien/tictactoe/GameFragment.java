@@ -156,12 +156,15 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                 && gameIsRunning) {
             timer.start();
             // set chip color and animation and show animation
-            chip.setTranslationY(-1000f);
+            //chip.setTranslationY(-1000f);
             if (activePlayer == 1)
                 chip.setImageResource(R.drawable.yellow);
             else
                 chip.setImageResource(R.drawable.red);
-            chip.animate().translationY(0f).rotation(3600).setDuration(300);
+            //chip.animate().translationY(0f).rotation(3600).setDuration(300);
+            YoYo.with(Techniques.BounceInDown)
+                    .duration(500)
+                    .playOn(chip);
 
             // save the positionState of the position that was clicked to the used color
             positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer;
