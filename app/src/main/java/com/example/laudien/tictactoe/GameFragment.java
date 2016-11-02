@@ -115,7 +115,6 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         YoYo.with(Techniques.Hinge)
                 .duration(1000)
                 .playOn(winnerLayout);
-        counterTextView.setVisibility(View.VISIBLE);
         YoYo.with(Techniques.FlipInX)
                 .duration(1000)
                 .playOn(counterTextView);
@@ -215,12 +214,14 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                 // start MediaPlayer, show winnerLayout with winnerMessage, cancel timer
                 mediaPlayer.start();
                 timer.cancel();
-                counterTextView.setVisibility(View.INVISIBLE);
                 winnerText.setText(winnerMessage);
                 winnerLayout.setVisibility(View.VISIBLE);
                 YoYo.with(Techniques.BounceInLeft)
                         .duration(1000)
                         .playOn(winnerLayout);
+                YoYo.with(Techniques.FlipOutX)
+                        .duration(1000)
+                        .playOn(counterTextView);
             }
 
             // change active player
