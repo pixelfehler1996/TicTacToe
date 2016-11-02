@@ -257,7 +257,8 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                     YoYo.with(Techniques.Flash)
                             .duration(500)
                             .playOn(counterTextView);
-                }
+                }else
+                    counterTextView.setTextColor(Color.BLACK);
             }
             @Override
             public void onFinish() {
