@@ -15,4 +15,5 @@
     <string name="you_win">Gewonnen!</string>
     <string name="you_lose">Verloren!</string>
     <string name="animation_duration">Animationszeit:</string>
+    <string name="press_again_to_exit">Erneut clicken, um die App zu beenden!</string>
 </resources>

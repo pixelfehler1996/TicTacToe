@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
     LayoutAnimation animation;
     public static SharedPreferences sharedPreferences;
+    boolean backPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +106,20 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                     }
                 }, animationDuration);
         } else { // exit app
-            finish();
-            System.exit(0);
+            if(!backPressed) {
+                backPressed = true;
+                Toast.makeText(getApplicationContext(), getString(R.string.press_again_to_exit),
+                        Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        backPressed = false;
+                    }
+                }, 3000);
+            }else {
+                finish();
+                System.exit(0);
+            }
         }
     }
     @Override
