@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.Random;
 
 class Ship {
@@ -43,7 +46,10 @@ class Ship {
         chip = (ImageView) board.getChildAt(rand);
 
         mediaPlayer.start();
-        imageView.setTranslationX(0f);
+        //imageView.setTranslationX(0f);
+        YoYo.with(Techniques.FadeIn)
+                .duration(500)
+                .playOn(imageView);
         imageView.animate().translationX(-1500f).setDuration(5000);
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
