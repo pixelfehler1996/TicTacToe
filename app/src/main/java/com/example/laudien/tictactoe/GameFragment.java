@@ -86,8 +86,10 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             computer.setDifficulty(difficulty);
         if(mediaPlayer != null) mediaPlayer.start();
         if(timer!= null) {
-            if (gameIsRunning)
+            if (gameIsRunning) {
+                resetTimer();
                 timer.start();
+            }
             counterTextView.setTextColor(Color.BLACK);
         }
         if(!gameIsRunning) counterTextView.setAlpha(0f);
