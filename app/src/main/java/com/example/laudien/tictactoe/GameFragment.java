@@ -89,6 +89,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             if (gameIsRunning) {
                 resetTimer();
                 timer.start();
+                YoYo.with(Techniques.Shake)
+                        .duration(700)
+                        .playOn(counterTextView);
             }
             counterTextView.setTextColor(Color.BLACK);
         }
