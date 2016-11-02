@@ -86,6 +86,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             computer.setDifficulty(difficulty);
         if(mediaPlayer != null) mediaPlayer.start();
         if(timer!= null) timer.start();
+        if(!gameIsRunning) counterTextView.setAlpha(0f);
     }
     public void startGame(boolean aiIsUsed){
         // change the size of the board (height = width)
