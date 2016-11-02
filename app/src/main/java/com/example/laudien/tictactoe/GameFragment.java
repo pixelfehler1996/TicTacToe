@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.Random;
 
 public class GameFragment extends Fragment implements View.OnClickListener{
@@ -109,8 +112,13 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             ((ImageView)board.getChildAt(i)).setImageResource(0);
 
         // make winnerLayout invisible and the countdown visible
-        winnerLayout.setVisibility(View.INVISIBLE);
+        YoYo.with(Techniques.Hinge)
+                .duration(1000)
+                .playOn(winnerLayout);
         counterTextView.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.FlipInX)
+                .duration(1000)
+                .playOn(counterTextView);
 
         shipImage.setVisibility(View.INVISIBLE); // make the shipImage invisible
 
@@ -210,6 +218,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                 counterTextView.setVisibility(View.INVISIBLE);
                 winnerText.setText(winnerMessage);
                 winnerLayout.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInLeft)
+                        .duration(1000)
+                        .playOn(winnerLayout);
             }
 
             // change active player
