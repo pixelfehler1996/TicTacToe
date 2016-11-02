@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            if(getTopMostLayout() == settings) {
+                onBackPressed();
+                return true;
+            }
             lastLayout = getTopMostLayout();
             if(lastLayout != settings) {
                 if (lastLayout == gameLayout)
