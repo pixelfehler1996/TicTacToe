@@ -85,7 +85,9 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         else
             computer.setDifficulty(difficulty);
         if(mediaPlayer != null) mediaPlayer.start();
-        if(timer!= null) timer.start();
+        if(timer!= null)
+            if(gameIsRunning)
+                timer.start();
         if(!gameIsRunning) counterTextView.setAlpha(0f);
     }
     public void startGame(boolean aiIsUsed){
@@ -156,6 +158,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
 
         if(positionState[Integer.parseInt(chip.getTag().toString())] == 2
                 && gameIsRunning) {
+            counterTextView.setTextColor(Color.BLACK);
             timer.start();
             // set chip color and animation and show animation
             //chip.setTranslationY(-1000f);
@@ -258,8 +261,7 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                     YoYo.with(Techniques.Flash)
                             .duration(500)
                             .playOn(counterTextView);
-                }else
-                    counterTextView.setTextColor(Color.BLACK);
+                }
             }
             @Override
             public void onFinish() {
