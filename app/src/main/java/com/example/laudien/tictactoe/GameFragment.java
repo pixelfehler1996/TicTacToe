@@ -1,6 +1,7 @@
 package com.example.laudien.tictactoe;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -251,13 +252,19 @@ public class GameFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onTick(long l) {
                 counterTextView.setText(Long.toString(l/1000));
+                if(l < 4000) {
+                    counterTextView.setTextColor(Color.RED);
+                    YoYo.with(Techniques.Flash)
+                            .duration(500)
+                            .playOn(counterTextView);
+                }
             }
-
             @Override
             public void onFinish() {
                 if(gameIsRunning) {
                     if(ship == null) ship = new Ship(getContext(), positionState, board, shipImage, mediaPlayer, timer);
                     placeChip(ship.show());
+                    counterTextView.setTextColor(Color.BLACK);
                     YoYo.with(Techniques.Shake)
                             .duration(700)
                             .playOn(counterTextView);
