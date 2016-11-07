@@ -140,9 +140,10 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
             }else if(winner != RESULT_DRAW) {
                 soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.you_win));
-            }else
+            }else {
                 soundPlayer.play(R.raw.monkeys);
                 winnerText.setText(getString(R.string.draw));
+            }
             return;
         }
         // player vs. player
