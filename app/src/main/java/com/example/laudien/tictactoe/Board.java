@@ -36,7 +36,7 @@ public class Board {
         onNextPlayerListeners = new ArrayList<>();
         gameIsRunning = false;
         winner = NO_RESULT_YET; // 0 = red, 1 = yellow, 2 = draw, 3 = nobody yet
-        activePlayer = 0;
+        activePlayer = RED_PLAYER;
     }
 
     public void placeChip(ImageView chip, boolean isPlayer){
@@ -54,15 +54,15 @@ public class Board {
         positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer; // sets player in the positionState
 
         switch (getWinner()){
-            case 0: // red has won
-            case 1: // yellow has won
-            case 2: // draw
+            case RED_PLAYER: // red has won
+            case YELLOW_PLAYER: // yellow has won
+            case RESULT_DRAW: // draw
                 userCanInteract = false;
                 gameIsRunning = false;
                 for(OnGameOverListener listener : onGameOverListeners)
                     listener.onGameOver(winner);
                 break;
-            case 3: // nobody has won yet
+            case NO_RESULT_YET: // nobody has won yet
                 nextPlayer();
         }
     }

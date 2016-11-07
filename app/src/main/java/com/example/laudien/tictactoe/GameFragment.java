@@ -18,7 +18,10 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import static com.example.laudien.tictactoe.ArtificialIntelligence.HARD;
+import static com.example.laudien.tictactoe.ArtificialIntelligence.MEDIUM;
 import static com.example.laudien.tictactoe.Board.RED_PLAYER;
+import static com.example.laudien.tictactoe.Board.RESULT_DRAW;
 import static com.example.laudien.tictactoe.Board.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCES;
 import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_DIFFICULTY;
@@ -29,7 +32,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
     private TextView counterTextView, winnerText;
-    private boolean aiIsUsed;
     private MediaPlayer mediaPlayer;
     private ImageView shipImage;
     private Board board;
@@ -91,9 +93,10 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     }
     public void startGame(boolean aiIsUsed){
         if(aiIsUsed) {
-            int difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1);
-            computer = new ArtificialIntelligence(board, difficulty,
-                    (difficulty == 2) ? RED_PLAYER : YELLOW_PLAYER);
+            int difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
+            if(computer == null)
+                computer = new ArtificialIntelligence(board, difficulty,
+                        (difficulty == HARD) ? RED_PLAYER : YELLOW_PLAYER);
 
         }else
             computer = null;
@@ -124,7 +127,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         if(computer != null){
             if(winner == computer.getChipColor())
                 winnerText.setText(getString(R.string.you_lose));
-            else if(winner != 2)
+            else if(winner != RESULT_DRAW)
                 winnerText.setText(getString(R.string.you_win));
             else
                 winnerText.setText(getString(R.string.draw));
@@ -132,13 +135,13 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         }
         // player vs. player
         switch (winner){
-            case 0:
+            case RED_PLAYER:
                 winnerText.setText(getString(R.string.red_wins));
                 break;
-            case 1:
+            case YELLOW_PLAYER:
                 winnerText.setText(getString(R.string.yellow_wins));
                 break;
-            case 2:
+            case RESULT_DRAW:
                 winnerText.setText(getString(R.string.draw));
                 break;
         }

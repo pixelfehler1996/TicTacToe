@@ -11,6 +11,9 @@ import static com.example.laudien.tictactoe.Board.YELLOW_PLAYER;
 
 class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
     private final static int NO_POSITION_FOUND = -1;
+    public final static int EASY = 0;
+    public final static int MEDIUM = 1;
+    public final static int HARD = 2;
     private int difficulty;
     private int counter; // counts the moves
     private Board board;
@@ -41,13 +44,13 @@ class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPl
         positionState = board.getPositionState();
 
         switch (difficulty) {
-            case 0: //easy
+            case EASY: //easy
                 easy();
                 break;
-            case 1: // medium
+            case MEDIUM: // medium
                 medium();
                 break;
-            case 2: // hard - every time its the red player!
+            case HARD: // hard - every time its the red player!
                 hard();
                 break;
         }
