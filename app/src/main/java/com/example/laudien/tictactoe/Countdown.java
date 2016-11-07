@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
+
 public class Countdown {
     private TextView counterTextView;
     private CountDownTimer timer;
@@ -38,7 +40,7 @@ public class Countdown {
                 if(l > 2000 && l < 4000) {
                     counterTextView.setTextColor(Color.RED); // red text
                     YoYo.with(Techniques.Flash) // flash animation
-                            .duration(500)
+                            .duration(animationDuration * 5/2)
                             .playOn(counterTextView);
                 }
             }
@@ -47,7 +49,7 @@ public class Countdown {
             public void onFinish() {
                 counterTextView.setTextColor(Color.BLACK); // black text
                 YoYo.with(Techniques.Shake) // shake animation
-                        .duration(700)
+                        .duration(animationDuration * 7/2)
                         .playOn(counterTextView);
                 if(listener != null) // notify the listener
                     listener.onFinish();
@@ -82,7 +84,7 @@ public class Countdown {
         createNewTimer(time);
         if(counterTextView.getAlpha() != 1f) // show animation only if text view is not visible!
             YoYo.with(Techniques.FlipInX)
-                    .duration(1000)
+                    .duration(animationDuration * 5)
                     .playOn(counterTextView);
         Log.i("Countdown", "Timer enabled!");
     }
@@ -92,7 +94,7 @@ public class Countdown {
         enabled = false;
         timer.cancel();
         YoYo.with(Techniques.FlipOutX)
-                .duration(1000)
+                .duration(animationDuration * 5)
                 .playOn(counterTextView);
         Log.i("Countdown", "Timer disabled!");
     }

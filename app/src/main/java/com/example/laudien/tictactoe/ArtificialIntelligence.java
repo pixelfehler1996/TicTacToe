@@ -8,6 +8,7 @@ import static com.example.laudien.tictactoe.Board.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Board.RED_PLAYER;
 import static com.example.laudien.tictactoe.Board.WINNING_POSITIONS;
 import static com.example.laudien.tictactoe.Board.YELLOW_PLAYER;
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
     private final static int NO_POSITION_FOUND = -1;
@@ -160,7 +161,7 @@ class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPl
                 board.placeChip((ImageView) board.getBoardLayout().getChildAt(position), false);
                 board.enableUserInput();
             }
-        }, 1100);
+        }, animationDuration * 5 + 100);
     }
 
     @Override

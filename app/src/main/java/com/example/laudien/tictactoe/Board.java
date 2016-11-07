@@ -11,6 +11,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
+
 public class Board {
     public final static int [][] WINNING_POSITIONS = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
     public final static int RED_PLAYER = 0;
@@ -48,7 +50,7 @@ public class Board {
 
         chip.setImageResource((activePlayer == RED_PLAYER) ? R.drawable.red : R.drawable.yellow); // sets the color
         YoYo.with(Techniques.BounceInDown) // chip animation
-                .duration(500)
+                .duration(animationDuration * 5/2)
                 .playOn(chip);
 
         positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer; // sets player in the positionState
@@ -92,12 +94,12 @@ public class Board {
 
         // shake the chips off the board
         YoYo.with(Techniques.Shake)
-                .duration(200)
+                .duration(animationDuration)
                 .playOn(boardLayout);
         for(int i = 0; i < 9; i++)
             if(boardLayout.getChildAt(i).getAlpha() == 1f)
                 YoYo.with(Techniques.TakingOff)
-                        .duration(1000)
+                        .duration(animationDuration * 5)
                         .playOn(boardLayout.getChildAt(i));
 
         // reset positionState
@@ -109,7 +111,7 @@ public class Board {
             public void run() {
                 userCanInteract = true; // enable the playground
             }
-        }, 1100);
+        }, animationDuration * 5 + 100);
 
         for(OnNextPlayerListener listener : onNextPlayerListeners)
             listener.onNextPlayer(activePlayer);

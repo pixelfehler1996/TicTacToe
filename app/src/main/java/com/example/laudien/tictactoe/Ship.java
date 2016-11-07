@@ -14,6 +14,8 @@ import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.Random;
 
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
+
 class Ship {
     private Context context;
     private Board board;
@@ -38,15 +40,15 @@ class Ship {
         mediaPlayer.start();
         //imageView.setTranslationX(0f);
         YoYo.with(Techniques.FadeIn)
-                .duration(500)
+                .duration(animationDuration * 5/2)
                 .playOn(shipImage);
-        shipImage.animate().translationX(-1500f).setDuration(5000);
+        shipImage.animate().translationX(-1500f).setDuration(animationDuration * 25);
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 shipImage.setVisibility(View.INVISIBLE); // make the ship invisible again
             }
-        },5000);
+        },animationDuration * 25);
     }
 }

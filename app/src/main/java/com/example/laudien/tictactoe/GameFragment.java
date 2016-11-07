@@ -23,6 +23,7 @@ import static com.example.laudien.tictactoe.ArtificialIntelligence.MEDIUM;
 import static com.example.laudien.tictactoe.Board.RED_PLAYER;
 import static com.example.laudien.tictactoe.Board.RESULT_DRAW;
 import static com.example.laudien.tictactoe.Board.YELLOW_PLAYER;
+import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCES;
 import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_DIFFICULTY;
 import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_TIME;
@@ -108,7 +109,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         if(v.getId() == R.id.newGame) { // click on "new game" button
             board.newGame(countdown);
             YoYo.with(Techniques.Hinge)
-                    .duration(1000)
+                    .duration(animationDuration * 5)
                     .playOn(winnerLayout);
         }else if(v.getParent() == boardLayout){ // if any chip was clicked
             board.placeChip((ImageView) v, true);
@@ -120,7 +121,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     public void onGameOver(int winner) {
         Log.i("GameFragment", "Game over! Winner = " + winner);
         YoYo.with(Techniques.BounceInLeft)
-                .duration(1000)
+                .duration(animationDuration * 5)
                 .playOn(winnerLayout);
         countdown.disable();
         // bot game

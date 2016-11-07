@@ -79,6 +79,24 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        seekBar_animation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(i < 100)
+                    seekBar.setProgress(100);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         return view;
     }
     String difficultyToString(int difficulty){
