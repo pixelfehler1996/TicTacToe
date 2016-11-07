@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
-
-    public static final String NAME_AI_IS_USED = "aiIsUsed";
     public static long animationDuration;
     GameFragment gameFragment;
     StartFragment startFragment;
