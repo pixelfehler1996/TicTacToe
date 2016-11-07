@@ -15,7 +15,7 @@ import com.example.laudien.tictactoe.R;
 
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener{
     public static final String PREFERENCES = "Settings";
     public static final String PREFERENCE_TIME = "savedTime";
     public static final String PREFERENCE_DIFFICULTY = "difficulty";
@@ -40,64 +40,17 @@ public class SettingsFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
         // Initialize timeSeekBar
-
         timeSeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_TIME, 20));
         timeTextView.setText(Integer.toString(timeSeekBar.getProgress()));
-        timeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if(seekBar.getProgress() < 5){seekBar.setProgress(5);}
-                timeTextView.setText(Integer.toString(seekBar.getProgress()));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        timeSeekBar.setOnSeekBarChangeListener(this);
 
         // Initialize difficultySeekBar
         difficultySeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1));
         difficultyTextView.setText(difficultyToString(difficultySeekBar.getProgress()));
-        difficultySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                difficultyTextView.setText(difficultyToString(i));
-            }
+        difficultySeekBar.setOnSeekBarChangeListener(this);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        seekBar_animation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if(i < 100)
-                    seekBar.setProgress(100);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        // initialize seekbar_animation
+        seekBar_animation.setOnSeekBarChangeListener(this);
 
         return view;
     }
@@ -137,6 +90,32 @@ public class SettingsFragment extends Fragment {
 
     public void setOnSettingsChangedListener(OnSettingsChangedListener listener){
         this.listener = listener;
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        switch (seekBar.getId()){
+            case R.id.timeSeekBar:
+                if(seekBar.getProgress() < 5){seekBar.setProgress(5);}
+                timeTextView.setText(Integer.toString(seekBar.getProgress()));
+                break;
+            case R.id.difficultySeekBar:
+                difficultyTextView.setText(difficultyToString(i));
+                break;
+            case R.id.seekBar_animation:
+                if(i < 100) seekBar.setProgress(100);
+                break;
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 
     public interface OnSettingsChangedListener{
