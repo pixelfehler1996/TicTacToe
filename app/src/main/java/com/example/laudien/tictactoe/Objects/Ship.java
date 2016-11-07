@@ -1,22 +1,18 @@
-package com.example.laudien.tictactoe;
+package com.example.laudien.tictactoe.Objects;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-
-import java.util.Random;
+import com.example.laudien.tictactoe.R;
 
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
-class Ship {
+public class Ship {
     private Context context;
     private Board board;
     private ImageView shipImage;

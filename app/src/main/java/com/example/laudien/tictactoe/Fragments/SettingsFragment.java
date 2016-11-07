@@ -1,4 +1,4 @@
-package com.example.laudien.tictactoe;
+package com.example.laudien.tictactoe.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.example.laudien.tictactoe.R;
 
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 

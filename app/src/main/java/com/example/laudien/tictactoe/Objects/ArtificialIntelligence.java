@@ -1,16 +1,17 @@
-package com.example.laudien.tictactoe;
+package com.example.laudien.tictactoe.Objects;
 
 import android.os.Handler;
-import android.util.Log;
 import android.widget.ImageView;
 
-import static com.example.laudien.tictactoe.Board.EMPTY_FIELD;
-import static com.example.laudien.tictactoe.Board.RED_PLAYER;
-import static com.example.laudien.tictactoe.Board.WINNING_POSITIONS;
-import static com.example.laudien.tictactoe.Board.YELLOW_PLAYER;
+import com.example.laudien.tictactoe.Objects.Board;
+
+import static com.example.laudien.tictactoe.Objects.Board.EMPTY_FIELD;
+import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
+import static com.example.laudien.tictactoe.Objects.Board.WINNING_POSITIONS;
+import static com.example.laudien.tictactoe.Objects.Board.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
-class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
+public class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
     private final static int NO_POSITION_FOUND = -1;
     public final static int EASY = 0;
     public final static int MEDIUM = 1;
@@ -21,7 +22,7 @@ class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPl
     private int[] positionState;
     private int chipColor;
 
-    ArtificialIntelligence(Board board, int difficulty, int chipColor){
+    public ArtificialIntelligence(Board board, int difficulty, int chipColor){
         resetCounter();
         this.board = board;
         this.chipColor = chipColor;
@@ -29,7 +30,7 @@ class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPl
         board.addOnNextPlayerListener(this);
         board.addOnGameOverListener(this);
     }
-    void setDifficulty(int difficulty){
+    public void setDifficulty(int difficulty){
         this.difficulty = difficulty;
     }
     public int getChipColor(){

@@ -12,11 +12,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.laudien.tictactoe.Fragments.GameFragment;
+import com.example.laudien.tictactoe.Fragments.SettingsFragment;
+import com.example.laudien.tictactoe.Fragments.StartFragment;
+
 import java.util.ArrayList;
 
-import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
-import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_DIFFICULTY;
-import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_TIME;
+import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
 
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     SettingsFragment settingsFragment;
     FragmentManager fragmentManager;
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
-    LayoutAnimation animation;
     private SharedPreferences sharedPreferences;
     boolean backPressed;
 
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         layoutList.add(mainMenu);
         layoutList.add(gameLayout);
         layoutList.add(settings);
-        animation = new LayoutAnimation(layoutList, animationDuration, 0);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
         animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, 200);
 

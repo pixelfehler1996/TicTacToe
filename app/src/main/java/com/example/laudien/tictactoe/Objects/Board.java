@@ -1,4 +1,4 @@
-package com.example.laudien.tictactoe;
+package com.example.laudien.tictactoe.Objects;
 
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.laudien.tictactoe.R;
 
 import java.util.ArrayList;
 import java.util.Random;

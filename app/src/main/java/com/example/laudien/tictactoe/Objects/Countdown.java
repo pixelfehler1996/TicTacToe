@@ -1,4 +1,4 @@
-package com.example.laudien.tictactoe;
+package com.example.laudien.tictactoe.Objects;
 
 import android.content.Context;
 import android.graphics.Color;
