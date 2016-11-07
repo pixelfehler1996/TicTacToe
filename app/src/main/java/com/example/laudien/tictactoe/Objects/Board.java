@@ -86,11 +86,11 @@ public class Board {
 
     }
 
-    public void newGame(Countdown countdown){
+    public void newGame(Countdown countdown, int beginner){
         disableUserInput();
         soundPlayer.play(R.raw.gong);
         this.countdown = countdown;
-        activePlayer = RED_PLAYER;
+        activePlayer = beginner;
         winner = NO_RESULT_YET;
         countdown.enable();
         countdown.start();

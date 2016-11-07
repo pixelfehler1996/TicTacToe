@@ -1,6 +1,7 @@
 package com.example.laudien.tictactoe.Objects;
 
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 import static com.example.laudien.tictactoe.Objects.Board.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
@@ -53,12 +54,15 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
 
         switch (difficulty) {
             case EASY: //easy
+                Log.i("ArtificialIntelligence", "Doing an easy move...");
                 easy();
                 break;
             case MEDIUM: // medium
+                Log.i("ArtificialIntelligence", "Doing a medium move...");
                 medium();
                 break;
             case HARD: // hard - every time its the red player!
+                Log.i("ArtificialIntelligence", "Doing a hard move...");
                 hard();
                 break;
         }

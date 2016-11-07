@@ -1,5 +1,6 @@
 package com.example.laudien.tictactoe.Fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENC
 import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_TIME;
 
 public class GameFragment extends Fragment implements View.OnClickListener, Board.OnGameOverListener, SettingsFragment.OnSettingsChangedListener {
+    public static final int NO_COLOR = -1;
     private SharedPreferences sharedPreferences;
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
@@ -44,6 +47,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private Countdown countdown;
     private Ship ship;
     private ArtificialIntelligence computer;
+    private Dialog colorDialog;
+    public static int playerColor, botColor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +91,15 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         btnNewGame.setOnClickListener(this);
         winnerText = (TextView) view.findViewById(R.id.winnerText);
 
+        // color colorDialog
+        colorDialog = new Dialog(getContext());
+        colorDialog.setTitle("Choose your color:");
+        colorDialog.setContentView(R.layout.dialog_choose_color);
+        ImageButton btn_red = (ImageButton) colorDialog.findViewById(R.id.btn_red);
+        ImageButton btn_yellow = (ImageButton) colorDialog.findViewById(R.id.btn_yellow);
+        btn_red.setOnClickListener(this);
+        btn_yellow.setOnClickListener(this);
+
         return view;
     }
 
@@ -95,32 +109,42 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         countdown.pause();
         soundPlayer.stop();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         countdown.start();
     }
+
     public void startGame(boolean aiIsUsed){
         if(aiIsUsed) {
-            int difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
-            if(computer == null)
-                computer = new ArtificialIntelligence(board, difficulty,
-                        (difficulty == HARD) ? RED_PLAYER : YELLOW_PLAYER);
-
-        }else
+            colorDialog.show();
+        }else {
             computer = null;
-        board.newGame(countdown);
+            board.newGame(countdown, playerColor);
+        }
     }
 
     @Override
     public void onClick(View v) {
+        int difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
         if(v.getId() == R.id.newGame) { // click on "new game" button
-            board.newGame(countdown);
+            board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
             YoYo.with(Techniques.Hinge)
                     .duration(animationDuration * 5)
                     .playOn(winnerLayout);
         }else if(v.getParent() == boardLayout){ // if any chip was clicked
             board.placeChip((ImageView) v, true);
+        }else if(v.getId() == R.id.btn_red || v.getId() == R.id.btn_yellow){ // color chooser
+                if(computer == null)
+                    computer = new ArtificialIntelligence(board, difficulty, RED_PLAYER);
+                else
+                    computer.setChipColor(RED_PLAYER);
+                playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
+                botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
+                board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
+
+                colorDialog.dismiss();
         }
 
     }
