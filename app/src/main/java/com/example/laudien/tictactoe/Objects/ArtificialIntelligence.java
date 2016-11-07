@@ -30,18 +30,27 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
         board.addOnNextPlayerListener(this);
         board.addOnGameOverListener(this);
     }
+
     public void setDifficulty(int difficulty){
         this.difficulty = difficulty;
     }
+
+    public void setChipColor(int color){
+        chipColor = color;
+    }
+
     public int getChipColor(){
         return chipColor;
     }
+
     private int getEnemyColor(){
         return (getChipColor() == YELLOW_PLAYER) ? RED_PLAYER : YELLOW_PLAYER;
     }
+
     private void resetCounter(){
         counter = 1;
     }
+
     private void attack() {
         positionState = board.getPositionState();
 
@@ -80,45 +89,87 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
 
     private void hard(){ // every time its the red player (0)!
         int position;
-        if (counter == 1 || counter == 2)
-            placeChip(getFreeEdge());
-        else if (counter == 3) {
-            position = searchPositions(getChipColor());
-            if (position != NO_POSITION_FOUND) // 1. Attack (= win the game if possible):
-                placeChip(position);
-            else { // 2. if not immediate win is possible, defense a possible win of the player:
-                position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND)
-                    placeChip(position);
-                else // if no defense is necessary, place on free edge
-                    placeChip(getFreeEdge());
-            }
-        } else if (counter == 4) {
-            if (positionState[4] == EMPTY_FIELD) // if middle field is empty, place there and win
-                placeChip(4);
-            else {
+        int edge;
+        switch (counter){
+            case 1:
+            case 2:
+                placeChip(getFreeEdge());
+                break;
+            case 3:
                 position = searchPositions(getChipColor());
-                if (position != NO_POSITION_FOUND) // 1. Attack (= win the game if possible):
+                // 1. Attack (= win the game if possible):
+                if (position != NO_POSITION_FOUND){
                     placeChip(position);
-                else { // 2. if not immediate win is possible, defense a possible win of the player:
-                    position = searchPositions(getEnemyColor());
-                    if (position != NO_POSITION_FOUND)
-                        placeChip(position);
-                    else // if no defense is necessary, place on free edge
-                        placeChip(getFreeEdge());
+                    break;
                 }
-            }
-        } else if (counter > 4) {
-            position = searchPositions(getChipColor());
-            if (position != NO_POSITION_FOUND) // 1. Attack (= win the gameLayout if possible):
-                placeChip(position);
-            else { // 2. if not immediate win is possible, defense a possible win of the player:
+                // 2. if the player thought he can beat the hard bot, defend against it
+                if(positionState[1] == getEnemyColor() && positionState[3] == getEnemyColor()) {
+                    placeChip(4);
+                    break;
+                }
+                // 3. if no immediate win is possible, defense a possible win of the player:
                 position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND)
+                if (position != NO_POSITION_FOUND){
                     placeChip(position);
-                else // if no defense is necessary, place on free edge
+                    break;
+                }
+                // 4. if no defense is necessary, place on free edge
+                edge = getFreeEdge();
+                if (edge != NO_POSITION_FOUND){
                     placeChip(getFreeEdge());
-            }
+                    break;
+                }
+                // 5. if no edge was found, place random (like on easy mode)
+                easy();
+                break;
+            case 4:
+                // 1. if middle field is empty, place there and win
+                if (positionState[4] == EMPTY_FIELD) {
+                    placeChip(4);
+                    break;
+                }
+                // 2. Attack (= win the game if possible):
+                position = searchPositions(getChipColor());
+                if (position != NO_POSITION_FOUND) {
+                    placeChip(position);
+                    break;
+                }
+                // 3. if not immediate win is possible, defense a possible win of the player:
+                position = searchPositions(getEnemyColor());
+                if (position != NO_POSITION_FOUND) {
+                    placeChip(position);
+                    break;
+                }
+                // 4. if no defense is necessary, place on free edge
+                edge = getFreeEdge();
+                if (edge != NO_POSITION_FOUND) {
+                    placeChip(getFreeEdge());
+                    break;
+                }
+                // 5. if no edge was found, place random (like on easy mode)
+                easy();
+                break;
+            default:
+                position = searchPositions(getChipColor());
+                // 1. Attack (= win the gameLayout if possible):
+                if (position != NO_POSITION_FOUND) {
+                    placeChip(position);
+                    break;
+                }
+                // 2. if not immediate win is possible, defense a possible win of the player:
+                position = searchPositions(getEnemyColor());
+                if (position != NO_POSITION_FOUND){
+                    placeChip(position);
+                    break;
+                }
+                // 3. if no defense is necessary, place on free edge
+                edge = getFreeEdge();
+                if(edge != NO_POSITION_FOUND) {
+                    placeChip(getFreeEdge());
+                    break;
+                }
+                // 4. if no edge was found, place random (like on easy mode)
+                easy();
         }
     }
 
