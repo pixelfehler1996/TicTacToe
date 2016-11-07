@@ -136,15 +136,15 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         }else if(v.getParent() == boardLayout){ // if any chip was clicked
             board.placeChip((ImageView) v, true);
         }else if(v.getId() == R.id.btn_red || v.getId() == R.id.btn_yellow){ // color chooser
-                if(computer == null)
-                    computer = new ArtificialIntelligence(board, difficulty, RED_PLAYER);
-                else
-                    computer.setChipColor(RED_PLAYER);
-                playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
-                botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
-                board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
+            playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
+            botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
+            if(computer == null)
+                computer = new ArtificialIntelligence(board, difficulty, botColor);
+            else
+                computer.setChipColor(botColor);
 
-                colorDialog.dismiss();
+            board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
+            colorDialog.dismiss();
         }
 
     }
