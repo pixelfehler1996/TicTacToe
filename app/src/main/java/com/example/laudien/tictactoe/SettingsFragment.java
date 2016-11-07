@@ -79,25 +79,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        // Initialize difficultySeekBar
-        difficultySeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1));
-        difficultyTextView.setText(difficultyToString(difficultySeekBar.getProgress()));
-        difficultySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                difficultyTextView.setText(difficultyToString(i));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
         return view;
     }
     String difficultyToString(int difficulty){
