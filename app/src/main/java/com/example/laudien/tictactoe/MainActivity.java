@@ -14,10 +14,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener{
+import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
+import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_DIFFICULTY;
+import static com.example.laudien.tictactoe.SettingsFragment.PREFERENCE_TIME;
+
+public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
 
     public static final String NAME_AI_IS_USED = "aiIsUsed";
-    public static final String ANIMATION_DURATION = "animationDuration";
     public static long animationDuration;
     GameFragment gameFragment;
     StartFragment startFragment;
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     FragmentManager fragmentManager;
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
     LayoutAnimation animation;
-    public static SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     boolean backPressed;
 
     @Override
@@ -33,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
-        settingsFragment = new SettingsFragment();
         gameFragment = new GameFragment();
+        settingsFragment = new SettingsFragment();
+        settingsFragment.setOnSettingsChangedListener(gameFragment);
         fragmentManager = getSupportFragmentManager();
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         layoutList.add(settings);
         animation = new LayoutAnimation(layoutList, animationDuration, 0);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
-        animationDuration = sharedPreferences.getLong(ANIMATION_DURATION, 200);
+        animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, 200);
 
         // load Fragments
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu

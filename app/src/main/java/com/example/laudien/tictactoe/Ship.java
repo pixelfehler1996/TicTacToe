@@ -16,49 +16,37 @@ import java.util.Random;
 
 class Ship {
     private Context context;
-    private int[] positionState;
-    private ConstraintLayout board;
-    private ImageView imageView;
+    private Board board;
+    private ImageView shipImage;
     private MediaPlayer mediaPlayer;
-    private CountDownTimer timer;
 
-    Ship(Context context, int[] positionState, ConstraintLayout board, ImageView imageView,
-         MediaPlayer mediaPlayer, CountDownTimer timer){
+    public Ship(Context context, Board board, ImageView shipImage, MediaPlayer mediaPlayer){
         this.context = context;
-        this.positionState = positionState;
         this.board = board;
-        this.imageView = imageView;
+        this.shipImage = shipImage;
         this.mediaPlayer = mediaPlayer;
-        this.timer = timer;
     }
 
-    ImageView show(){ // returns the chip that is placed by the ship
-        ImageView chip;
-        timer.cancel();
-        int rand = new Random().nextInt(9);
+    public void show(){ // returns the chip that is placed by the ship
         mediaPlayer = MediaPlayer.create(context,R.raw.foghorn);
 
-        imageView.setVisibility(View.VISIBLE); // make the ship visable
+        shipImage.setVisibility(View.VISIBLE); // make the ship visible
 
         // get an empty field
-        while (positionState[rand] != 2)
-            rand = new Random().nextInt(9);
-        chip = (ImageView) board.getChildAt(rand);
+        board.placeRandom();
 
         mediaPlayer.start();
         //imageView.setTranslationX(0f);
         YoYo.with(Techniques.FadeIn)
                 .duration(500)
-                .playOn(imageView);
-        imageView.animate().translationX(-1500f).setDuration(5000);
+                .playOn(shipImage);
+        shipImage.animate().translationX(-1500f).setDuration(5000);
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                imageView.setVisibility(View.INVISIBLE); // make the ship invisable again
+                shipImage.setVisibility(View.INVISIBLE); // make the ship invisible again
             }
         },5000);
-
-        return chip;
     }
 }
