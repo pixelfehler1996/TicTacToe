@@ -13,7 +13,7 @@ public class SoundPlayer {
 
     public void play(int soundFile){
         stop();
-        mediaPlayer = mediaPlayer.create(context, soundFile);
+        mediaPlayer = MediaPlayer.create(context, soundFile);
         mediaPlayer.start();
     }
 
