@@ -25,7 +25,7 @@ public class Ship {
         this.soundPlayer = soundPlayer;
     }
 
-    public void show(){ // returns the chip that is placed by the ship
+    public void show(){
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         board.placeRandom(); // place a random chip
         soundPlayer.play(R.raw.foghorn); // play the ship sound
