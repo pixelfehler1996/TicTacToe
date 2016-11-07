@@ -75,16 +75,19 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     private void medium(){
         int position = searchPositions(getChipColor()); // every time its the yellow player!
 
-        if (position != NO_POSITION_FOUND) // 1. Attack (= win the game if possible):
+        // 1. Attack (= win the game if possible):
+        if (position != NO_POSITION_FOUND) {
             placeChip(position);
-        else { // 2. if no immediate win is possible, defense a possible win of the player:
-            position = searchPositions(getEnemyColor());
-            if (position != NO_POSITION_FOUND)
-                placeChip(position);
-            else { // 3. if no possible win was found, place random:
-                board.placeRandom();
-            }
+            return;
         }
+        // 2. if no immediate win is possible, defense a possible win of the player:
+        position = searchPositions(getEnemyColor());
+        if (position != NO_POSITION_FOUND) {
+            placeChip(position);
+            return;
+        }
+        // 3. if no possible win was found, place random (like on easy mode):
+        easy();
     }
 
     private void hard(){ // every time its the red player (0)!
@@ -194,7 +197,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     return possiblePosition[2];
             }
         }
-        return -1; // if nothing was found, return -1
+        return NO_POSITION_FOUND; // if nothing was found, return -1
     }
     private int getFreeEdge(){
         // searches for the next free edge
