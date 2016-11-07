@@ -2,9 +2,6 @@ package com.example.laudien.tictactoe.Objects;
 
 import android.os.Handler;
 import android.widget.ImageView;
-
-import com.example.laudien.tictactoe.Objects.Board;
-
 import static com.example.laudien.tictactoe.Objects.Board.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
 import static com.example.laudien.tictactoe.Objects.Board.WINNING_POSITIONS;

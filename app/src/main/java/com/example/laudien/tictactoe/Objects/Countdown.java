@@ -1,10 +1,8 @@
 package com.example.laudien.tictactoe.Objects;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
