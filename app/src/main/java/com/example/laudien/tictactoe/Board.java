@@ -21,6 +21,7 @@ public class Board {
     public final static int RESULT_DRAW = 2;
     public final static int NO_RESULT_YET = 3;
     private int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
+    private SoundPlayer soundPlayer;
     private ConstraintLayout boardLayout;
     private boolean gameIsRunning, userCanInteract;
     private Countdown countdown;
@@ -31,9 +32,10 @@ public class Board {
 
 
 
-    public Board(ConstraintLayout boardLayout, Countdown countdown){
+    public Board(ConstraintLayout boardLayout, Countdown countdown, SoundPlayer soundPlayer){
         this.boardLayout = boardLayout;
         this.countdown = countdown;
+        this.soundPlayer = soundPlayer;
         onGameOverListeners = new ArrayList<>();
         onNextPlayerListeners = new ArrayList<>();
         gameIsRunning = false;
@@ -85,6 +87,7 @@ public class Board {
 
     public void newGame(Countdown countdown){
         disableUserInput();
+        soundPlayer.play(R.raw.gong);
         this.countdown = countdown;
         activePlayer = RED_PLAYER;
         winner = NO_RESULT_YET;

@@ -33,7 +33,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
     private TextView counterTextView, winnerText;
-    private MediaPlayer mediaPlayer;
+    private SoundPlayer soundPlayer;
     private ImageView shipImage;
     private Board board;
     private Countdown countdown;
@@ -48,6 +48,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         long time = sharedPreferences.getInt(PREFERENCE_TIME, 20) * 1000;
 
+        soundPlayer = new SoundPlayer(getContext());
+
         // Countdown
         counterTextView = (TextView) view.findViewById(R.id.counterTextView);
         countdown = new Countdown(counterTextView, time);
@@ -60,12 +62,12 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
 
         // Board
         boardLayout = (ConstraintLayout) view.findViewById(R.id.board);
-        board = new Board(boardLayout, countdown);
+        board = new Board(boardLayout, countdown, soundPlayer);
         board.addOnGameOverListener(this);
 
         // Ship
         shipImage = (ImageView) view.findViewById(R.id.shipView);
-        ship = new Ship(getContext(), board, shipImage, mediaPlayer);
+        ship = new Ship(getContext(), board, shipImage, soundPlayer);
 
         // onClick listeners for the chips
         for(int i = 0; i < 9; i++)
@@ -86,6 +88,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     public void onPause() {
         super.onPause();
         countdown.pause();
+        soundPlayer.stop();
     }
     @Override
     public void onResume() {
@@ -126,23 +129,29 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         countdown.disable();
         // bot game
         if(computer != null){
-            if(winner == computer.getChipColor())
+            if(winner == computer.getChipColor()) {
+                soundPlayer.play(R.raw.kid_laugh);
                 winnerText.setText(getString(R.string.you_lose));
-            else if(winner != RESULT_DRAW)
+            }else if(winner != RESULT_DRAW) {
+                soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.you_win));
-            else
+            }else
+                soundPlayer.play(R.raw.monkeys);
                 winnerText.setText(getString(R.string.draw));
             return;
         }
         // player vs. player
         switch (winner){
             case RED_PLAYER:
+                soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.red_wins));
                 break;
             case YELLOW_PLAYER:
+                soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.yellow_wins));
                 break;
             case RESULT_DRAW:
+                soundPlayer.play(R.raw.monkeys);
                 winnerText.setText(getString(R.string.draw));
                 break;
         }

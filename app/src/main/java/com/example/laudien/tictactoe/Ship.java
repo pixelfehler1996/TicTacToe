@@ -20,24 +20,23 @@ class Ship {
     private Context context;
     private Board board;
     private ImageView shipImage;
-    private MediaPlayer mediaPlayer;
+    private SoundPlayer soundPlayer;
 
-    public Ship(Context context, Board board, ImageView shipImage, MediaPlayer mediaPlayer){
+    public Ship(Context context, Board board, ImageView shipImage, SoundPlayer soundPlayer){
         this.context = context;
         this.board = board;
         this.shipImage = shipImage;
-        this.mediaPlayer = mediaPlayer;
+        this.soundPlayer = soundPlayer;
     }
 
     public void show(){ // returns the chip that is placed by the ship
-        mediaPlayer = MediaPlayer.create(context,R.raw.foghorn);
-
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
 
         // get an empty field
         board.placeRandom();
 
-        mediaPlayer.start();
+        soundPlayer.play(R.raw.foghorn); // play the ship sound
+
         //imageView.setTranslationX(0f);
         YoYo.with(Techniques.FadeIn)
                 .duration(animationDuration * 5/2)
