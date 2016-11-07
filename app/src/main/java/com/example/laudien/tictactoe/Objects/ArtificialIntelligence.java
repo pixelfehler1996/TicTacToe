@@ -196,6 +196,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
         }
         return NO_POSITION_FOUND; // if nothing was found, return -1
     }
+
     private int getFreeEdge(){
         // searches for the next free edge
         int[] edges = {0,2,6,8};

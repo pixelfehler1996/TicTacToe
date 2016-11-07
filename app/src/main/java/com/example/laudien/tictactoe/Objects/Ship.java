@@ -27,17 +27,15 @@ public class Ship {
 
     public void show(){ // returns the chip that is placed by the ship
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
-
-        // get an empty field
-        board.placeRandom();
-
+        board.placeRandom(); // place a random chip
         soundPlayer.play(R.raw.foghorn); // play the ship sound
 
-        //imageView.setTranslationX(0f);
+        // do the animation
         YoYo.with(Techniques.FadeIn)
                 .duration(animationDuration * 5/2)
                 .playOn(shipImage);
         shipImage.animate().translationX(-1500f).setDuration(animationDuration * 25);
+
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
