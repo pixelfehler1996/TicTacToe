@@ -210,11 +210,11 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                 countdown.setTime(sharedPreferences.getInt(preference, 20) * 1000);
                 break;
             case PREFERENCE_DIFFICULTY:
-                if(computer != null) {
+                if(computer != null) { // only on bot game
                     Toast.makeText(getContext(), getString(R.string.new_difficulty), Toast.LENGTH_SHORT).show();
-                    difficulty = sharedPreferences.getInt(preference, MEDIUM);
-                    difficultyChanged = true;
                 }
+                difficulty = sharedPreferences.getInt(preference, MEDIUM);
+                difficultyChanged = true;
                 break;
         }
     }

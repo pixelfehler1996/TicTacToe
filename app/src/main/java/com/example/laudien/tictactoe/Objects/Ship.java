@@ -2,6 +2,7 @@ package com.example.laudien.tictactoe.Objects;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class Ship {
     }
 
     public void show(){
+        Log.i("Ship", "Placing a random chip...");
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         board.placeRandom(); // place a random chip
         soundPlayer.play(R.raw.foghorn); // play the ship sound
