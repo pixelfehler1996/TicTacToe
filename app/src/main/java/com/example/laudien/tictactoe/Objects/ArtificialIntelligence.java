@@ -61,7 +61,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 Log.i("ArtificialIntelligence", "Doing a medium move...");
                 medium();
                 break;
-            case HARD: // hard - every time its the red player!
+            case HARD: // hard
                 Log.i("ArtificialIntelligence", "Doing a hard move...");
                 hard();
                 break;
@@ -74,7 +74,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void medium(){
-        int position = searchPositions(getChipColor()); // every time its the yellow player!
+        int position = searchPositions(getChipColor());
 
         // 1. Attack (= win the game if possible):
         if (position != NO_POSITION_FOUND) {
@@ -91,7 +91,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
         easy();
     }
 
-    private void hard(){ // every time its the red player (0)!
+    private void hard(){
         int position;
         int edge;
         switch (counter){
