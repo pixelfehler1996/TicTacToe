@@ -104,6 +104,12 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        difficulty = difficultySeekBar.getProgress();
+    }
+
     public void addOnSettingsChangedListener(OnSettingsChangedListener listener){
         listeners.add(listener);
     }
