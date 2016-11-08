@@ -52,12 +52,14 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
         // Initialize timeSeekBar
-        timeSeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_TIME, 20));
+        time = sharedPreferences.getInt(PREFERENCE_TIME, 20);
+        timeSeekBar.setProgress(time);
         timeTextView.setText(Integer.toString(timeSeekBar.getProgress()));
         timeSeekBar.setOnSeekBarChangeListener(this);
 
         // Initialize difficultySeekBar
-        difficultySeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1));
+        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1);
+        difficultySeekBar.setProgress(difficulty);
         difficultyTextView.setText(difficultyToString(getContext(), difficultySeekBar.getProgress()));
         difficultySeekBar.setOnSeekBarChangeListener(this);
 
@@ -86,28 +88,26 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         super.onPause();
 
         if(time != timeSeekBar.getProgress()){
-            sharedPreferences.edit().putInt(PREFERENCE_TIME,timeSeekBar.getProgress()).apply();
+            time = timeSeekBar.getProgress();
+            sharedPreferences.edit().putInt(PREFERENCE_TIME,time).apply();
+            Log.i("SettingsFragment", "Time was changed to " + time);
             for(OnSettingsChangedListener listener : listeners)
                 listener.onSettingsChanged(PREFERENCE_TIME);
         }
         if(difficulty != difficultySeekBar.getProgress()){
-            sharedPreferences.edit().putInt(PREFERENCE_DIFFICULTY, difficultySeekBar.getProgress()).apply();
-            Log.i("SettingsFragment", "Difficulty changed!");
+            difficulty = difficultySeekBar.getProgress();
+            sharedPreferences.edit().putInt(PREFERENCE_DIFFICULTY, difficulty).apply();
+            Log.i("SettingsFragment", "Difficulty changed to " + difficulty);
             for(OnSettingsChangedListener listener : listeners)
                 listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
         }
         if(animationDuration != seekBar_animation.getProgress()){
             animationDuration = seekBar_animation.getProgress();
             sharedPreferences.edit().putLong(PREFERENCE_ANIMATION_DURATION, animationDuration).apply();
+            Log.i("SettingsFragment", "Animation duration changed to " + animationDuration);
             for(OnSettingsChangedListener listener : listeners)
                 listener.onSettingsChanged(PREFERENCE_ANIMATION_DURATION);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        difficulty = difficultySeekBar.getProgress();
     }
 
     public void addOnSettingsChangedListener(OnSettingsChangedListener listener){
