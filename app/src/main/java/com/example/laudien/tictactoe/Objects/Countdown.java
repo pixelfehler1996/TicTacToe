@@ -15,8 +15,7 @@ public class Countdown {
     private CountDownTimer timer;
     private OnFinishedListener listener;
     private long time, timeNow;
-    private boolean hasFinished;
-    private boolean enabled;
+    private boolean hasFinished, enabled;
 
     public Countdown(final TextView counterTextView, long time){
         this.counterTextView = counterTextView;
@@ -97,10 +96,12 @@ public class Countdown {
         Log.i("Countdown", "Timer disabled!");
     }
 
+    public boolean isEnabled(){
+        return enabled;
+    }
+
     public void setTime(long time){
-        if(!enabled) return; // return if timer is not enabled!
         this.time = time;
-        timer.cancel();
         createNewTimer(time);
         Log.i("Countdown", "Time was set to " + time);
     }
