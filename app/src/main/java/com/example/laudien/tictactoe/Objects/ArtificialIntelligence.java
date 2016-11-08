@@ -138,7 +138,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     placeChip(position);
                     break;
                 }
-                // 3. if not immediate win is possible, defense a possible win of the player:
+                // 3. if not immediate win is possible, defend a possible win of the player:
                 position = searchPositions(getEnemyColor());
                 if (position != NO_POSITION_FOUND) {
                     placeChip(position);
@@ -160,7 +160,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     placeChip(position);
                     break;
                 }
-                // 2. if not immediate win is possible, defense a possible win of the player:
+                // 2. if not immediate win is possible, defend a possible win of the player:
                 position = searchPositions(getEnemyColor());
                 if (position != NO_POSITION_FOUND){
                     placeChip(position);
