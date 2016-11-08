@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         startFragment = (StartFragment)Fragment.instantiate(this, StartFragment.class.getName(), null);
         gameFragment = new GameFragment();
         settingsFragment = new SettingsFragment();
-        settingsFragment.setOnSettingsChangedListener(gameFragment);
         fragmentManager = getSupportFragmentManager();
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
@@ -53,6 +52,13 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu
         fragmentManager.beginTransaction().replace(R.id.settings_layout, settingsFragment).commit(); // settings fragment
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit(); // game fragment
+        fragmentManager.executePendingTransactions();
+        settingsFragment.addOnSettingsChangedListener(new SettingsFragment.OnSettingsChangedListener() {
+            @Override
+            public void onSettingsChanged(String preference) {
+                gameFragment.onSettingsChanged(preference);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

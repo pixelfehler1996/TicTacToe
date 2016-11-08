@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -40,7 +41,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private SharedPreferences sharedPreferences;
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
-    private TextView counterTextView, winnerText;
+    private TextView counterTextView, winnerText, difficultyTextView;
     private SoundPlayer soundPlayer;
     private ImageView shipImage;
     private Board board;
@@ -49,6 +50,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private ArtificialIntelligence computer;
     private Dialog colorDialog;
     public static int playerColor, botColor;
+    private int difficulty;
+    private boolean difficultyChanged;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +61,12 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         long time = sharedPreferences.getInt(PREFERENCE_TIME, 20) * 1000;
 
+        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
+
         soundPlayer = new SoundPlayer(getContext());
+
+        // difficulty textView
+        difficultyTextView = (TextView) view.findViewById(R.id.difficulty_text_view);
 
         // Countdown
         counterTextView = (TextView) view.findViewById(R.id.counterTextView);
@@ -127,8 +135,15 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
 
     @Override
     public void onClick(View v) {
-        int difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
         if(v.getId() == R.id.newGame) { // click on "new game" button
+            if(computer != null && difficultyChanged) {
+                difficultyChanged = false;
+                computer.setDifficulty(difficulty);
+                difficultyTextView.setText(SettingsFragment.difficultyToString(getContext(), difficulty));
+                YoYo.with(Techniques.StandUp) // stand up animation
+                        .duration(animationDuration * 4)
+                        .playOn(difficultyTextView);
+            }
             board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
             YoYo.with(Techniques.Hinge)
                     .duration(animationDuration * 5)
@@ -136,6 +151,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         }else if(v.getParent() == boardLayout){ // if any chip was clicked
             board.placeChip((ImageView) v, true);
         }else if(v.getId() == R.id.btn_red || v.getId() == R.id.btn_yellow){ // color chooser
+            difficultyTextView.setText(SettingsFragment.difficultyToString(getContext(), difficulty));
             playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
             botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
             if(computer == null)
@@ -194,8 +210,11 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                 countdown.setTime(sharedPreferences.getInt(preference, 20) * 1000);
                 break;
             case PREFERENCE_DIFFICULTY:
-                if(computer != null)
-                    computer.setDifficulty(sharedPreferences.getInt(preference, 1));
+                if(computer != null) {
+                    Toast.makeText(getContext(), getString(R.string.new_difficulty), Toast.LENGTH_SHORT).show();
+                    difficulty = sharedPreferences.getInt(preference, MEDIUM);
+                    difficultyChanged = true;
+                }
                 break;
         }
     }

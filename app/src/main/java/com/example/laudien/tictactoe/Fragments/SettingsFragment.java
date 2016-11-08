@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,12 @@ import android.widget.TextView;
 
 import com.example.laudien.tictactoe.R;
 
+import java.util.ArrayList;
+
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
+import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.EASY;
+import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.HARD;
+import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.MEDIUM;
 
 public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener{
     public static final String PREFERENCES = "Settings";
@@ -24,8 +30,14 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     private SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
     private TextView timeTextView, difficultyTextView;
     private int time, difficulty;
-    private OnSettingsChangedListener listener;
+    private ArrayList<OnSettingsChangedListener> listeners;
     private SharedPreferences sharedPreferences;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listeners = new ArrayList<>();
+    }
 
     @Nullable
     @Override
@@ -46,7 +58,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
         // Initialize difficultySeekBar
         difficultySeekBar.setProgress(sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1));
-        difficultyTextView.setText(difficultyToString(difficultySeekBar.getProgress()));
+        difficultyTextView.setText(difficultyToString(getContext(), difficultySeekBar.getProgress()));
         difficultySeekBar.setOnSeekBarChangeListener(this);
 
         // initialize seekbar_animation
@@ -54,17 +66,17 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
         return view;
     }
-    String difficultyToString(int difficulty){
+    public static String difficultyToString(Context context, int difficulty){
         String diffString = "";
         switch (difficulty){
-            case 0:
-                diffString = getResources().getString(R.string.easy);
+            case EASY:
+                diffString = context.getResources().getString(R.string.easy);
                 break;
-            case 1:
-                diffString = getResources().getString(R.string.medium);
+            case MEDIUM:
+                diffString = context.getResources().getString(R.string.medium);
                 break;
-            case 2:
-                diffString = getResources().getString(R.string.hard);
+            case HARD:
+                diffString = context.getResources().getString(R.string.hard);
         }
         return diffString;
     }
@@ -75,21 +87,25 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
         if(time != timeSeekBar.getProgress()){
             sharedPreferences.edit().putInt(PREFERENCE_TIME,timeSeekBar.getProgress()).apply();
-            listener.onSettingsChanged(PREFERENCE_TIME);
+            for(OnSettingsChangedListener listener : listeners)
+                listener.onSettingsChanged(PREFERENCE_TIME);
         }
         if(difficulty != difficultySeekBar.getProgress()){
             sharedPreferences.edit().putInt(PREFERENCE_DIFFICULTY, difficultySeekBar.getProgress()).apply();
-            listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
+            Log.i("SettingsFragment", "Difficulty changed!");
+            for(OnSettingsChangedListener listener : listeners)
+                listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
         }
         if(animationDuration != seekBar_animation.getProgress()){
             animationDuration = seekBar_animation.getProgress();
             sharedPreferences.edit().putLong(PREFERENCE_ANIMATION_DURATION, animationDuration).apply();
-            listener.onSettingsChanged(PREFERENCE_ANIMATION_DURATION);
+            for(OnSettingsChangedListener listener : listeners)
+                listener.onSettingsChanged(PREFERENCE_ANIMATION_DURATION);
         }
     }
 
-    public void setOnSettingsChangedListener(OnSettingsChangedListener listener){
-        this.listener = listener;
+    public void addOnSettingsChangedListener(OnSettingsChangedListener listener){
+        listeners.add(listener);
     }
 
     @Override
@@ -100,7 +116,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
                 timeTextView.setText(Integer.toString(seekBar.getProgress()));
                 break;
             case R.id.difficultySeekBar:
-                difficultyTextView.setText(difficultyToString(i));
+                difficultyTextView.setText(difficultyToString(getContext(), i));
                 break;
             case R.id.seekBar_animation:
                 if(i < 100) seekBar.setProgress(100);
