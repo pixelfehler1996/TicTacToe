@@ -58,11 +58,12 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
+        // load data from SharedPreferences
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         long time = sharedPreferences.getInt(PREFERENCE_TIME, 20) * 1000;
-
         difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
 
+        // create new instance of SoundPlayer
         soundPlayer = new SoundPlayer(getContext());
 
         // difficulty textView

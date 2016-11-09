@@ -4,14 +4,11 @@ import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.widget.ImageView;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.laudien.tictactoe.R;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 public class Board {
@@ -26,7 +23,6 @@ public class Board {
     private ConstraintLayout boardLayout;
     private boolean gameIsRunning, userCanInteract;
     private Countdown countdown;
-    private int winner;
     private int activePlayer;
     private ArrayList<OnGameOverListener> onGameOverListeners;
     private ArrayList<OnNextPlayerListener> onNextPlayerListeners;
@@ -39,9 +35,6 @@ public class Board {
         this.soundPlayer = soundPlayer;
         onGameOverListeners = new ArrayList<>();
         onNextPlayerListeners = new ArrayList<>();
-        gameIsRunning = false;
-        winner = NO_RESULT_YET; // 0 = red, 1 = yellow, 2 = draw, 3 = nobody yet
-        activePlayer = RED_PLAYER;
     }
 
     public void placeChip(ImageView chip, boolean isPlayer){
@@ -58,7 +51,8 @@ public class Board {
 
         positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer; // sets player in the positionState
 
-        switch (getWinner()){
+        int winner = getWinner();
+        switch (winner){
             case RED_PLAYER: // red has won
             case YELLOW_PLAYER: // yellow has won
             case RESULT_DRAW: // draw
@@ -72,7 +66,7 @@ public class Board {
         }
     }
 
-    public void placeRandom(){
+    public void placeRandom(){ // places a random chip on the board
         int rand = new Random().nextInt(9);
         while (positionState[rand] != EMPTY_FIELD)
             rand = new Random().nextInt(9);
@@ -86,23 +80,26 @@ public class Board {
 
     }
 
-    public void newGame(Countdown countdown, int beginner){
+    public void newGame(Countdown countdown, int firstColor){
         disableUserInput();
-        soundPlayer.play(R.raw.gong);
+        activePlayer = firstColor;
+
+        // Countdown
         this.countdown = countdown;
-        activePlayer = beginner;
-        winner = NO_RESULT_YET;
         countdown.enable();
         countdown.start();
-        gameIsRunning = true;
+
+        gameIsRunning = true; // set indicator that a game is running
+
+        soundPlayer.play(R.raw.gong); // play the gong sound
 
         // shake the chips off the board
-        YoYo.with(Techniques.Shake)
+        YoYo.with(Techniques.Shake) // animation for the board
                 .duration(animationDuration)
                 .playOn(boardLayout);
         for(int i = 0; i < 9; i++)
             if(boardLayout.getChildAt(i).getAlpha() == 1f)
-                YoYo.with(Techniques.TakingOff)
+                YoYo.with(Techniques.TakingOff) // animation for each chip
                         .duration(animationDuration * 5)
                         .playOn(boardLayout.getChildAt(i));
 
@@ -110,13 +107,15 @@ public class Board {
         for(int i = 0; i < positionState.length; i++)
             positionState[i] = EMPTY_FIELD;
 
+        // enable user input after all animations are finished
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                userCanInteract = true; // enable the playground
+                enableUserInput();
             }
         }, animationDuration * 5 + 100);
 
+        // call all the listeners
         for(OnNextPlayerListener listener : onNextPlayerListeners)
             listener.onNextPlayer(activePlayer);
     }
@@ -134,19 +133,19 @@ public class Board {
         for (int[] winningPosition : WINNING_POSITIONS) {
             if (positionState[winningPosition[0]] == activePlayer
                     && positionState[winningPosition[1]] == activePlayer
-                    && positionState[winningPosition[2]] == activePlayer) {
-                winner = activePlayer;
-                return winner;
+                    && positionState[winningPosition[2]] == activePlayer)
+                return activePlayer;
+        }
+
+        // if no one has won, check if any position is empty
+        for (int state : positionState){
+            if(state == EMPTY_FIELD){ // if any position is empty -> no one has won yet!
+                return NO_RESULT_YET;
             }
         }
 
-        for (int state : positionState){
-            if(state == EMPTY_FIELD){ // if one position on the field is empty
-                return winner;
-            }
-        }
-        winner = RESULT_DRAW; // draw
-        return winner;
+        // if no position is empty -> its a draw!
+        return RESULT_DRAW;
     }
 
     public ConstraintLayout getBoardLayout(){
@@ -158,11 +157,11 @@ public class Board {
     }
 
     private void nextPlayer(){
-        activePlayer = (activePlayer == RED_PLAYER) ? YELLOW_PLAYER : RED_PLAYER;
-        userCanInteract = true;
+        activePlayer = (activePlayer == RED_PLAYER) ? YELLOW_PLAYER : RED_PLAYER; // change player color
+        userCanInteract = true; // enable the board for player input
         countdown.reset();
         countdown.start();
-        for(OnNextPlayerListener listener : onNextPlayerListeners)
+        for(OnNextPlayerListener listener : onNextPlayerListeners) // call the listeners
             listener.onNextPlayer(activePlayer);
     }
 
