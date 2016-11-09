@@ -36,7 +36,7 @@ import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENC
 
 public class GameFragment extends Fragment implements View.OnClickListener, Board.OnGameOverListener, SettingsFragment.OnSettingsChangedListener {
 
-    public static int playerColor, botColor;
+    private static int playerColor, botColor;
     private SharedPreferences sharedPreferences;
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
