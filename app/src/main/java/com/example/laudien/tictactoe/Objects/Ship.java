@@ -26,24 +26,25 @@ public class Ship {
 
     public void show(){
         Log.i("Ship", "Placing a random chip...");
+        long duration = animationDuration * 16;
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         soundPlayer.play(R.raw.foghorn); // play the ship sound
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show(); // show the toast
         shipImage.setTranslationX(displayWidth); // set the ship to the right of the screen
-        shipImage.animate().translationX(-1 * displayWidth).setDuration(animationDuration * 25); // ship animation
+        shipImage.animate().translationX(-1 * displayWidth).setDuration(duration); // ship animation
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 board.placeRandom(); // place a random chip
             }
-        }, animationDuration * 25/2);
+        }, duration / 2);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 shipImage.setVisibility(View.INVISIBLE); // make the ship invisible again
             }
-        },animationDuration * 25);
+        },duration);
     }
 }
