@@ -123,15 +123,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         countdown.start(); // start the countdown again
     }
 
-    public void startGame(boolean aiIsUsed){
-        if(aiIsUsed) { // bot game
-            colorDialog.show(); // show the color chooser (it will start the game after choosing automatically)
-        }else { // player vs player
-            computer = null;
-            board.newGame(countdown, playerColor); // start a new game
-        }
-    }
-
     @Override
     public void onClick(View v) {
         if(v.getParent() == boardLayout){ // if any chip was clicked
@@ -172,6 +163,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                     computer = new ArtificialIntelligence(board, difficulty, botColor);
                 else
                     computer.setChipColor(botColor);
+
+                setBoardSize(); // change the size of the board layout (height = width)
 
                 // start a new game on the board and close the color chooser
                 board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
@@ -241,5 +234,22 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                 difficultyChanged = true;
                 break;
         }
+    }
+
+    public void startGame(boolean aiIsUsed){
+        if(aiIsUsed) { // bot game
+            colorDialog.show(); // show the color chooser (it will start the game after choosing automatically)
+        }else { // player vs player
+            computer = null;
+            board.newGame(countdown, playerColor); // start a new game
+            setBoardSize();
+        }
+    }
+
+    private void setBoardSize(){
+        // change the size of the board layout (height = width)
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) boardLayout.getLayoutParams();
+        params.height = boardLayout.getWidth();
+        boardLayout.setLayoutParams(params);
     }
 }
