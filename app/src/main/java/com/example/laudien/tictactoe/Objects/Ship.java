@@ -6,12 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.example.laudien.tictactoe.R;
 
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
+import static com.example.laudien.tictactoe.MainActivity.displayWidth;
 
 public class Ship {
     private Context context;
@@ -31,14 +29,10 @@ public class Ship {
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         board.placeRandom(); // place a random chip
         soundPlayer.play(R.raw.foghorn); // play the ship sound
+        Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show(); // show the toast
+        shipImage.setTranslationX(displayWidth); // set the ship to the right of the screen
+        shipImage.animate().translationX(-1 * displayWidth).setDuration(animationDuration * 25); // ship animation
 
-        // do the animation
-        YoYo.with(Techniques.FadeIn)
-                .duration(animationDuration * 5/2)
-                .playOn(shipImage);
-        shipImage.animate().translationX(-1500f).setDuration(animationDuration * 25);
-
-        Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

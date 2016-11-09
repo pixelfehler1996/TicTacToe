@@ -67,7 +67,12 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void easy() {
-        board.placeRandom();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                board.placeRandom();
+            }
+        }, animationDuration * 5 + 100);
     }
 
     private void medium(){

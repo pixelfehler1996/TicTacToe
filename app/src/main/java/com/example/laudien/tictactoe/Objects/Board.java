@@ -71,13 +71,7 @@ public class Board {
         while (positionState[rand] != EMPTY_FIELD)
             rand = new Random().nextInt(9);
         final int finalRand = rand;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                placeChip((ImageView) boardLayout.getChildAt(finalRand), false);
-            }
-        }, 1100);
-
+        placeChip((ImageView) boardLayout.getChildAt(finalRand), false);
     }
 
     public void newGame(Countdown countdown, int firstColor){

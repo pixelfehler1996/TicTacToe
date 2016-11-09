@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENC
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
     public static long animationDuration;
+    public static int displayWidth;
     GameFragment gameFragment;
     StartFragment startFragment;
     SettingsFragment settingsFragment;
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
         animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, 200);
 
+        // get display width
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        displayWidth = metrics.widthPixels;
+
         // load Fragments
         fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit(); // start fragment with main manu
         fragmentManager.beginTransaction().replace(R.id.settings_layout, settingsFragment).commit(); // settings fragment
@@ -56,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         settingsFragment.addOnSettingsChangedListener(new SettingsFragment.OnSettingsChangedListener() {
             @Override
             public void onSettingsChanged(String preference) {
-                gameFragment.onSettingsChanged(preference);
+                if(gameFragment != null)
+                    gameFragment.onSettingsChanged(preference);
             }
         });
     }
