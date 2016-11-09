@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.laudien.tictactoe.Objects.ArtificialIntelligence;
@@ -25,7 +24,6 @@ import com.example.laudien.tictactoe.Objects.Countdown;
 import com.example.laudien.tictactoe.Objects.Ship;
 import com.example.laudien.tictactoe.Objects.SoundPlayer;
 import com.example.laudien.tictactoe.R;
-
 import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.HARD;
 import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.MEDIUM;
 import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
@@ -37,7 +35,8 @@ import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENC
 import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_TIME;
 
 public class GameFragment extends Fragment implements View.OnClickListener, Board.OnGameOverListener, SettingsFragment.OnSettingsChangedListener {
-    public static final int NO_COLOR = -1;
+
+    public static int playerColor, botColor;
     private SharedPreferences sharedPreferences;
     private ConstraintLayout boardLayout;
     private LinearLayout winnerLayout;
@@ -49,7 +48,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     private Ship ship;
     private ArtificialIntelligence computer;
     private Dialog colorDialog;
-    public static int playerColor, botColor;
     private int difficulty;
     private boolean difficultyChanged;
 
@@ -115,89 +113,111 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     @Override
     public void onPause() {
         super.onPause();
-        countdown.pause();
-        soundPlayer.stop();
+        countdown.pause(); // pause the countdown
+        soundPlayer.stop(); // stop any sound that is playing
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        countdown.start();
+        countdown.start(); // start the countdown again
     }
 
     public void startGame(boolean aiIsUsed){
-        if(aiIsUsed) {
-            colorDialog.show();
-        }else {
+        if(aiIsUsed) { // bot game
+            colorDialog.show(); // show the color chooser (it will start the game after choosing automatically)
+        }else { // player vs player
             computer = null;
-            board.newGame(countdown, playerColor);
+            board.newGame(countdown, playerColor); // start a new game
         }
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.newGame) { // click on "new game" button
-            if(computer != null && difficultyChanged) {
-                difficultyChanged = false;
-                computer.setDifficulty(difficulty);
-                difficultyTextView.setText(SettingsFragment.difficultyToString(getContext(), difficulty));
-                YoYo.with(Techniques.StandUp) // stand up animation
-                        .duration(animationDuration * 4)
-                        .playOn(difficultyTextView);
-            }
-            board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
-            YoYo.with(Techniques.Hinge)
-                    .duration(animationDuration * 5)
-                    .playOn(winnerLayout);
-        }else if(v.getParent() == boardLayout){ // if any chip was clicked
-            board.placeChip((ImageView) v, true);
-        }else if(v.getId() == R.id.btn_red || v.getId() == R.id.btn_yellow){ // color chooser
-            difficultyTextView.setText(SettingsFragment.difficultyToString(getContext(), difficulty));
-            playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
-            botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
-            if(computer == null)
-                computer = new ArtificialIntelligence(board, difficulty, botColor);
-            else
-                computer.setChipColor(botColor);
-
-            board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
-            colorDialog.dismiss();
+        if(v.getParent() == boardLayout){ // if any chip was clicked
+            board.placeChip((ImageView) v, true); // place the chip on the corresponding place on the board
+            return;
         }
 
+        switch (v.getId()){
+            case R.id.newGame: // "New Game" button
+                // change the difficulty of the bot (if setting was changed and bot is enabled)
+                if(computer != null && difficultyChanged) {
+                    difficultyChanged = false; // reset the indicator
+                    computer.setDifficulty(difficulty); // set the new difficulty
+                    difficultyTextView.setText(SettingsFragment. // set difficulty textView
+                            difficultyToString(getContext(), difficulty));
+                    YoYo.with(Techniques.StandUp) // stand up animation of the difficulty textView
+                            .duration(animationDuration * 4)
+                            .playOn(difficultyTextView);
+                }
+
+                // start a new game and hide the winnerLayout with an animation
+                board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
+                YoYo.with(Techniques.Hinge)
+                        .duration(animationDuration * 5)
+                        .playOn(winnerLayout);
+                break;
+            case R.id.btn_red: // Red on color chooser
+            case R.id.btn_yellow: // Yellow on color chooser
+                // show the difficulty in the textView
+                difficultyTextView.setText(SettingsFragment.difficultyToString(getContext(), difficulty));
+
+                // get the colors of bot and player
+                playerColor = (v.getId() == R.id.btn_red)? RED_PLAYER : YELLOW_PLAYER;
+                botColor = (v.getId() == R.id.btn_red)? YELLOW_PLAYER : RED_PLAYER;
+
+                // create a new bot with that color or set the new color on the existing bot
+                if(computer == null)
+                    computer = new ArtificialIntelligence(board, difficulty, botColor);
+                else
+                    computer.setChipColor(botColor);
+
+                // start a new game on the board and close the color chooser
+                board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
+                colorDialog.dismiss();
+                break;
+        }
     }
 
     @Override
     public void onGameOver(int winner) {
         Log.i("GameFragment", "Game over! Winner = " + winner);
+
+        // show the winnerLayout with an animation
         YoYo.with(Techniques.BounceInLeft)
                 .duration(animationDuration * 5)
                 .playOn(winnerLayout);
+
+        // disable the countdown
         countdown.disable();
-        // bot game
+
+        // if it is a bot game
         if(computer != null){
-            if(winner == computer.getChipColor()) {
+            if(winner == computer.getChipColor()) { // if the bot has won
                 soundPlayer.play(R.raw.kid_laugh);
                 winnerText.setText(getString(R.string.you_lose));
-            }else if(winner != RESULT_DRAW) {
+            }else if(winner != RESULT_DRAW) { // if the player has won
                 soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.you_win));
-            }else {
+            }else { // if the result is draw
                 soundPlayer.play(R.raw.monkeys);
                 winnerText.setText(getString(R.string.draw));
             }
             return;
         }
-        // player vs. player
+
+        // if it is player vs. player
         switch (winner){
-            case RED_PLAYER:
+            case RED_PLAYER: // red wins
                 soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.red_wins));
                 break;
-            case YELLOW_PLAYER:
+            case YELLOW_PLAYER: // yellow wins
                 soundPlayer.play(R.raw.small_crowd_applause);
                 winnerText.setText(getString(R.string.yellow_wins));
                 break;
-            case RESULT_DRAW:
+            case RESULT_DRAW: // draw
                 soundPlayer.play(R.raw.monkeys);
                 winnerText.setText(getString(R.string.draw));
                 break;
@@ -207,13 +227,16 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     @Override
     public void onSettingsChanged(String preference) {
         switch (preference){
-            case PREFERENCE_TIME:
+            case PREFERENCE_TIME: // if the time in the settings changed
+                // set the new time in the countdown
                 countdown.setTime(sharedPreferences.getInt(preference, 20) * 1000);
                 break;
-            case PREFERENCE_DIFFICULTY:
-                if(computer != null) { // only on bot game
+            case PREFERENCE_DIFFICULTY: // if the difficulty was changed
+                // if it is a bot game, show this toast to the player
+                if(computer != null)
                     Toast.makeText(getContext(), getString(R.string.new_difficulty), Toast.LENGTH_SHORT).show();
-                }
+
+                // remember that this setting was changed to change it in the game on "New Game"
                 difficulty = sharedPreferences.getInt(preference, MEDIUM);
                 difficultyChanged = true;
                 break;
