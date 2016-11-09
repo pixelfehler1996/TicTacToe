@@ -43,10 +43,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         mainMenu = (FrameLayout)findViewById(R.id.foreground_layout);
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
-        ArrayList<FrameLayout> layoutList = new ArrayList<>();
-        layoutList.add(mainMenu);
-        layoutList.add(gameLayout);
-        layoutList.add(settings);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
         animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, 200);
 
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                 if (lastLayout == gameLayout)
                     gameFragment.onPause();
                 settings.setVisibility(View.VISIBLE);
-                settings.setTranslationX(+1100f);
+                settings.setTranslationX(displayWidth);
                 settings.animate().translationX(0f).setDuration(animationDuration);
             }
             return true;
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
             if(settingsFragment != null)
                 settingsFragment.onPause();
             gameLayout.setAlpha(0f);
-            settings.animate().translationX(+1100f).setDuration(animationDuration);
+            settings.animate().translationX(displayWidth).setDuration(animationDuration);
             gameLayout.animate().alpha(1f).setDuration(animationDuration);
             new Handler().postDelayed(new Runnable() {
                 @Override
