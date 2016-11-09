@@ -27,11 +27,17 @@ public class Ship {
     public void show(){
         Log.i("Ship", "Placing a random chip...");
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
-        board.placeRandom(); // place a random chip
         soundPlayer.play(R.raw.foghorn); // play the ship sound
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show(); // show the toast
         shipImage.setTranslationX(displayWidth); // set the ship to the right of the screen
         shipImage.animate().translationX(-1 * displayWidth).setDuration(animationDuration * 25); // ship animation
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                board.placeRandom(); // place a random chip
+            }
+        }, animationDuration * 25/2);
 
         new Handler().postDelayed(new Runnable() {
             @Override
