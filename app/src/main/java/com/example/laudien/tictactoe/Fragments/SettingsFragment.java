@@ -44,17 +44,17 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         // timeSeekBar
         time = sharedPreferences.getInt(PREFERENCE_TIME, 20);
         timeSeekBar = (SeekBar)view.findViewById(R.id.timeSeekBar);
+        timeTextView = (TextView)view.findViewById(R.id.timeTextView);
         timeSeekBar.setOnSeekBarChangeListener(this);
         timeSeekBar.setProgress(time);
-        timeTextView = (TextView)view.findViewById(R.id.timeTextView);
         timeTextView.setText(Integer.toString(timeSeekBar.getProgress()));
 
         // difficultySeekBar
         difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1);
         difficultySeekBar = (SeekBar)view.findViewById(R.id.difficultySeekBar);
+        difficultyTextView = (TextView)view.findViewById(R.id.difficultyTextView);
         difficultySeekBar.setProgress(difficulty);
         difficultySeekBar.setOnSeekBarChangeListener(this);
-        difficultyTextView = (TextView)view.findViewById(R.id.difficultyTextView);
         difficultyTextView.setText(difficultyToString(getContext(), difficultySeekBar.getProgress()));
 
         // seekbar_animation

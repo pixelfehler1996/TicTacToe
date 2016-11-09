@@ -14,16 +14,15 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     public final static int EASY = 0;
     public final static int MEDIUM = 1;
     public final static int HARD = 2;
-    private int difficulty;
-    private int counter; // counts the moves
-    private Board board;
+    private int difficulty, counter, chipColor;
     private int[] positionState;
-    private int chipColor;
+    private Board board;
 
     public ArtificialIntelligence(Board board, int difficulty, int chipColor){
-        resetCounter();
         this.board = board;
         this.chipColor = chipColor;
+        positionState = board.getPositionState();
+        resetCounter();
         setDifficulty(difficulty);
         board.addOnNextPlayerListener(this);
         board.addOnGameOverListener(this);
@@ -33,8 +32,8 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
         this.difficulty = difficulty;
     }
 
-    public void setChipColor(int color){
-        chipColor = color;
+    public void setChipColor(int chipColor){
+        this.chipColor = chipColor;
     }
 
     public int getChipColor(){
@@ -50,8 +49,6 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void attack() {
-        positionState = board.getPositionState();
-
         switch (difficulty) {
             case EASY: //easy
                 Log.i("ArtificialIntelligence", "Doing an easy move...");
@@ -212,6 +209,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void placeChip(final int position){
+        // place the chip after all the animations are definitely finished
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -228,6 +226,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
 
     @Override
     public void onNextPlayer(int activePlayer) {
+        // attack if the bot is the activePlayer
         if(getChipColor() == activePlayer) {
             board.disableUserInput();
             attack();
