@@ -25,16 +25,17 @@ import com.example.laudien.tictactoe.Objects.Ship;
 import com.example.laudien.tictactoe.Objects.SoundPlayer;
 import com.example.laudien.tictactoe.R;
 
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.TIME_DEF;
-import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.HARD;
-import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.MEDIUM;
-import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
-import static com.example.laudien.tictactoe.Objects.Board.RESULT_DRAW;
-import static com.example.laudien.tictactoe.Objects.Board.YELLOW_PLAYER;
+import static com.example.laudien.tictactoe.Contract.DIFFICULTY_DEF;
+import static com.example.laudien.tictactoe.Contract.HARD;
+import static com.example.laudien.tictactoe.Contract.MEDIUM;
+import static com.example.laudien.tictactoe.Contract.PREFERENCES;
+import static com.example.laudien.tictactoe.Contract.PREFERENCE_DIFFICULTY;
+import static com.example.laudien.tictactoe.Contract.PREFERENCE_TIME;
+import static com.example.laudien.tictactoe.Contract.RED_PLAYER;
+import static com.example.laudien.tictactoe.Contract.RESULT_DRAW;
+import static com.example.laudien.tictactoe.Contract.TIME_DEF;
+import static com.example.laudien.tictactoe.Contract.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCES;
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_DIFFICULTY;
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_TIME;
 
 public class GameFragment extends Fragment implements View.OnClickListener, Board.OnGameOverListener, SettingsFragment.OnSettingsChangedListener {
 
@@ -61,7 +62,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         // load data from SharedPreferences
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         long time = sharedPreferences.getInt(PREFERENCE_TIME, TIME_DEF) * 1000;
-        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
+        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, DIFFICULTY_DEF);
 
         // create new instance of SoundPlayer
         soundPlayer = new SoundPlayer(getContext());

@@ -9,15 +9,16 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.laudien.tictactoe.R;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static com.example.laudien.tictactoe.Contract.EMPTY_FIELD;
+import static com.example.laudien.tictactoe.Contract.NO_RESULT_YET;
+import static com.example.laudien.tictactoe.Contract.RED_PLAYER;
+import static com.example.laudien.tictactoe.Contract.RESULT_DRAW;
+import static com.example.laudien.tictactoe.Contract.WINNING_POSITIONS;
+import static com.example.laudien.tictactoe.Contract.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 public class Board {
-    public final static int [][] WINNING_POSITIONS = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
-    public final static int RED_PLAYER = 0;
-    public final static int YELLOW_PLAYER = 1;
-    public final static int EMPTY_FIELD = 2;
-    public final static int RESULT_DRAW = 2;
-    public final static int NO_RESULT_YET = 3;
     private int[] positionState = {2,2,2,2,2,2,2,2,2}; //shows what chips are placed (0=red, 1=yellow, 2=free/no Chip)
     private SoundPlayer soundPlayer;
     private ConstraintLayout boardLayout;

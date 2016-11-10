@@ -13,20 +13,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.example.laudien.tictactoe.R;
 import java.util.ArrayList;
+
+import static com.example.laudien.tictactoe.Contract.ANIMATION_DURATION_DEF;
+import static com.example.laudien.tictactoe.Contract.ANIMATION_DURATION_MIN;
+import static com.example.laudien.tictactoe.Contract.EASY;
+import static com.example.laudien.tictactoe.Contract.HARD;
+import static com.example.laudien.tictactoe.Contract.MEDIUM;
+import static com.example.laudien.tictactoe.Contract.PREFERENCES;
+import static com.example.laudien.tictactoe.Contract.PREFERENCE_ANIMATION_DURATION;
+import static com.example.laudien.tictactoe.Contract.PREFERENCE_DIFFICULTY;
+import static com.example.laudien.tictactoe.Contract.PREFERENCE_TIME;
+import static com.example.laudien.tictactoe.Contract.TIME_DEF;
+import static com.example.laudien.tictactoe.Contract.TIME_MIN;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
-import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.EASY;
-import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.HARD;
-import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.MEDIUM;
 
 public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener{
-    public static final String PREFERENCES = "Settings";
-    public static final String PREFERENCE_TIME = "savedTime";
-    public static final String PREFERENCE_DIFFICULTY = "difficulty";
-    public static final String PREFERENCE_ANIMATION_DURATION = "animationDuration";
-    public static final int TIME_DEF = 10;
-    private static final int TIME_MIN = 2;
-    public static final int ANIMATION_DURATION_DEF = 100;
-    private static final int ANIMATION_DURATION_MIN = 50;
     private SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
     private TextView timeTextView, difficultyTextView, animationTextView;
     private int time, difficulty;

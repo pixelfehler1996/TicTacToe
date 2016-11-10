@@ -3,17 +3,18 @@ package com.example.laudien.tictactoe.Objects;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
-import static com.example.laudien.tictactoe.Objects.Board.EMPTY_FIELD;
-import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
-import static com.example.laudien.tictactoe.Objects.Board.WINNING_POSITIONS;
-import static com.example.laudien.tictactoe.Objects.Board.YELLOW_PLAYER;
+
+import static com.example.laudien.tictactoe.Contract.EASY;
+import static com.example.laudien.tictactoe.Contract.EMPTY_FIELD;
+import static com.example.laudien.tictactoe.Contract.HARD;
+import static com.example.laudien.tictactoe.Contract.MEDIUM;
+import static com.example.laudien.tictactoe.Contract.RED_PLAYER;
+import static com.example.laudien.tictactoe.Contract.WINNING_POSITIONS;
+import static com.example.laudien.tictactoe.Contract.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 public class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
-    private final static int NO_POSITION_FOUND = -1;
-    public final static int EASY = 0;
-    public final static int MEDIUM = 1;
-    public final static int HARD = 2;
+    private static final int NO_POSITION_FOUND = -1;
     private int difficulty, counter, chipColor;
     private int[] positionState;
     private Board board;

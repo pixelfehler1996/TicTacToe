@@ -17,10 +17,7 @@ import com.example.laudien.tictactoe.Fragments.GameFragment;
 import com.example.laudien.tictactoe.Fragments.SettingsFragment;
 import com.example.laudien.tictactoe.Fragments.StartFragment;
 
-import java.util.ArrayList;
-
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.ANIMATION_DURATION_DEF;
-import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
+import static com.example.laudien.tictactoe.Contract.ANIMATION_DURATION_DEF;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
     public static long animationDuration;
