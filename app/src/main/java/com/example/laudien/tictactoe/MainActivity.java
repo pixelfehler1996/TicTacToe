@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onStartGame(final boolean aiIsUsed) {
         if(gameFragment == null)
             gameFragment = new GameFragment();
-        mainMenu.animate().translationX(displayWidth).setDuration(animationDuration * DURATION_LAYOUT_TRANSLATION);
+        mainMenu.animate().translationX(-displayWidth).setDuration(animationDuration * DURATION_LAYOUT_TRANSLATION);
         gameLayout.animate().alpha(1f).setDuration(animationDuration * DURATION_LAYOUT_TRANSLATION);
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
         new Handler().postDelayed(new Runnable() {
