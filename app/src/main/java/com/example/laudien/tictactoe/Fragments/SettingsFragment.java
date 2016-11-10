@@ -98,7 +98,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
             for(OnSettingsChangedListener listener : listeners)
                 listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
         }
-        if(animationDuration != seekBar_animation.getProgress()){
+        if(animationDuration/2 != seekBar_animation.getProgress()){
             animationDuration = seekBar_animation.getProgress() * 2;
             sharedPreferences.edit().putLong(PREFERENCE_ANIMATION_DURATION, animationDuration).apply();
             Log.i("SettingsFragment", "Animation duration changed to " + animationDuration);
