@@ -54,4 +54,7 @@ public class Contract {
 
         // Layout translation
         public static final int DURATION_LAYOUT_TRANSLATION = 2;
+
+        // Back button to exit
+        public static final int DURATION_BACK_TO_EXIT = 3;
 }

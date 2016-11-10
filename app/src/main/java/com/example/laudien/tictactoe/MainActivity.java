@@ -18,6 +18,7 @@ import com.example.laudien.tictactoe.Fragments.SettingsFragment;
 import com.example.laudien.tictactoe.Fragments.StartFragment;
 
 import static com.example.laudien.tictactoe.Contract.ANIMATION_DURATION_DEF;
+import static com.example.laudien.tictactoe.Contract.DURATION_BACK_TO_EXIT;
 import static com.example.laudien.tictactoe.Contract.DURATION_LAYOUT_TRANSLATION;
 import static com.example.laudien.tictactoe.Contract.PREFERENCES;
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                     public void run() {
                         backPressed = false;
                     }
-                }, 3000);
+                }, 1000 * DURATION_BACK_TO_EXIT);
             }else {
                 finish();
                 System.exit(0);
