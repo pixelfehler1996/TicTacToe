@@ -108,6 +108,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
         colorDialog = new Dialog(getContext());
         colorDialog.setTitle("Choose your color:");
         colorDialog.setContentView(R.layout.dialog_choose_color);
+        colorDialog.setCancelable(false);
         ImageButton btn_red = (ImageButton) colorDialog.findViewById(R.id.btn_red);
         ImageButton btn_yellow = (ImageButton) colorDialog.findViewById(R.id.btn_yellow);
         btn_red.setOnClickListener(this);
