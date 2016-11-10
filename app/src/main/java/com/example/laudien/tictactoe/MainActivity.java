@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
-        animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, ANIMATION_DURATION_DEF);
+        animationDuration = ANIMATION_DURATION_DEF * 2;
 
         // get display width
         DisplayMetrics metrics = getResources().getDisplayMetrics();

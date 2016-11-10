@@ -16,15 +16,26 @@ public class Ship {
     private Board board;
     private ImageView shipImage;
     private SoundPlayer soundPlayer;
+    private boolean enabled;
 
     public Ship(Context context, Board board, ImageView shipImage, SoundPlayer soundPlayer){
         this.context = context;
         this.board = board;
         this.shipImage = shipImage;
         this.soundPlayer = soundPlayer;
+        this.enabled = true;
+    }
+
+    public void disable(){
+        enabled = false;
+    }
+
+    public void enable(){
+        enabled = true;
     }
 
     public void show(){
+        if(!enabled) return;
         Log.i("Ship", "Placing a random chip...");
         board.disableUserInput();
         long duration = animationDuration * 16;

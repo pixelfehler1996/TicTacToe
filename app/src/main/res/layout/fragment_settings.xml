@@ -91,13 +91,23 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:id="@+id/seekBar_animation"
-        android:max="300"
-        android:progress="200"
+        android:max="150"
+        android:progress="100"
         android:indeterminate="false"
         android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/animationTextView"
+        android:layout_above="@+id/seekBar_animation"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3"
+        android:layout_marginLeft="5dp" />
 
 </RelativeLayout>

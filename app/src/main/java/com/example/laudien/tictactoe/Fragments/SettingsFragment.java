@@ -25,10 +25,10 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     public static final String PREFERENCE_ANIMATION_DURATION = "animationDuration";
     public static final int TIME_DEF = 10;
     private static final int TIME_MIN = 2;
-    public static final int ANIMATION_DURATION_DEF = 200;
-    private static final int ANIMATION_DURATION_MIN = 100;
+    public static final int ANIMATION_DURATION_DEF = 100;
+    private static final int ANIMATION_DURATION_MIN = 50;
     private SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
-    private TextView timeTextView, difficultyTextView;
+    private TextView timeTextView, difficultyTextView, animationTextView;
     private int time, difficulty;
     private ArrayList<OnSettingsChangedListener> listeners;
     private SharedPreferences sharedPreferences;
@@ -63,8 +63,10 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
         // seekbar_animation
         seekBar_animation = (SeekBar)view.findViewById(R.id.seekBar_animation);
-        seekBar_animation.setProgress((int)animationDuration);
+        animationTextView = (TextView) view.findViewById(R.id.animationTextView);
+        seekBar_animation.setProgress((int)animationDuration/2);
         seekBar_animation.setOnSeekBarChangeListener(this);
+        animationTextView.setText((double)animationDuration/(ANIMATION_DURATION_DEF*2) + "x");
 
         return view;
     }
@@ -97,7 +99,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
                 listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
         }
         if(animationDuration != seekBar_animation.getProgress()){
-            animationDuration = seekBar_animation.getProgress();
+            animationDuration = seekBar_animation.getProgress() * 2;
             sharedPreferences.edit().putLong(PREFERENCE_ANIMATION_DURATION, animationDuration).apply();
             Log.i("SettingsFragment", "Animation duration changed to " + animationDuration);
             for(OnSettingsChangedListener listener : listeners)
@@ -109,14 +111,16 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
         switch (seekBar.getId()){
             case R.id.timeSeekBar:
-                if(seekBar.getProgress() < TIME_MIN){seekBar.setProgress(TIME_MIN);} // minimum of 5 seconds
+                if(seekBar.getProgress() < TIME_MIN){seekBar.setProgress(TIME_MIN);} // set minimum
                 timeTextView.setText(Integer.toString(seekBar.getProgress()));
                 break;
             case R.id.difficultySeekBar:
                 difficultyTextView.setText(difficultyToString(getContext(), i));
                 break;
             case R.id.seekBar_animation:
-                if(i < ANIMATION_DURATION_MIN) seekBar.setProgress(ANIMATION_DURATION_MIN); // minimum of 100
+                if(i < ANIMATION_DURATION_MIN) seekBar.setProgress(ANIMATION_DURATION_MIN); // set minimum
+                double newTime = (double) seekBar.getProgress() / ANIMATION_DURATION_DEF;
+                animationTextView.setText(newTime + "x");
                 break;
         }
     }

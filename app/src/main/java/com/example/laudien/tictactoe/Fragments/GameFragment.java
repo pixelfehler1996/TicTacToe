@@ -115,6 +115,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     @Override
     public void onPause() {
         super.onPause();
+        ship.disable();
         countdown.pause(); // pause the countdown
         soundPlayer.stop(); // stop any sound that is playing
     }
@@ -122,6 +123,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
     @Override
     public void onResume() {
         super.onResume();
+        ship.enable();
         countdown.start(); // start the countdown again
     }
 
