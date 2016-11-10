@@ -30,23 +30,28 @@ public class Contract {
     public static final int NO_RESULT_YET = 3;
 
     // Animation duration factors
-    // Board
-    public static final int DURATION_PLACE_CHIP = 5;
-    public static final int DURATION_CHIP_TAKEOFF = 10;
-    public static final int DURATION_BOARD_SHAKE = 2;
-    // Ship
-    public static final int DURATION_SHIP = 32;
-    // Countdown
-    public static final int DURATION_COUNTDOWN_FLASH = 5;
-    public static final int DURATION_COUNTDOWN_SHAKE = 7;
-    public static final int DURATION_COUNTDOWN_FLIP_IN = 10;
-    public static final int DURATION_COUNTDOWN_FLIP_OUT = 10;
-    // Artificial Intelligence
-    public static final int DURATION_AI_WAIT = 10;
-    // GameFragment
-    public static final int DURATION_DIFFICULTY_STAND_UP = 8;
-    public static final int DURATION_WINNER_LAYOUT_HINGE = 10;
-    public static final int DURATION_WINNER_LAYOUT_BOUNCE_IN = 10;
-    // Layout translation
-    public static final int DURATION_LAYOUT_TRANSLATION = 2;
+        // Board
+        public static final int DURATION_PLACE_CHIP = 5;
+        public static final int DURATION_CHIP_TAKEOFF = 10;
+        public static final int DURATION_BOARD_SHAKE = 2;
+
+        // Ship
+        public static final int DURATION_SHIP = 32;
+
+        // Countdown
+        public static final int DURATION_COUNTDOWN_FLASH = 5;
+        public static final int DURATION_COUNTDOWN_SHAKE = 7;
+        public static final int DURATION_COUNTDOWN_FLIP_IN = 10;
+        public static final int DURATION_COUNTDOWN_FLIP_OUT = 10;
+
+        // Artificial Intelligence
+        public static final int DURATION_AI_WAIT = 10;
+
+        // GameFragment
+        public static final int DURATION_DIFFICULTY_STAND_UP = 8;
+        public static final int DURATION_WINNER_LAYOUT_HINGE = 10;
+        public static final int DURATION_WINNER_LAYOUT_BOUNCE_IN = 10;
+
+        // Layout translation
+        public static final int DURATION_LAYOUT_TRANSLATION = 2;
 }
