@@ -25,6 +25,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     public static final String PREFERENCE_ANIMATION_DURATION = "animationDuration";
     public static final int TIME_DEF = 10;
     private static final int TIME_MIN = 2;
+    public static final int ANIMATION_DURATION_DEF = 200;
     private static final int ANIMATION_DURATION_MIN = 100;
     private SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
     private TextView timeTextView, difficultyTextView;

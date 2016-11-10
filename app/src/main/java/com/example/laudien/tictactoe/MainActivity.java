@@ -19,6 +19,7 @@ import com.example.laudien.tictactoe.Fragments.StartFragment;
 
 import java.util.ArrayList;
 
+import static com.example.laudien.tictactoe.Fragments.SettingsFragment.ANIMATION_DURATION_DEF;
 import static com.example.laudien.tictactoe.Fragments.SettingsFragment.PREFERENCE_ANIMATION_DURATION;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
-        animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, 200);
+        animationDuration = sharedPreferences.getLong(PREFERENCE_ANIMATION_DURATION, ANIMATION_DURATION_DEF);
 
         // get display width
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onStartGame(final boolean aiIsUsed) {
         if(gameFragment == null)
             gameFragment = new GameFragment();
-        mainMenu.animate().translationX(-1100f).setDuration(animationDuration);
+        mainMenu.animate().translationX(displayWidth).setDuration(animationDuration);
         gameLayout.animate().alpha(1f).setDuration(animationDuration);
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
         new Handler().postDelayed(new Runnable() {
