@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:id="@+id/seekBar_animation"
-        android:max="400"
+        android:max="300"
         android:progress="200"
         android:indeterminate="false"
         android:layout_below="@+id/textView3"
