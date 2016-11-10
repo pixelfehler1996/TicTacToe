@@ -26,6 +26,9 @@ import com.example.laudien.tictactoe.Objects.SoundPlayer;
 import com.example.laudien.tictactoe.R;
 
 import static com.example.laudien.tictactoe.Contract.DIFFICULTY_DEF;
+import static com.example.laudien.tictactoe.Contract.DURATION_DIFFICULTY_STAND_UP;
+import static com.example.laudien.tictactoe.Contract.DURATION_WINNER_LAYOUT_BOUNCE_IN;
+import static com.example.laudien.tictactoe.Contract.DURATION_WINNER_LAYOUT_HINGE;
 import static com.example.laudien.tictactoe.Contract.HARD;
 import static com.example.laudien.tictactoe.Contract.MEDIUM;
 import static com.example.laudien.tictactoe.Contract.PREFERENCES;
@@ -144,14 +147,14 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                     difficultyTextView.setText(SettingsFragment. // set difficulty textView
                             difficultyToString(getContext(), difficulty));
                     YoYo.with(Techniques.StandUp) // stand up animation of the difficulty textView
-                            .duration(animationDuration * 8)
+                            .duration(animationDuration * DURATION_DIFFICULTY_STAND_UP)
                             .playOn(difficultyTextView);
                 }
 
                 // start a new game and hide the winnerLayout with an animation
                 board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
                 YoYo.with(Techniques.Hinge)
-                        .duration(animationDuration * 10)
+                        .duration(animationDuration * DURATION_WINNER_LAYOUT_HINGE)
                         .playOn(winnerLayout);
                 break;
             case R.id.btn_red: // Red on color chooser
@@ -184,7 +187,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
 
         // show the winnerLayout with an animation
         YoYo.with(Techniques.BounceInLeft)
-                .duration(animationDuration * 10)
+                .duration(animationDuration * DURATION_WINNER_LAYOUT_BOUNCE_IN)
                 .playOn(winnerLayout);
 
         // disable the countdown

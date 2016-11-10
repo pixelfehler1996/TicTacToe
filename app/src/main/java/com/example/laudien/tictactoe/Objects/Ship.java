@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.laudien.tictactoe.R;
 
+import static com.example.laudien.tictactoe.Contract.DURATION_SHIP;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 import static com.example.laudien.tictactoe.MainActivity.displayWidth;
 
@@ -38,7 +39,7 @@ public class Ship {
         if(!enabled) return;
         Log.i("Ship", "Placing a random chip...");
         board.disableUserInput();
-        long duration = animationDuration * 32;
+        long duration = animationDuration * DURATION_SHIP;
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         soundPlayer.play(R.raw.foghorn); // play the ship sound
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show(); // show the toast

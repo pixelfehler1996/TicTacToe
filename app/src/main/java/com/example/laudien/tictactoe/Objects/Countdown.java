@@ -8,6 +8,10 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import static com.example.laudien.tictactoe.Contract.DURATION_COUNTDOWN_FLASH;
+import static com.example.laudien.tictactoe.Contract.DURATION_COUNTDOWN_FLIP_IN;
+import static com.example.laudien.tictactoe.Contract.DURATION_COUNTDOWN_FLIP_OUT;
+import static com.example.laudien.tictactoe.Contract.DURATION_COUNTDOWN_SHAKE;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 public class Countdown {
@@ -37,7 +41,7 @@ public class Countdown {
                 if(l > 2000 && l < 4000) {
                     counterTextView.setTextColor(Color.RED); // red text
                     YoYo.with(Techniques.Flash) // flash animation
-                            .duration(animationDuration * 5)
+                            .duration(animationDuration * DURATION_COUNTDOWN_FLASH)
                             .playOn(counterTextView);
                 }
             }
@@ -46,7 +50,7 @@ public class Countdown {
             public void onFinish() {
                 counterTextView.setTextColor(Color.BLACK); // black text
                 YoYo.with(Techniques.Shake) // shake animation
-                        .duration(animationDuration * 7)
+                        .duration(animationDuration * DURATION_COUNTDOWN_SHAKE)
                         .playOn(counterTextView);
                 if(listener != null) // notify the listener
                     listener.onFinish();
@@ -81,7 +85,7 @@ public class Countdown {
         createNewTimer(time);
         if(counterTextView.getAlpha() != 1f) // show animation only if text view is not visible!
             YoYo.with(Techniques.FlipInX)
-                    .duration(animationDuration * 10)
+                    .duration(animationDuration * DURATION_COUNTDOWN_FLIP_IN)
                     .playOn(counterTextView);
         Log.i("Countdown", "Timer enabled!");
     }
@@ -91,7 +95,7 @@ public class Countdown {
         enabled = false;
         timer.cancel();
         YoYo.with(Techniques.FlipOutX)
-                .duration(animationDuration * 10)
+                .duration(animationDuration * DURATION_COUNTDOWN_FLIP_OUT)
                 .playOn(counterTextView);
         Log.i("Countdown", "Timer disabled!");
     }

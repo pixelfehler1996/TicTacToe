@@ -10,6 +10,9 @@ import com.example.laudien.tictactoe.R;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.laudien.tictactoe.Contract.DURATION_BOARD_SHAKE;
+import static com.example.laudien.tictactoe.Contract.DURATION_CHIP_TAKEOFF;
+import static com.example.laudien.tictactoe.Contract.DURATION_PLACE_CHIP;
 import static com.example.laudien.tictactoe.Contract.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Contract.NO_RESULT_YET;
 import static com.example.laudien.tictactoe.Contract.RED_PLAYER;
@@ -47,7 +50,7 @@ public class Board {
 
         chip.setImageResource((activePlayer == RED_PLAYER) ? R.drawable.red : R.drawable.yellow); // sets the color
         YoYo.with(Techniques.BounceInDown) // chip animation
-                .duration(animationDuration * 5)
+                .duration(animationDuration * DURATION_PLACE_CHIP)
                 .playOn(chip);
 
         positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer; // sets player in the positionState
@@ -90,12 +93,12 @@ public class Board {
 
         // shake the chips off the board
         YoYo.with(Techniques.Shake) // animation for the board
-                .duration(animationDuration * 2)
+                .duration(animationDuration * DURATION_BOARD_SHAKE)
                 .playOn(boardLayout);
         for(int i = 0; i < 9; i++)
             if(boardLayout.getChildAt(i).getAlpha() == 1f)
                 YoYo.with(Techniques.TakingOff) // animation for each chip
-                        .duration(animationDuration * 10)
+                        .duration(animationDuration * DURATION_CHIP_TAKEOFF)
                         .playOn(boardLayout.getChildAt(i));
 
         // reset positionState
@@ -108,7 +111,7 @@ public class Board {
             public void run() {
                 enableUserInput();
             }
-        }, animationDuration * 10 + 100);
+        }, animationDuration * DURATION_CHIP_TAKEOFF + 100);
 
         // call all the listeners
         for(OnNextPlayerListener listener : onNextPlayerListeners)

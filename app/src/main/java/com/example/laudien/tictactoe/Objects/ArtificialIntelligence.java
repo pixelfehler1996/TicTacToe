@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
+import static com.example.laudien.tictactoe.Contract.DURATION_AI_WAIT;
 import static com.example.laudien.tictactoe.Contract.EASY;
 import static com.example.laudien.tictactoe.Contract.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Contract.HARD;
@@ -73,7 +74,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
             public void run() {
                 board.placeRandom();
             }
-        }, animationDuration * 10 + 100);
+        }, animationDuration * DURATION_AI_WAIT + 100);
     }
 
     private void medium(){
@@ -222,7 +223,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 board.placeChip((ImageView) board.getBoardLayout().getChildAt(position), false);
                 board.enableUserInput();
             }
-        }, animationDuration * 10 + 100);
+        }, animationDuration * DURATION_AI_WAIT + 100);
     }
 
     @Override
