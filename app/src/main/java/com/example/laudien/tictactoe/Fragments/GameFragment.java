@@ -24,6 +24,8 @@ import com.example.laudien.tictactoe.Objects.Countdown;
 import com.example.laudien.tictactoe.Objects.Ship;
 import com.example.laudien.tictactoe.Objects.SoundPlayer;
 import com.example.laudien.tictactoe.R;
+
+import static com.example.laudien.tictactoe.Fragments.SettingsFragment.TIME_DEF;
 import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.HARD;
 import static com.example.laudien.tictactoe.Objects.ArtificialIntelligence.MEDIUM;
 import static com.example.laudien.tictactoe.Objects.Board.RED_PLAYER;
@@ -58,7 +60,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
 
         // load data from SharedPreferences
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getInt(PREFERENCE_TIME, 20) * 1000;
+        long time = sharedPreferences.getInt(PREFERENCE_TIME, TIME_DEF) * 1000;
         difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
 
         // create new instance of SoundPlayer

@@ -152,7 +152,7 @@ public class Board {
 
     private void nextPlayer(){
         activePlayer = (activePlayer == RED_PLAYER) ? YELLOW_PLAYER : RED_PLAYER; // change player color
-        userCanInteract = true; // enable the board for player input
+        enableUserInput(); // enable the board for player input
         countdown.reset();
         countdown.start();
         for(OnNextPlayerListener listener : onNextPlayerListeners) // call the listeners

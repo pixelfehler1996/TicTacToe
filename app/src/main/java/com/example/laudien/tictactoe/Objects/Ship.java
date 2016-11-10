@@ -26,6 +26,7 @@ public class Ship {
 
     public void show(){
         Log.i("Ship", "Placing a random chip...");
+        board.disableUserInput();
         long duration = animationDuration * 16;
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         soundPlayer.play(R.raw.foghorn); // play the ship sound

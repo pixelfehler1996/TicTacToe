@@ -23,6 +23,9 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     public static final String PREFERENCE_TIME = "savedTime";
     public static final String PREFERENCE_DIFFICULTY = "difficulty";
     public static final String PREFERENCE_ANIMATION_DURATION = "animationDuration";
+    public static final int TIME_DEF = 10;
+    private static final int TIME_MIN = 2;
+    private static final int ANIMATION_DURATION_MIN = 100;
     private SeekBar timeSeekBar, difficultySeekBar, seekBar_animation;
     private TextView timeTextView, difficultyTextView;
     private int time, difficulty;
@@ -42,7 +45,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         sharedPreferences = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
         // timeSeekBar
-        time = sharedPreferences.getInt(PREFERENCE_TIME, 20);
+        time = sharedPreferences.getInt(PREFERENCE_TIME, TIME_DEF);
         timeSeekBar = (SeekBar)view.findViewById(R.id.timeSeekBar);
         timeTextView = (TextView)view.findViewById(R.id.timeTextView);
         timeSeekBar.setOnSeekBarChangeListener(this);
@@ -50,7 +53,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         timeTextView.setText(Integer.toString(timeSeekBar.getProgress()));
 
         // difficultySeekBar
-        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, 1);
+        difficulty = sharedPreferences.getInt(PREFERENCE_DIFFICULTY, MEDIUM);
         difficultySeekBar = (SeekBar)view.findViewById(R.id.difficultySeekBar);
         difficultyTextView = (TextView)view.findViewById(R.id.difficultyTextView);
         difficultySeekBar.setProgress(difficulty);
@@ -105,14 +108,14 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
         switch (seekBar.getId()){
             case R.id.timeSeekBar:
-                if(seekBar.getProgress() < 5){seekBar.setProgress(5);} // minimum of 5 seconds
+                if(seekBar.getProgress() < TIME_MIN){seekBar.setProgress(TIME_MIN);} // minimum of 5 seconds
                 timeTextView.setText(Integer.toString(seekBar.getProgress()));
                 break;
             case R.id.difficultySeekBar:
                 difficultyTextView.setText(difficultyToString(getContext(), i));
                 break;
             case R.id.seekBar_animation:
-                if(i < 100) seekBar.setProgress(100); // minimum of 100
+                if(i < ANIMATION_DURATION_MIN) seekBar.setProgress(ANIMATION_DURATION_MIN); // minimum of 100
                 break;
         }
     }
