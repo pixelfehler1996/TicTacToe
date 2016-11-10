@@ -64,9 +64,9 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         // seekbar_animation
         seekBar_animation = (SeekBar)view.findViewById(R.id.seekBar_animation);
         animationTextView = (TextView) view.findViewById(R.id.animationTextView);
-        seekBar_animation.setProgress((int)animationDuration/2);
+        seekBar_animation.setProgress((int)animationDuration);
         seekBar_animation.setOnSeekBarChangeListener(this);
-        animationTextView.setText((double)animationDuration/(ANIMATION_DURATION_DEF*2) + "x");
+        animationTextView.setText((double)animationDuration/(ANIMATION_DURATION_DEF) + "x");
 
         return view;
     }
@@ -98,8 +98,8 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
             for(OnSettingsChangedListener listener : listeners)
                 listener.onSettingsChanged(PREFERENCE_DIFFICULTY);
         }
-        if(animationDuration/2 != seekBar_animation.getProgress()){
-            animationDuration = seekBar_animation.getProgress() * 2;
+        if(animationDuration != seekBar_animation.getProgress()){
+            animationDuration = seekBar_animation.getProgress();
             sharedPreferences.edit().putLong(PREFERENCE_ANIMATION_DURATION, animationDuration).apply();
             Log.i("SettingsFragment", "Animation duration changed to " + animationDuration);
             for(OnSettingsChangedListener listener : listeners)

@@ -38,7 +38,7 @@ public class Ship {
         if(!enabled) return;
         Log.i("Ship", "Placing a random chip...");
         board.disableUserInput();
-        long duration = animationDuration * 16;
+        long duration = animationDuration * 32;
         shipImage.setVisibility(View.VISIBLE); // make the ship visible
         soundPlayer.play(R.raw.foghorn); // play the ship sound
         Toast.makeText(context, "Arrr!", Toast.LENGTH_SHORT).show(); // show the toast

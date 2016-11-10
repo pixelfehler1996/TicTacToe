@@ -143,14 +143,14 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
                     difficultyTextView.setText(SettingsFragment. // set difficulty textView
                             difficultyToString(getContext(), difficulty));
                     YoYo.with(Techniques.StandUp) // stand up animation of the difficulty textView
-                            .duration(animationDuration * 4)
+                            .duration(animationDuration * 8)
                             .playOn(difficultyTextView);
                 }
 
                 // start a new game and hide the winnerLayout with an animation
                 board.newGame(countdown, (difficulty == HARD)? botColor : playerColor);
                 YoYo.with(Techniques.Hinge)
-                        .duration(animationDuration * 5)
+                        .duration(animationDuration * 10)
                         .playOn(winnerLayout);
                 break;
             case R.id.btn_red: // Red on color chooser
@@ -183,7 +183,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Boar
 
         // show the winnerLayout with an animation
         YoYo.with(Techniques.BounceInLeft)
-                .duration(animationDuration * 5)
+                .duration(animationDuration * 10)
                 .playOn(winnerLayout);
 
         // disable the countdown

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
         gameLayout = (FrameLayout)findViewById(R.id.background_layout);
         settings = (FrameLayout)findViewById(R.id.settings_layout);
         sharedPreferences = getSharedPreferences("com.example.laudien.tictactoe", 0);
-        animationDuration = ANIMATION_DURATION_DEF * 2;
+        animationDuration = ANIMATION_DURATION_DEF;
 
         // get display width
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                     gameFragment.onPause();
                 settings.setVisibility(View.VISIBLE);
                 settings.setTranslationX(displayWidth);
-                settings.animate().translationX(0f).setDuration(animationDuration);
+                settings.animate().translationX(0f).setDuration(animationDuration * 2);
             }
             return true;
         }
@@ -95,20 +95,20 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
             if(settingsFragment != null)
                 settingsFragment.onPause();
             gameLayout.setAlpha(0f);
-            settings.animate().translationX(displayWidth).setDuration(animationDuration);
-            gameLayout.animate().alpha(1f).setDuration(animationDuration);
+            settings.animate().translationX(displayWidth).setDuration(animationDuration * 2);
+            gameLayout.animate().alpha(1f).setDuration(animationDuration * 2);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if(gameFragment != null)
                         gameFragment.onResume();
                 }
-            }, animationDuration);
+            }, animationDuration * 2);
 
         }else if(getTopMostLayout() == gameLayout){
                 mainMenu.setVisibility(View.VISIBLE);
-                mainMenu.animate().translationX(0f).setDuration(animationDuration);
-                gameLayout.animate().alpha(0f).setDuration(animationDuration);
+                mainMenu.animate().translationX(0f).setDuration(animationDuration * 2);
+                gameLayout.animate().alpha(0f).setDuration(animationDuration * 2);
                 fragmentManager.beginTransaction().replace(R.id.foreground_layout, startFragment).commit();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                         fragmentManager.beginTransaction().remove(gameFragment).commit();
                         gameFragment = null;
                     }
-                }, animationDuration);
+                }, animationDuration * 2);
         } else { // exit app
             if(!backPressed) {
                 backPressed = true;
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     public void onStartGame(final boolean aiIsUsed) {
         if(gameFragment == null)
             gameFragment = new GameFragment();
-        mainMenu.animate().translationX(displayWidth).setDuration(animationDuration);
-        gameLayout.animate().alpha(1f).setDuration(animationDuration);
+        mainMenu.animate().translationX(displayWidth).setDuration(animationDuration * 2);
+        gameLayout.animate().alpha(1f).setDuration(animationDuration * 2);
         fragmentManager.beginTransaction().replace(R.id.background_layout, gameFragment).commit();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                 mainMenu.setVisibility(View.INVISIBLE);
                 gameFragment.startGame(aiIsUsed);
             }
-        }, animationDuration);
+        }, animationDuration * 2);
     }
     private FrameLayout getTopMostLayout(){
         if(settings.getVisibility() == View.VISIBLE && settings.getTranslationX() == 0f)

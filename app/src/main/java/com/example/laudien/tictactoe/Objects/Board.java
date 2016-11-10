@@ -46,7 +46,7 @@ public class Board {
 
         chip.setImageResource((activePlayer == RED_PLAYER) ? R.drawable.red : R.drawable.yellow); // sets the color
         YoYo.with(Techniques.BounceInDown) // chip animation
-                .duration(animationDuration * 5/2)
+                .duration(animationDuration * 5)
                 .playOn(chip);
 
         positionState[Integer.parseInt(chip.getTag().toString())] = activePlayer; // sets player in the positionState
@@ -89,12 +89,12 @@ public class Board {
 
         // shake the chips off the board
         YoYo.with(Techniques.Shake) // animation for the board
-                .duration(animationDuration)
+                .duration(animationDuration * 2)
                 .playOn(boardLayout);
         for(int i = 0; i < 9; i++)
             if(boardLayout.getChildAt(i).getAlpha() == 1f)
                 YoYo.with(Techniques.TakingOff) // animation for each chip
-                        .duration(animationDuration * 5)
+                        .duration(animationDuration * 10)
                         .playOn(boardLayout.getChildAt(i));
 
         // reset positionState
@@ -107,7 +107,7 @@ public class Board {
             public void run() {
                 enableUserInput();
             }
-        }, animationDuration * 5 + 100);
+        }, animationDuration * 10 + 100);
 
         // call all the listeners
         for(OnNextPlayerListener listener : onNextPlayerListeners)

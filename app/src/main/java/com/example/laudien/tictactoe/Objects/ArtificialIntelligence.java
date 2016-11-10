@@ -72,7 +72,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
             public void run() {
                 board.placeRandom();
             }
-        }, animationDuration * 5 + 100);
+        }, animationDuration * 10 + 100);
     }
 
     private void medium(){
@@ -221,7 +221,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 board.placeChip((ImageView) board.getBoardLayout().getChildAt(position), false);
                 board.enableUserInput();
             }
-        }, animationDuration * 5 + 100);
+        }, animationDuration * 10 + 100);
     }
 
     @Override
