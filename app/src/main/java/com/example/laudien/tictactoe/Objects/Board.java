@@ -78,14 +78,13 @@ public class Board {
         placeChip((ImageView) boardLayout.getChildAt(finalRand), false);
     }
 
-    public void newGame(Countdown countdown, int firstColor){
+    public void newGame(final Countdown countdown, int firstColor){
         disableUserInput();
         activePlayer = firstColor;
 
         // Countdown
         this.countdown = countdown;
         countdown.enable();
-        countdown.start();
 
         gameIsRunning = true; // set indicator that a game is running
 
@@ -110,6 +109,7 @@ public class Board {
             @Override
             public void run() {
                 enableUserInput();
+                countdown.start();
             }
         }, animationDuration * DURATION_CHIP_TAKEOFF + 100);
 
