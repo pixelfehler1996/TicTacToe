@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -16,13 +17,17 @@ import android.widget.Toast;
 import com.example.laudien.tictactoe.Fragments.GameFragment;
 import com.example.laudien.tictactoe.Fragments.SettingsFragment;
 import com.example.laudien.tictactoe.Fragments.StartFragment;
+import com.example.laudien.tictactoe.Tools.FlingRecognizer;
 
 import static com.example.laudien.tictactoe.Contract.ANIMATION_DURATION_DEF;
 import static com.example.laudien.tictactoe.Contract.DURATION_BACK_TO_EXIT;
 import static com.example.laudien.tictactoe.Contract.DURATION_LAYOUT_TRANSLATION;
 import static com.example.laudien.tictactoe.Contract.PREFERENCES;
+import static com.example.laudien.tictactoe.Tools.FlingRecognizer.FLING_LEFT;
+import static com.example.laudien.tictactoe.Tools.FlingRecognizer.FLING_RIGHT;
 
-public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener {
+public class MainActivity extends AppCompatActivity implements StartFragment.OnStartGameListener,
+        FlingRecognizer.OnFlingListener {
     public static long animationDuration;
     public static int displayWidth;
     GameFragment gameFragment;
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
     FrameLayout mainMenu, gameLayout, settings, lastLayout;
     private SharedPreferences sharedPreferences;
     boolean backPressed;
+    FlingRecognizer flingRecognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                     gameFragment.onSettingsChanged(preference);
             }
         });
+
+        flingRecognizer = new FlingRecognizer(this, settings);
+        flingRecognizer.addOnFlingListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,14 +86,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                 onBackPressed();
                 return true;
             }
-            lastLayout = getTopMostLayout();
-            if(lastLayout != settings) {
-                if (lastLayout == gameLayout)
-                    gameFragment.onPause();
-                settings.setVisibility(View.VISIBLE);
-                settings.setTranslationX(displayWidth);
-                settings.animate().translationX(0f).setDuration(animationDuration * DURATION_LAYOUT_TRANSLATION);
-            }
+            openSettings();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -149,6 +151,28 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
             }
         }, animationDuration * DURATION_LAYOUT_TRANSLATION);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        flingRecognizer.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onFling(View view, int type) {
+        if(view == settings){
+            switch (type){
+                case FLING_RIGHT:
+                    if(getTopMostLayout() == settings)
+                        onBackPressed();
+                    break;
+                case FLING_LEFT:
+                    openSettings();
+                    break;
+            }
+        }
+    }
+
     private FrameLayout getTopMostLayout(){
         if(settings.getVisibility() == View.VISIBLE && settings.getTranslationX() == 0f)
             return settings;
@@ -156,5 +180,16 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
                 && mainMenu.getAlpha() == 1f && mainMenu.getTranslationX() == 0f)
             return mainMenu;
         else return gameLayout;
+    }
+
+    private void openSettings(){
+        lastLayout = getTopMostLayout();
+        if(lastLayout != settings) {
+            if (lastLayout == gameLayout)
+                gameFragment.onPause();
+            settings.setVisibility(View.VISIBLE);
+            settings.setTranslationX(displayWidth);
+            settings.animate().translationX(0f).setDuration(animationDuration * DURATION_LAYOUT_TRANSLATION);
+        }
     }
 }
