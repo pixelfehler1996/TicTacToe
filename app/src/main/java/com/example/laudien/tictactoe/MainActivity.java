@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnS
 
         flingRecognizer = new FlingRecognizer(this, settings);
         flingRecognizer.addOnFlingListener(this);
+        mainMenu.setOnTouchListener(flingRecognizer);
+        settings.setOnTouchListener(flingRecognizer);
+        gameLayout.setOnTouchListener(flingRecognizer);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

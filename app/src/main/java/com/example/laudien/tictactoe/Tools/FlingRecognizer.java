@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class FlingRecognizer extends GestureDetector.SimpleOnGestureListener {
+public class FlingRecognizer extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
     public static final int FLING_LEFT = 1;
     public static final int FLING_RIGHT = 2;
     private ArrayList<OnFlingListener> onFlingListeners;
@@ -22,6 +22,12 @@ public class FlingRecognizer extends GestureDetector.SimpleOnGestureListener {
 
     public void addOnFlingListener(OnFlingListener listener){
         onFlingListeners.add(listener);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        onTouchEvent(motionEvent);
+        return false;
     }
 
     public interface OnFlingListener{
