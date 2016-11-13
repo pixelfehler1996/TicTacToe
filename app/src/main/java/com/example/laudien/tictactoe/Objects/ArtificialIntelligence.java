@@ -4,25 +4,34 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.util.Random;
+
 import static com.example.laudien.tictactoe.Contract.DURATION_AI_WAIT;
 import static com.example.laudien.tictactoe.Contract.EASY;
+import static com.example.laudien.tictactoe.Contract.EDGES;
 import static com.example.laudien.tictactoe.Contract.EMPTY_FIELD;
 import static com.example.laudien.tictactoe.Contract.HARD;
 import static com.example.laudien.tictactoe.Contract.MEDIUM;
+import static com.example.laudien.tictactoe.Contract.NUMBER_OF_TACTICS;
+import static com.example.laudien.tictactoe.Contract.OPPOSITE_EDGES;
 import static com.example.laudien.tictactoe.Contract.RED_PLAYER;
+import static com.example.laudien.tictactoe.Contract.ROWS;
+import static com.example.laudien.tictactoe.Contract.TACTIC_EDGE;
+import static com.example.laudien.tictactoe.Contract.TACTIC_MIDDLE;
 import static com.example.laudien.tictactoe.Contract.WINNING_POSITIONS;
 import static com.example.laudien.tictactoe.Contract.YELLOW_PLAYER;
 import static com.example.laudien.tictactoe.MainActivity.animationDuration;
 
 public class ArtificialIntelligence implements Board.OnGameOverListener, Board.OnNextPlayerListener {
     private static final int NO_POSITION_FOUND = -1;
-    private int difficulty, counter, chipColor;
+    private int difficulty, counter, chipColor, tactic, placedEdge;
     private int[] positionState;
     private Board board;
 
     public ArtificialIntelligence(Board board, int difficulty, int chipColor){
         this.board = board;
         this.chipColor = chipColor;
+        setRandomTactic();
         positionState = board.getPositionState();
         resetCounter();
         setDifficulty(difficulty);
@@ -96,6 +105,19 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void hard(){
+        switch (tactic){
+            case TACTIC_EDGE:
+                Log.i("ArtificialIntelligence", "Tactic = Edge");
+                tacticEdge();
+                break;
+            case TACTIC_MIDDLE:
+                Log.i("ArtificialIntelligence", "Tactic = Middle");
+                tacticMiddle();
+                break;
+        }
+    }
+
+    private void tacticEdge(){
         int position;
         int edge;
         switch (counter){
@@ -115,7 +137,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     placeChip(4);
                     break;
                 }
-                // 3. if no immediate win is possible, defense a possible win of the player:
+                // 3. if no immediate win is possible, defend a possible win of the player:
                 position = searchPositions(getEnemyColor());
                 if (position != NO_POSITION_FOUND){
                     placeChip(position);
@@ -124,11 +146,9 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 // 4. if no defense is necessary, place on free edge
                 edge = getFreeEdge();
                 if (edge != NO_POSITION_FOUND){
-                    placeChip(getFreeEdge());
+                    placeChip(edge);
                     break;
                 }
-                // 5. if no edge was found, place random (like on easy mode)
-                easy();
                 break;
             case 4:
                 // 1. if middle field is empty, place there and win
@@ -181,6 +201,59 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
         }
     }
 
+    private void tacticMiddle(){
+        switch (counter){
+            case 1: // first place the chip in the middle
+                placeChip(4);
+                break;
+            case 2: // place on the next free edge where on opposite edge is not the player
+                for(int edge : EDGES){
+                    // if that edge is not free - go to next edge
+                    if(positionState[edge] != EMPTY_FIELD)
+                        continue;
+                    // place on that edge where the enemy is not on opposite edge
+                    if(getOppositeEdge(edge) != getEnemyColor()) {
+                        placedEdge = edge;
+                        placeChip(edge);
+                        break;
+                    }
+                }
+                break;
+            case 3:
+                // defend if necessary
+                int position = searchPositions(getEnemyColor());
+                if (position != NO_POSITION_FOUND){
+                    placeChip(position);
+                    break;
+                }
+                // if the position between is empty, place on free edge
+                int edge = getFreeEdge();
+                if(positionState[getPositionBetween(placedEdge, edge)] == EMPTY_FIELD){
+                    placeChip(edge);
+                    break;
+                }
+                // if it is not free, place on another edge
+                int nextEdge = NO_POSITION_FOUND;
+                for(int i = 0; i < EDGES.length - 1; i++){
+                    if(EDGES[i] == edge){
+                        nextEdge = EDGES[i+1];
+                        break;
+                    }
+                }
+                if(nextEdge != NO_POSITION_FOUND) {
+                    placeChip(nextEdge);
+                }
+                break;
+            default: // same as on medium
+                medium();
+                break;
+        }
+    }
+
+    private void setRandomTactic() {
+        tactic = new Random().nextInt(NUMBER_OF_TACTICS);
+    }
+
     private int searchPositions(int playerID){
         // searches for a position where are 2/3 used from the player with playerID
         int counter;
@@ -207,12 +280,68 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
 
     private int getFreeEdge(){
         // searches for the next free edge
-        int[] edges = {0,2,6,8};
-        for(int edge:edges){
+        for(int edge:EDGES){
             if(positionState[edge] == EMPTY_FIELD)
                 return edge;
         }
         return NO_POSITION_FOUND; // nothing was found
+    }
+
+    private int getOppositeEdge(int edge){
+        for (int pos[] : OPPOSITE_EDGES){
+            if(pos[0] == edge)
+                return pos[1];
+            if(pos[1] == edge)
+                return pos[0];
+        }
+        return NO_POSITION_FOUND;
+    }
+
+    private int getPositionBetween(int pos1, int pos2){
+        // takes 2 edges and returns the position between them
+        // the two positions must be different:
+        if(pos1 == pos2) return NO_POSITION_FOUND;
+
+        // make sure, that pos1 < pos2:
+        if(pos1 > pos2){
+            int i = pos1;
+            pos1 = pos2;
+            pos2 = i;
+        }
+
+        // make sure that the positions really are edges:
+        boolean pos1_isEdge = false;
+        boolean pos2_isEdge = false;
+        for(int edge : EDGES){
+            if(pos1 == edge) pos1_isEdge = true;
+            if(pos2 == edge) pos2_isEdge = true;
+        }
+        if(!pos1_isEdge || !pos2_isEdge)
+            return NO_POSITION_FOUND;
+
+        // if the edges are opposite of each other, result = middle position
+        if(getOppositeEdge(pos1) != pos2) return 4;
+
+        // check, if the edges are on the same row
+        boolean sameRow = false;
+        for(int[] row : ROWS){ // every row
+            boolean pos1_in_row = false;
+            boolean pos2_in_row = false;
+            for(int position : row){ // every position on that row
+                if(position == pos1) pos1_in_row = true;
+                if(position == pos2) pos2_in_row = true;
+                if(pos1_in_row && pos2_in_row){
+                    sameRow = true;
+                    break;
+                }
+            }
+        }
+
+        // get position between if positions are in the same row
+        if(sameRow) return pos2 - 1;
+
+        // get position between if not in same row
+        return pos1 + 3;
     }
 
     private void placeChip(final int position){
@@ -229,6 +358,7 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     @Override
     public void onGameOver(int winner) {
         resetCounter();
+        setRandomTactic();
     }
 
     @Override

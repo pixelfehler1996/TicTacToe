@@ -12,6 +12,16 @@ public class Contract {
     public static final int MEDIUM = 1;
     public static final int HARD = 2;
 
+    // AI tactics
+    public static final int NUMBER_OF_TACTICS = 2;
+    public static final int TACTIC_EDGE = 0;
+    public static final int TACTIC_MIDDLE = 1;
+
+    // board edges and stuff
+    public static final int[] EDGES = {0,2,6,8};
+    public static final int[][] OPPOSITE_EDGES = {{0,8}, {2,6}};
+    public static final int[][] ROWS = {{0,1,2}, {3,4,5}, {6,7,8}};
+
     // Slider Values
     public static final int DIFFICULTY_DEF = MEDIUM;
     public static final int TIME_DEF = 10;
