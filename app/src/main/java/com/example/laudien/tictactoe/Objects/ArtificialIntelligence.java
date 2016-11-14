@@ -105,6 +105,22 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void hard(){
+        // standard stuff first:
+        if(counter > 2){
+            int position = searchPositions(getChipColor());
+            // 1. Attack (= win the game if possible):
+            if (position != NO_POSITION_FOUND) {
+                placeChip(position);
+                return;
+            }
+            // 2. if no immediate win is possible, defense a possible win of the player:
+            position = searchPositions(getEnemyColor());
+            if (position != NO_POSITION_FOUND) {
+                placeChip(position);
+                return;
+            }
+        }
+
         switch (tactic){
             case TACTIC_EDGE:
                 Log.i("ArtificialIntelligence", "Tactic = Edge");
@@ -118,7 +134,6 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
     }
 
     private void tacticEdge(){
-        int position;
         int edge;
         switch (counter){
             case 1:
@@ -126,21 +141,9 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 placeChip(getFreeEdge());
                 break;
             case 3:
-                position = searchPositions(getChipColor());
-                // 1. Attack (= win the game if possible):
-                if (position != NO_POSITION_FOUND){
-                    placeChip(position);
-                    break;
-                }
                 // 2. if the player thought he can beat the hard bot, defend against it
                 if(positionState[1] == getEnemyColor() && positionState[3] == getEnemyColor()) {
                     placeChip(4);
-                    break;
-                }
-                // 3. if no immediate win is possible, defend a possible win of the player:
-                position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND){
-                    placeChip(position);
                     break;
                 }
                 // 4. if no defense is necessary, place on free edge
@@ -156,18 +159,6 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     placeChip(4);
                     break;
                 }
-                // 2. Attack (= win the game if possible):
-                position = searchPositions(getChipColor());
-                if (position != NO_POSITION_FOUND) {
-                    placeChip(position);
-                    break;
-                }
-                // 3. if not immediate win is possible, defend a possible win of the player:
-                position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND) {
-                    placeChip(position);
-                    break;
-                }
                 // 4. if no defense is necessary, place on free edge
                 edge = getFreeEdge();
                 if (edge != NO_POSITION_FOUND) {
@@ -178,18 +169,6 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 easy();
                 break;
             default:
-                position = searchPositions(getChipColor());
-                // 1. Attack (= win the gameLayout if possible):
-                if (position != NO_POSITION_FOUND) {
-                    placeChip(position);
-                    break;
-                }
-                // 2. if not immediate win is possible, defend a possible win of the player:
-                position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND){
-                    placeChip(position);
-                    break;
-                }
                 // 3. if no defense is necessary, place on free edge
                 edge = getFreeEdge();
                 if(edge != NO_POSITION_FOUND) {
@@ -220,12 +199,6 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                 }
                 break;
             case 3:
-                // defend if necessary
-                int position = searchPositions(getEnemyColor());
-                if (position != NO_POSITION_FOUND){
-                    placeChip(position);
-                    break;
-                }
                 // if the position between is empty, place on free edge
                 int edge = getFreeEdge();
                 if(positionState[getPositionBetween(placedEdge, edge)] == EMPTY_FIELD){
@@ -244,8 +217,8 @@ public class ArtificialIntelligence implements Board.OnGameOverListener, Board.O
                     placeChip(nextEdge);
                 }
                 break;
-            default: // same as on medium
-                medium();
+            default: // after the standard stuff, it is the same as on easy ;)
+                easy();
                 break;
         }
     }
